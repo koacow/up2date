@@ -7,7 +7,10 @@ usersRouter.post('/authenticate', async (req, res) => {
     const { username, email, password } = req.body;
     const { data, error } = await supabase.auth.signIn({
         email,
-        password
+        password,
+        options: {
+            emailRedirectTo: 'http://localhost:3000',
+        },
     });
     if (error) {
         console.log(error);
@@ -24,13 +27,15 @@ usersRouter.post('/register', async (req, res) => {
         password
     });
     if (authError) {
-        return res.status(400).json({ error: error.message });
+        return res.status(400).json({ error: authError.message });
     }
-    const { userData, userError } = await supabase
-        .from('users')
-        .insert([{ username, email }]);
-    
-    return res.status(200).json(data);
+    return res.status(200).json(authData);
 });
 
+usersRouter.put('/reset-password', async (req, res) => {
+    const { email } = req.body;
+    await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: 'http://localhost:3000',
+    });
+});
 module.exports = usersRouter;
