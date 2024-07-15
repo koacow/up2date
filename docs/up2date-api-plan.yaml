@@ -1,0 +1,97 @@
+openapi: 3.0.1
+info:
+  title: up2date-backend
+  version: 1.0.0
+  description: A fully customizable independent news application.
+paths:
+  /api/articles/{topic}:
+    summary: Get all articles from a certain topic.
+    description: Retrieves a page of articles relating to the topic param.
+    parameters:
+      - in: path
+        name: topic
+        schema:
+          type: string
+        required: true
+        description: topic name
+    get:
+      summary: Gets all articles belonging to a topic
+      description: >-
+        Makes an API call to the News API to retrieve all articles relating to
+        the topic
+      operationId: get_articles
+      responses:
+        default:
+          description: Default error sample response
+  /api/articles/saved:
+    summary: All saved articles
+    description: Retrieves all saved articles
+    get:
+      summary: Retrieves a users' saved articles
+      description: Get a full list of the user's saved article, most recently saved first.
+      operationId: fetch_saved_articles
+      responses:
+        default:
+          description: Default error sample response
+    post:
+      summary: Saves a new article
+      description: Adds a new article to the user's current list of saved articles.
+      operationId: add_to_saved_articles
+      responses:
+        default:
+          description: Default error sample response
+    delete:
+      summary: Unsaves an article
+      description: Deletes an article from the user's current list of saved articles.
+      operationId: delete_from_saved_articles
+      responses:
+        default:
+          description: Default error sample response
+  /api/users/signup:
+    summary: Sign up
+    description: Creates a new user.
+    post:
+      summary: Creates a new user profile
+      description: >-
+        Creates a new user profile (name, email, password, preferences) and add
+        the user to database.
+      operationId: create_user
+      responses:
+        default:
+          description: Default error sample response
+  /api/users/authenticate:
+    summary: Sign in
+    description: Verifies a user's authentication information and signs them in.
+    get:
+      summary: Authenticates a user.
+      description: Authenticates a user log in details and logs them in if correct.
+      operationId: authenticate_user
+      responses:
+        default:
+          description: Default error sample response
+  /api/user/preferences:
+    summary: A user's preferences
+    description: Anything to do with a user's preferences.
+    get:
+      summary: Retrieves a user's preferences
+      description: >-
+        Retrieve an object representing all user's app preferences (categories,
+        theme, settings)
+      operationId: get_preferences
+      responses:
+        default:
+          description: Default error sample response
+    put:
+      summary: Update a user's preferences.
+      description: ''
+      operationId: update_preferences
+      responses:
+        default:
+          description: Default error sample response
+    delete:
+      summary: Reset preferences
+      description: Delete all preferences and revert back to default settings.
+      operationId: reset_preferences.
+      responses:
+        default:
+          description: Default error sample response
