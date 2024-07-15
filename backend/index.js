@@ -4,9 +4,18 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 require('dotenv').config();
 
+// Import routers
+const usersRouter = require('./controllers/routes/users');
+const userRouter = require('./controllers/routes/user');
+const articlesRouter = require('./controllers/routes/articles');
+
 const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(bodyParser.json());
+
+app.use('/api/users', usersRouter);
+app.use('/api/user', userRouter);
+app.use('/api/articles', articlesRouter);
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
