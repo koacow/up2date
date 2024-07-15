@@ -9,7 +9,7 @@ const usersRouter = require('./controllers/routes/users');
 const userRouter = require('./controllers/routes/user');
 const articlesRouter = require('./controllers/routes/articles');
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4000;
 app.use(cors());
 app.use(bodyParser.json());
 
