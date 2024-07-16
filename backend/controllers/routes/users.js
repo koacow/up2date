@@ -3,31 +3,43 @@
 const usersRouter = require('express').Router();
 const supabase = require('../../models/db');
 
-usersRouter.post('/authenticate', async (req, res) => {
+usersRouter.post('/auth', async (req, res) => {
     const { username, email, password } = req.body;
-    const { data, error } = await supabase.auth.signIn({
+    const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
         options: {
-            emailRedirectTo: 'http://localhost:3000',
+            emailRedirectTo: 'http://localhost:5173',
         },
     });
     if (error) {
-        console.log(error);
-        return res.status(400).json({ error: error.message });
+        return res.status(400).json({ 
+            error: error.message,
+            code: error.code
+         });
     }
-    console.log(data);
     return res.status(200).json(data);
 });
 
 usersRouter.post('/register', async (req, res) => {
-    const { username, email, password } = req.body;
-    const { authData, authError } = await supabase.auth.signUp({
+    const { username, email, password, first_name, last_name } = req.body;
+    const { data: authData, error: authError } = await supabase.auth.signUp({
         email,
         password
     });
     if (authError) {
-        return res.status(400).json({ error: authError.message });
+        return res.status(400).json({ 
+            error: authError.message,
+            code: authError.code
+         });
+    }
+    const user_id = authData.user.id;
+    const { error: insertError } = await supabase.from('user_profiles').insert({ user_id, first_name, last_name, region_code });
+    if (insertError) {
+        return res.status(400).json({ 
+            error: userError.message,
+            code: userError.code
+        });
     }
     return res.status(200).json(authData);
 });
@@ -35,7 +47,7 @@ usersRouter.post('/register', async (req, res) => {
 usersRouter.put('/reset-password', async (req, res) => {
     const { email } = req.body;
     await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: 'http://localhost:3000',
+        redirectTo: 'http://localhost:5173',
     });
 });
 module.exports = usersRouter;
