@@ -18,30 +18,14 @@ CREATE TABLE IF NOT EXISTS user_settings (
 );
 
 
---- Articles tables
-CREATE TABLE IF NOT EXISTS articles (
-    id UUID PRIMARY KEY,
-    url VARCHAR(255) NOT NULL,
-    author VARCHAR(255) NOT NULL,
-    title VARCHAR(255) NOT NULL,
-    content TEXT NOT NULL,
-    published_at TIMESTAMP
-);
-
 CREATE TABLE IF NOT EXISTS keywords (
     id SERIAL PRIMARY KEY,
     keyword VARCHAR(255) NOT NULL UNIQUE
 );
 
-CREATE TABLE IF NOT EXISTS article_keywords (
-    article_id UUID REFERENCES articles(id) ON DELETE CASCADE,
-    keyword_id INT REFERENCES keywords(id) ON DELETE CASCADE,
-    PRIMARY KEY (article_id, keyword_id)
-);
-
 CREATE TABLE IF NOT EXISTS saved_articles (
     user_id UUID REFERENCES auth.users ON DELETE CASCADE,
-    article_id UUID REFERENCES articles(id) ON DELETE CASCADE,
+    article_url REFERENCES articles(id) ON DELETE CASCADE,
     PRIMARY KEY (user_id, article_id)
 );
 
