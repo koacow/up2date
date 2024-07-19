@@ -25,7 +25,7 @@ userRouter.put('/settings', async (req, res) => {
 
 userRouter.get('/topics', async (req, res) => {
     const { user_id } = req.query;
-    const { data, error } = await supabase.from('user_topics').select('*').eq('user_id', user_id);
+    const { data, error } = await supabase.from('user_topics').select('topics(topic)').eq('user_id', user_id);
     if (error) {
         return res.status(400).json({ error: 'Failed to fetch user topics' });
     }
@@ -33,23 +33,33 @@ userRouter.get('/topics', async (req, res) => {
 });
 
 userRouter.put('/topics', async (req, res) => {
-    const { user_id, topics } = req.body;
-    const topic_ids = [];
-    try {
-        topics.forEach(async (topic) => {
-            const { data, error } = await supabase.from('topics').select('id').eq('topic', topic);
+    const { user_id, topic_ids } = req.body;
+
+    // Fetch existing topic ids
+    const { data: existingTopicIds, error: fetchExistingTopicIdsError } = await supabase.from('user_topics').select('topic_id').eq('user_id', user_id);
+    if (fetchExistingTopicIdsError) {
+        return res.status(400).json({ error: 'Failed to update user topics' });
+    }
+    
+    // Delete existing topics that are not in the new list
+    for (let existingTopicId of existingTopicIds) {
+        if (!topic_ids.includes(existingTopicId)) {
+            const { error } = await supabase.from('user_topics').delete().eq('user_id', user_id).eq('topic_id', existingTopicId);
             if (error) {
-                throw new Error();
+                return res.status(400).json({ error: 'Failed to update user topics' });
             }
-            topic_ids.push(data[0].id);
-        });
-    } catch (error) {
-        return res.status(400).json({ error: 'Failed to fetch topic ids' });
-    };
-    try {
-        topic
+        }
     }
 
+    // Upsert new topics
+    for (let topic_id of topic_ids) {
+        const { error } = await supabase.from('user_topics').upsert({ user_id, topic_id });
+        if (error) {
+            return res.status(400).json({ error: 'Failed to update user topics' });
+        }
+    }
+
+    return res.status(200).json({newTopicIds: topic_ids, message: 'User topics updated' });
 })
 
 module.exports = userRouter;

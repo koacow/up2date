@@ -22,7 +22,7 @@ usersRouter.post('/auth', async (req, res) => {
 });
 
 usersRouter.post('/register', async (req, res) => {
-    const { username, email, password, first_name, last_name } = req.body;
+    const { email, password, first_name, last_name } = req.body;
     const { data: authData, error: authError } = await supabase.auth.signUp({
         email,
         password
