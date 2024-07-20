@@ -3,8 +3,8 @@
 const usersRouter = require('express').Router();
 const supabase = require('../../models/db');
 
-usersRouter.post('/auth', async (req, res) => {
-    const { username, email, password } = req.body;
+usersRouter.post('/authenticate', async (req, res) => {
+    const { email, password } = req.body;
     const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -46,8 +46,15 @@ usersRouter.post('/register', async (req, res) => {
 
 usersRouter.put('/reset-password', async (req, res) => {
     const { email } = req.body;
-    await supabase.auth.resetPasswordForEmail(email, {
+    const { error} = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: 'http://localhost:5173',
     });
+    if (error) {
+        return res.status(400).json({ 
+            error: error.message,
+            code: error.code
+         });
+    }
+    return res.status(200).json({ message: 'Password reset email sent' });
 });
 module.exports = usersRouter;

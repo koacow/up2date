@@ -13,12 +13,23 @@ userRouter.get('/settings', async (req, res) => {
 });
 
 userRouter.put('/settings', async (req, res) => {
-    const { user_id, settings: newSettings } = req.body;
+    const { user_id } = req.query;
+    const { settings: newSettings } = req.body;
     const { error } = await supabase.from('user_settings').upsert({ user_id, newSettings });
     if (error) {
         return res.status(400).json({ error: 'Failed to update user settings' });
     }
     return res.status(200).json({ message: 'User settings updated' });
+});
+
+userRouter.delete('/settings', async (req, res) => {
+    const { user_id } = req.query;
+    const defaultSettings = {}; // TO DO: Fetch default settings from a table
+    const { error } = await supabase.from('user_settings').delete().eq('user_id', user_id);
+    if (error) {
+        return res.status(400).json({ error: 'Failed to delete user settings' });
+    }
+    return res.status(200).json({ message: 'User settings deleted' });
 });
 
 // TO DO: Create a default setting object and insert it into user_settings table when a new user registers
