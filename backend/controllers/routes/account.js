@@ -1,11 +1,11 @@
-// userRouter matches /api/user paths
+// accountRouter matches /api/account paths
 
 // Import required modules
 const { query, body, validationResult } = require('express-validator');
-const userRouter = require('express').Router();
+const accountRouter = require('express').Router();
 const supabase = require('../../models/db');
     
-userRouter.get('/settings',
+accountRouter.get('/settings',
     // Input validation chain
     query('user_id').isUUID().escape(), 
     async (req, res) => {
@@ -24,7 +24,7 @@ userRouter.get('/settings',
         return res.status(200).json(data);
 });
 
-userRouter.put('/settings',
+accountRouter.put('/settings',
     // Input validation chain
     query('user_id').isUUID().escape(),
     body('settings').isJSON().escape(),
@@ -45,7 +45,7 @@ userRouter.put('/settings',
         return res.status(200).json({ message: 'User settings updated' });
 });
 
-userRouter.delete('/settings',
+accountRouter.delete('/settings',
     // Input validation chain
     query('user_id').isUUID().escape(), 
     async (req, res) => {
@@ -67,7 +67,7 @@ userRouter.delete('/settings',
 
 // TO DO: Create a default setting object and insert it into user_settings table when a new user registers
 
-userRouter.get('/topics',
+accountRouter.get('/topics',
     // Input validation chain
     query('user_id').isUUID().escape, 
     async (req, res) => {
@@ -86,7 +86,7 @@ userRouter.get('/topics',
         return res.status(200).json(data);
 });
 
-userRouter.put('/topics',
+accountRouter.put('/topics',
     // Input validation chain 
     query('user_id').isUUID().escape(),
     body('topic_ids').isArray(),
@@ -127,4 +127,4 @@ userRouter.put('/topics',
         return res.status(200).json({newTopicIds: topic_ids, message: 'User topics updated' });
 })
 
-module.exports = userRouter;
+module.exports = accountRouter;

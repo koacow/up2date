@@ -1,0 +1,16 @@
+{
+    "display": {
+        "darkMode": false,
+        "language": "en"
+    },
+    "notifications": {
+        "email": {
+            "dailyDigest": true,
+            "newsletter": true
+        },
+        "push": {
+            "dailyDigest": true,
+            "newsletter": true
+        }
+    }
+}
