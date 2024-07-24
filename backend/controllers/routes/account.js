@@ -4,6 +4,24 @@
 const { query, body, validationResult } = require('express-validator');
 const accountRouter = require('express').Router();
 const supabase = require('../../models/db');
+
+// TO DO: remove hardcoded default settings
+const defaultSettings = {
+    "display": {
+        "darkMode": false,
+        "language": "en"
+    },
+    "notifications": {
+        "email": {
+            "dailyDigest": true,
+            "newsletter": true
+        },
+        "push": {
+            "dailyDigest": true,
+            "newsletter": true
+        }
+    }
+}
     
 accountRouter.get('/settings',
     // Input validation chain
@@ -57,7 +75,6 @@ accountRouter.delete('/settings',
 
         // Upsert user settings with default settings based on the user ID
         const { user_id } = req.query;
-        const defaultSettings = {}; // TO DO: Fetch default settings from a table
         const { error } = await supabase.from('user_settings').upsert({ user_id, settings: defaultSettings });
         if (error) {
             return res.status(400).json({ error: 'Failed to delete user settings' });
