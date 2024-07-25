@@ -74,7 +74,7 @@ usersRouter.post('/register',
 
 usersRouter.put('/reset-password',
     // Input validation chain
-    body('email').isEmail().normalize, 
+    body('email').isEmail().normalizeEmail(), 
     async (req, res) => {
         // If there are validation errors, return a 400 response
         const validationErrors = validationResult(req);
