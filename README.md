@@ -14,8 +14,7 @@ News collected from the **News API**.
 4. Search functionality for finding specific news articles.
 5. Responsive design for desktop and mobile devices.
 6. Dark and light mode for user interface.
-7. Notifications for breaking news.
-8. User feedback and support system.
+7. User feedback and support system.
 
 ## Future updates
 

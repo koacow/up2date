@@ -36,8 +36,8 @@ usersRouter.post('/authenticate',
 
 usersRouter.post('/register',
   // Input validation chain
-  body('email').isEmail().normalizeEmail(),
-  body('password').isLength({ min: 6 }),
+  body('email').notEmpty().isEmail().normalizeEmail(),
+  body('password').notEmpty().isLength({ min: 6 }),
   body('first_name').notEmpty().isString().escape(),
   body('last_name').notEmpty().isString().escape(),
   async (req, res) => {
@@ -62,7 +62,7 @@ usersRouter.post('/register',
 
     // Insert user profile data into the user_profiles table
     const user_id = authData.user.id;
-    const { error: insertError } = await supabase.from('user_profiles').insert({ user_id, first_name, last_name });
+    const { error: insertError } = await supabase.from('user_profiles').insert({ user_id, first_name, last_name }); 
     if (insertError) {
       return res.status(400).json({ 
         error: insertError.message,

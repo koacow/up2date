@@ -4,6 +4,19 @@ info:
   version: 1.0.0
   description: A fully customizable independent news application.
 paths:
+  /api/articles/topics:
+    summary: Get all topics
+    description: Retrieves all topics from the database.
+    get:
+      summary: Gets all topics
+      description: >-
+        Makes an API call to the News API to retrieve all topics.
+      operationId: get_topics
+      responses:
+        200:
+          description: Successfully retrieved topics
+        400:
+          description: Request failed
   /api/articles/:topic_id:
     summary: Get all articles from a certain topic.
     description: Retrieves a page of articles relating to the topic param.
@@ -55,6 +68,22 @@ paths:
     summary: Create a new user
     description: Registration route.
     post:
+      parameters:
+        - in: body
+          name: body
+          description: User registration details
+          required: true
+          schema:
+            type: object
+            properties:
+              first_name:
+                type: string
+              last_name:
+                type: string
+              email:
+                type: string
+              password:
+                type: string
       summary: Creates a new user profile
       description: >-
         Creates a new user profile (name, email, password) and add
@@ -113,7 +142,7 @@ paths:
         400:
           description: Request failed
           
-  /api/user/settings:
+  /api/account/settings:
     summary: Route for a user's app settings
     get:
       summary: Retrieves a user's settings
@@ -180,7 +209,7 @@ paths:
         200:
           description: Successfully reset settings
           
-  /api/user/topics:
+  /api/account/topics:
     summary: Routes relating to a user's saved topics
     get:
       summary: Get the full list of a user's saved topics
