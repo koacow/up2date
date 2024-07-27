@@ -39,10 +39,10 @@ articlesRouter.get('/topics', async (req, res) => {
   return res.status(200).json(data);
 });
 
-articlesRouter.get('/:topicId',
+articlesRouter.get('/:topic_id',
   // Input validation chain
-  query('pageNum').isInt(),
-  param('topicId').isInt().escape(),
+  query('pageNum').isInt().optional(),
+  param('topic_id').isInt().escape(),
   async (req, res) => {
     // If there are validation errors, return a 400 response
     const validationErrors = validationResult(req);
@@ -52,11 +52,16 @@ articlesRouter.get('/:topicId',
 
     // Get topic title from the database based on the topic ID
     const { topic_id } = req.params;
-    const { data, error } = await supabase.from('topics').select('*').eq('topic_id', topic_id);
+    const { data, error } = await supabase.from('topics').select('*').eq('id', topic_id);
     if (error) {
       return res.status(400).json({ error: 'Failed to fetch topic' });
     }
-    const [ topic ] = data;
+
+    if (data.length === 0) {
+      return res.status(404).json({ error: 'Topic not found' });
+    }
+    
+    const [ { topic } ] = data;
     const { pageNum } = req.query;
 
     // Fetch articles from the News API based on the topic and page number

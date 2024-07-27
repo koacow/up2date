@@ -22,10 +22,24 @@ const defaultSettings = {
     }
   }
 };
+
+accountRouter.use(query('user_id').isUUID().escape(), async (req, res, next) => {
+  const validationErrors = validationResult(req);
+  if (!validationErrors.isEmpty()) {
+    return res.status(400).json({ error: 'Invalid input' });
+  }
+  const { user_id } = req.query;
+  const { data, error } = await supabase.from('user_profiles').select('user_id').eq('user_id', user_id);
+  if (error) {
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+  if (data.length === 0) {
+    return res.status(404).json({ error: 'User not found' });
+  }
+  next();
+});
     
 accountRouter.get('/settings',
-  // Input validation chain
-  query('user_id').isUUID().escape(), 
   async (req, res) => {
     // If there are validation errors, return a 400 response
     const validationErrors = validationResult(req);
@@ -39,17 +53,36 @@ accountRouter.get('/settings',
     if (error) {
       return res.status(400).json({ error: 'Failed to fetch user settings' });
     }
+    if ( data.length === 0 ) {
+      return res.status(404).json({ error: 'User not found' });
+    }
     return res.status(200).json(data);
   });
 
+accountRouter.post('/settings', async (req, res) => {
+  // If there are validation errors, return a 400 response
+  const validationErrors = validationResult(req);
+  if (!validationErrors.isEmpty()) {
+    return res.status(400).json({ error: 'Invalid input' });
+  };
+
+  // Insert user settings based on the user ID
+  const { user_id } = req.query;
+  const { error } = await supabase.from('user_settings').insert({ user_id });
+  if (error) {
+    return res.status(400).json({ error: 'Failed to insert user settings' });
+  };
+  return res.status(201).json({ message: 'User settings inserted' });
+});
+
 accountRouter.put('/settings',
   // Input validation chain
-  query('user_id').isUUID().escape(),
-  body('settings').isJSON().escape(),
+  body('settings').isJSON().escape(), // Figure out why this JSON validation chain is throwing invalid JSON errors when passed the default settings object
   async (req, res) => {
     // If there are validation errors, return a 400 response
     const validationErrors = validationResult(req);
     if (!validationErrors.isEmpty()) {
+      console.log(validationErrors);
       return res.status(400).json({ error: 'Invalid input' });
     };
 
@@ -64,8 +97,6 @@ accountRouter.put('/settings',
   });
 
 accountRouter.delete('/settings',
-  // Input validation chain
-  query('user_id').isUUID().escape(), 
   async (req, res) => {
     // If there are validation errors, return a 400 response
     const validationErrors = validationResult(req);
@@ -85,8 +116,6 @@ accountRouter.delete('/settings',
 // TO DO: Create a default setting object and insert it into user_settings table when a new user registers
 
 accountRouter.get('/topics',
-  // Input validation chain
-  query('user_id').isUUID().escape, 
   async (req, res) => {
     // If there are validation errors, return a 400 response
     const validationErrors = validationResult(req);
@@ -104,10 +133,8 @@ accountRouter.get('/topics',
   });
 
 accountRouter.put('/topics',
-  // Input validation chain 
-  query('user_id').isUUID().escape(),
   body('topic_ids').isArray(),
-  body('topic_ids.*').isUUID().escape(),
+  body('topic_ids.*').isNumeric().escape(),
   async (req, res) => {
     // If there are validation errors, return a 400 response
     const validationErrors = validationResult(req);
@@ -115,14 +142,23 @@ accountRouter.put('/topics',
       return res.status(400).json({ error: 'Invalid input' });
     };
 
-    const { user_id, topic_ids } = req.body;
+    const { user_id } = req.query;
+    const { topic_ids } = req.body;
 
     // Fetch existing topic ids
     const { data: existingTopicIds, error: fetchExistingTopicIdsError } = await supabase.from('user_topics').select('topic_id').eq('user_id', user_id);
     if (fetchExistingTopicIdsError) {
       return res.status(400).json({ error: 'Failed to update user topics' });
     }
-        
+    
+    // Upsert new topics
+    for (const topic_id of topic_ids) {
+      const { error } = await supabase.from('user_topics').upsert({ user_id, topic_id });
+      if (error) {
+        return res.status(400).json({ error: 'Failed to update user topics' });
+      }
+    }
+
     // Delete existing topics that are not in the new list
     for (const existingTopicId of existingTopicIds) {
       if (!topic_ids.includes(existingTopicId)) {
@@ -133,13 +169,6 @@ accountRouter.put('/topics',
       }
     }
 
-    // Upsert new topics
-    for (const topic_id of topic_ids) {
-      const { error } = await supabase.from('user_topics').upsert({ user_id, topic_id });
-      if (error) {
-        return res.status(400).json({ error: 'Failed to update user topics' });
-      }
-    }
 
     return res.status(200).json({newTopicIds: topic_ids, message: 'User topics updated' });
   });
