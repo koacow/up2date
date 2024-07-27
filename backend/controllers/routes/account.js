@@ -77,12 +77,40 @@ accountRouter.post('/settings', async (req, res) => {
 
 accountRouter.put('/settings',
   // Input validation chain
-  body('settings').isJSON().escape(), // Figure out why this JSON validation chain is throwing invalid JSON errors when passed the default settings object
+  body('settings').custom(settingsValue => {
+    const settingsSchema = {
+      display: {
+        darkMode: value => typeof value === 'boolean',
+        language: value => typeof value === 'string' && parseInt(value.length) === 2
+      },
+      notifications: {
+        email: value => {
+          if (typeof value !== 'object') return false;
+          return Object.keys(value).every(key => ['dailyDigest', 'newsletter'].includes(key) && typeof value[key] === 'boolean');
+        },
+        push: value => {
+          if (typeof value !== 'object') return false;
+          return Object.keys(value).every(key => ['dailyDigest', 'newsletter'].includes(key) && typeof value[key] === 'boolean');
+        }
+      }
+    };
+
+    for (const [key, value] of Object.entries(settingsValue)) {
+      if (!settingsSchema[key]) {
+        return false
+      }
+      for (const [subKey, subValue] of Object.entries(value)) {
+        if (!settingsSchema[key][subKey] || !settingsSchema[key][subKey](subValue)) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }),
   async (req, res) => {
     // If there are validation errors, return a 400 response
     const validationErrors = validationResult(req);
     if (!validationErrors.isEmpty()) {
-      console.log(validationErrors);
       return res.status(400).json({ error: 'Invalid input' });
     };
 
@@ -110,7 +138,7 @@ accountRouter.delete('/settings',
     if (error) {
       return res.status(400).json({ error: 'Failed to delete user settings' });
     };
-    return res.status(200).json({ message: 'User settings deleted' });
+    return res.status(200).json({ message: 'Reset user\'s settings to default' });
   });
 
 // TO DO: Create a default setting object and insert it into user_settings table when a new user registers
@@ -125,7 +153,7 @@ accountRouter.get('/topics',
 
     // Fetch user topics based on the user ID
     const { user_id } = req.query;
-    const { data, error } = await supabase.from('user_topics').select('topics(topic)').eq('user_id', user_id);
+    const { data, error } = await supabase.from('user_topics').select('topic_id, topics(topic)').eq('user_id', user_id);
     if (error) {
       return res.status(400).json({ error: 'Failed to fetch user topics' });
     }
@@ -143,26 +171,30 @@ accountRouter.put('/topics',
     };
 
     const { user_id } = req.query;
-    const { topic_ids } = req.body;
+    const newTopicIds = req.body.topic_ids.map(topic_id => parseInt(topic_id)); // Convert topic ids to integers
 
     // Fetch existing topic ids
-    const { data: existingTopicIds, error: fetchExistingTopicIdsError } = await supabase.from('user_topics').select('topic_id').eq('user_id', user_id);
+    const { data: existingTopics, error: fetchExistingTopicIdsError } = await supabase.from('user_topics').select('topic_id').eq('user_id', user_id);
     if (fetchExistingTopicIdsError) {
       return res.status(400).json({ error: 'Failed to update user topics' });
     }
     
     // Upsert new topics
-    for (const topic_id of topic_ids) {
+    for (const topic_id of newTopicIds) {
       const { error } = await supabase.from('user_topics').upsert({ user_id, topic_id });
       if (error) {
         return res.status(400).json({ error: 'Failed to update user topics' });
       }
     }
 
+    if (!existingTopics || existingTopics.length === 0) {
+      return res.status(200).json({newTopicIds, message: 'User topics updated' });
+    }
+
     // Delete existing topics that are not in the new list
-    for (const existingTopicId of existingTopicIds) {
-      if (!topic_ids.includes(existingTopicId)) {
-        const { error } = await supabase.from('user_topics').delete().eq('user_id', user_id).eq('topic_id', existingTopicId);
+    for (const existingTopic of existingTopics) {
+      if (!newTopicIds.includes(existingTopic.topic_id)) {
+        const { error } = await supabase.from('user_topics').delete().eq('user_id', user_id).eq('topic_id', existingTopic.topic_id);
         if (error) {
           return res.status(400).json({ error: 'Failed to update user topics' });
         }
@@ -170,7 +202,7 @@ accountRouter.put('/topics',
     }
 
 
-    return res.status(200).json({newTopicIds: topic_ids, message: 'User topics updated' });
+    return res.status(200).json({newTopicIds, message: 'User topics updated' });
   });
 
 module.exports = accountRouter;
