@@ -3,6 +3,39 @@ info:
   title: up2date-backend
   version: 1.0.0
   description: A fully customizable independent news application.
+
+components:
+  schemas:
+    Settings:
+      type: object
+      properties:
+        display:
+          darkMode:
+            type: string
+            description: The theme setting for the user 
+          language:
+            type: string
+            description: The language setting for the user
+        notifications:
+          email:
+            dailyDigest:
+              type: boolean
+              description: Whether the user has daily digest emails enabled
+            newsletters:
+              type: boolean
+              description: Whether the user has newsletters enabled
+          push:
+            dailyDigest:
+              type: boolean
+              description: Whether the user has daily digest push notifications enabled
+            newsletters:
+              type: boolean
+              description: Whether the user has newsletters push notifications enabled
+      required:
+        - display
+        - notifications
+
+
 paths:
   /api/articles/topics:
     summary: Get all topics
@@ -143,11 +176,10 @@ paths:
           description: Request failed
           
   /api/account/settings:
-    summary: Route for a user's app settings
+    summary: Routes relating to a user's settings
     get:
-      summary: Retrieves a user's settings
-      description: >-
-        Retrieve an object representing all user's app settings.
+      summary: Get the user's settings
+      description: Retrieve the user's settings from the database.
       parameters:
         - in: query
           name: user_id
@@ -157,14 +189,29 @@ paths:
           description: user id from session
       operationId: get_settings
       responses:
-        200: 
-          description: Successfully retrieved settings
         400:
           description: Request failed
-          
+        200:
+          description: Successfully retrieved settings
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Settings'
+    
+    post:
+      summary: Create a new user's settings
+      description: Initialize a new user's settings profile in the database with default settings.
+      parameters:
+        - in: query
+          name: user_id
+          schema:
+            type: string
+          required: true
+          description: user id from session
+              
     put:
-      summary: Update a user's settings.
-      description: Update the user's settings with a new settings object.
+      summary: Update the user's settings
+      description: Update the user's settings in the database.
       parameters:
         - in: query
           name: user_id
@@ -174,40 +221,18 @@ paths:
           description: user id from session
         - in: body
           name: body
-          description: New user settings object
+          description: New settings for the user
           required: true
-          schema:
-            type: object
-            properties:
-              setting1:
-                type: boolean
-              setting2:
-                type: string
-              setting3:
-                type: string
-      operationId: update_settigngs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Settings'
+      operationId: update_settings
       responses:
+        400:
+          description: Request failed
         200:
           description: Successfully updated settings
-        400:
-          description: Request failed
-          
-    delete:
-      summary: Reset settings
-      description: Delete all preferences and revert back to default settings.
-      operationId: reset_preferences.
-      parameters:
-        - in: query
-          name: user_id
-          schema:
-            type: string
-          required: true
-          description: user id from session
-      responses:
-        400:
-          description: Request failed
-        200:
-          description: Successfully reset settings
           
   /api/account/topics:
     summary: Routes relating to a user's saved topics
