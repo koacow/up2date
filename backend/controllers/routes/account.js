@@ -23,6 +23,7 @@ const defaultSettings = {
   }
 };
 
+// Validates the user_id query parameter and checks if the user exists
 accountRouter.use(query('user_id').isUUID().escape(), async (req, res, next) => {
   const validationErrors = validationResult(req);
   if (!validationErrors.isEmpty()) {
@@ -97,7 +98,7 @@ accountRouter.put('/settings',
 
     for (const [key, value] of Object.entries(settingsValue)) {
       if (!settingsSchema[key]) {
-        return false
+        return false;
       }
       for (const [subKey, subValue] of Object.entries(value)) {
         if (!settingsSchema[key][subKey] || !settingsSchema[key][subKey](subValue)) {
@@ -161,8 +162,14 @@ accountRouter.get('/topics',
   });
 
 accountRouter.put('/topics',
+  // Input validation chain
   body('topic_ids').isArray(),
-  body('topic_ids.*').isNumeric().escape(),
+  body('topic_ids.*').isNumeric().escape().custom(async (value) => {
+    const { data, error } = await supabase.from('topics').select('id').eq('id', parseInt(value));
+    if (error || data.length === 0) {
+      throw new Error('Invalid topic ID');
+    }
+  }),
   async (req, res) => {
     // If there are validation errors, return a 400 response
     const validationErrors = validationResult(req);
@@ -173,36 +180,82 @@ accountRouter.put('/topics',
     const { user_id } = req.query;
     const newTopicIds = req.body.topic_ids.map(topic_id => parseInt(topic_id)); // Convert topic ids to integers
 
-    // Fetch existing topic ids
-    const { data: existingTopics, error: fetchExistingTopicIdsError } = await supabase.from('user_topics').select('topic_id').eq('user_id', user_id);
-    if (fetchExistingTopicIdsError) {
+    // Delete user topics based on the user ID
+    const { error: deleteError } = await supabase.from('user_topics').delete().eq('user_id', user_id);
+    if (deleteError) {
       return res.status(400).json({ error: 'Failed to update user topics' });
     }
-    
-    // Upsert new topics
-    for (const topic_id of newTopicIds) {
-      const { error } = await supabase.from('user_topics').upsert({ user_id, topic_id });
-      if (error) {
-        return res.status(400).json({ error: 'Failed to update user topics' });
-      }
+
+    // Insert new user topics based on the user ID
+    const { error: insertError } = await supabase.from('user_topics').insert(newTopicIds.map(topic_id => ({ user_id, topic_id })));
+    if (insertError) {
+      return res.status(400).json({ error: 'Failed to update user topics' });
     }
-
-    if (!existingTopics || existingTopics.length === 0) {
-      return res.status(200).json({newTopicIds, message: 'User topics updated' });
-    }
-
-    // Delete existing topics that are not in the new list
-    for (const existingTopic of existingTopics) {
-      if (!newTopicIds.includes(existingTopic.topic_id)) {
-        const { error } = await supabase.from('user_topics').delete().eq('user_id', user_id).eq('topic_id', existingTopic.topic_id);
-        if (error) {
-          return res.status(400).json({ error: 'Failed to update user topics' });
-        }
-      }
-    }
-
-
-    return res.status(200).json({newTopicIds, message: 'User topics updated' });
+    return res.status(200).json({topic_ids: newTopicIds, message: 'User topics updated' });
   });
+
+accountRouter.delete('/topics',
+  async (req, res) => {
+    // Delete user topics based on the user ID
+    const { user_id } = req.query;
+    const { error } = await supabase.from('user_topics').delete().eq('user_id', user_id);
+    if (error) {
+      return res.status(400).json({ error: 'Failed to delete user topics' });
+    };
+    return res.status(200).json({ message: 'User topics deleted' });
+  });
+
+// Get user saved stocks
+accountRouter.get('/stocks', async (req, res) => {
+  const { user_id } = req.query;
+  const { data, error } = await supabase.from('saved_stocks').select('stock_ticker').eq('user_id', user_id);
+  if (error) {
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+  return res.status(200).json(data);
+});
+
+accountRouter.put('/stocks',
+  body('stock_tickers').isArray(),
+  body('stock_tickers.*').isString().escape().custom(async (value) => {
+    const {STOCK_API_KEY} = process.env;
+    const STOCK_API_ENDPOINT = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${value}&apikey=${STOCK_API_KEY}`;
+    const response = await fetch(STOCK_API_ENDPOINT);
+    if (!response.ok) {
+      throw new Error('Failed to fetch stock data');
+    }
+    const data = await response.json();
+    if (!data['Global Quote'] || !data['Global Quote']['01. symbol']) {
+      throw new Error('Invalid stock ticker');
+    }
+  }),
+  async (req, res) => {
+    const validationErrors = validationResult(req);
+    if (!validationErrors.isEmpty()) {
+      return res.status(400).json({ error: 'Invalid input' });
+    }
+    const { user_id } = req.query;
+    const { error: deleteError } = await supabase.from('saved_stocks').delete().eq('user_id', user_id);
+    if (deleteError) {
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+    const { stock_tickers } = req.body;
+    for (const stock_ticker of stock_tickers) {
+      const { error } = await supabase.from('saved_stocks').upsert({ user_id, stock_ticker });
+      if (error) {
+        return res.status(500).json({ error: 'Internal server error' });
+      }
+    }
+    return res.status(200).json({ stock_tickers, message: 'Stocks saved' });
+  });
+
+accountRouter.delete('/stocks', async (req, res) => {
+  const { user_id } = req.query;
+  const { error } = await supabase.from('saved_stocks').delete().eq('user_id', user_id);
+  if (error) {
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+  return res.status(200).json({ message: 'Stocks deleted' });
+});
 
 module.exports = accountRouter;
