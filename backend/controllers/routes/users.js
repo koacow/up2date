@@ -26,7 +26,7 @@ usersRouter.post('/authenticate',
       },
     });
     if (error) {
-      return res.status(400).json({ 
+      return res.status(500).json({ 
         error: error.message,
         code: error.code
       });
@@ -54,7 +54,7 @@ usersRouter.post('/register',
       password
     });
     if (authError) {
-      return res.status(400).json({ 
+      return res.status(500).json({ 
         error: authError.message,
         code: authError.code
       });
@@ -64,7 +64,7 @@ usersRouter.post('/register',
     const user_id = authData.user.id;
     const { error: insertError } = await supabase.from('user_profiles').insert({ user_id, first_name, last_name }); 
     if (insertError) {
-      return res.status(400).json({ 
+      return res.status(500).json({ 
         error: insertError.message,
         code: insertError.code
       });
@@ -88,7 +88,7 @@ usersRouter.put('/reset-password',
       redirectTo: 'http://localhost:5173',
     });
     if (error) {
-      return res.status(400).json({ 
+      return res.status(500).json({ 
         error: error.message,
         code: error.code
       });

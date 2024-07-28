@@ -52,7 +52,7 @@ accountRouter.get('/settings',
     const { user_id } = req.query;
     const { data, error } = await supabase.from('user_settings').select('*').eq('user_id', user_id);
     if (error) {
-      return res.status(400).json({ error: 'Failed to fetch user settings' });
+      return res.status(500).json({ error: 'Internal server error' });
     }
     if ( data.length === 0 ) {
       return res.status(404).json({ error: 'User not found' });
@@ -71,7 +71,7 @@ accountRouter.post('/settings', async (req, res) => {
   const { user_id } = req.query;
   const { error } = await supabase.from('user_settings').insert({ user_id });
   if (error) {
-    return res.status(400).json({ error: 'Failed to insert user settings' });
+    return res.status(500).json({ error: 'Internal server error' });
   };
   return res.status(201).json({ message: 'User settings inserted' });
 });
@@ -120,7 +120,7 @@ accountRouter.put('/settings',
     const { settings } = req.body;
     const { error } = await supabase.from('user_settings').upsert({ user_id, settings });
     if (error) {
-      return res.status(400).json({ error: 'Failed to update user settings' });
+      return res.status(500).json({ error: 'Internal server error' });
     };
     return res.status(200).json({ message: 'User settings updated' });
   });
@@ -137,7 +137,7 @@ accountRouter.delete('/settings',
     const { user_id } = req.query;
     const { error } = await supabase.from('user_settings').upsert({ user_id, settings: defaultSettings });
     if (error) {
-      return res.status(400).json({ error: 'Failed to delete user settings' });
+      return res.status(500).json({ error: 'Internal server error' });
     };
     return res.status(200).json({ message: 'Reset user\'s settings to default' });
   });
@@ -156,7 +156,7 @@ accountRouter.get('/topics',
     const { user_id } = req.query;
     const { data, error } = await supabase.from('user_topics').select('topic_id, topics(topic)').eq('user_id', user_id);
     if (error) {
-      return res.status(400).json({ error: 'Failed to fetch user topics' });
+      return res.status(500).json({ error: 'Internal server error' });
     }
     return res.status(200).json(data);
   });
@@ -200,7 +200,7 @@ accountRouter.delete('/topics',
     const { user_id } = req.query;
     const { error } = await supabase.from('user_topics').delete().eq('user_id', user_id);
     if (error) {
-      return res.status(400).json({ error: 'Failed to delete user topics' });
+      return res.status(500).json({ error: 'Internal server error' });
     };
     return res.status(200).json({ message: 'User topics deleted' });
   });
@@ -255,7 +255,7 @@ accountRouter.delete('/stocks', async (req, res) => {
   if (error) {
     return res.status(500).json({ error: 'Internal server error' });
   }
-  return res.status(200).json({ message: 'Stocks deleted' });
+  return res.status(200).json({ message: 'Saved stocks deleted' });
 });
 
 module.exports = accountRouter;

@@ -27,14 +27,14 @@ articlesRouter.get('/search',
       const data = await response.json();
       return res.status(200).json(data);
     }
-    return res.status(400).json({ error: 'Failed to fetch articles' });
+    return res.status(500).json({ error: 'Internal server error' });
   });
 
 articlesRouter.get('/topics', async (req, res) => {
   // Fetch all topics from the database
   const { data, error } = await supabase.from('topics').select('*');
   if (error) {
-    return res.status(400).json({ error: 'Failed to fetch topics' });
+    return res.status(500).json({ error: 'Internal server error' });
   }
   return res.status(200).json(data);
 });
@@ -54,7 +54,7 @@ articlesRouter.get('/:topic_id',
     const { topic_id } = req.params;
     const { data, error } = await supabase.from('topics').select('*').eq('id', topic_id);
     if (error) {
-      return res.status(400).json({ error: 'Failed to fetch topic' });
+      return res.status(500).json({ error: 'Internal server error' });
     }
 
     if (data.length === 0) {
@@ -70,7 +70,7 @@ articlesRouter.get('/:topic_id',
       const articles = await response.json();
       return res.status(200).json(articles);
     }
-    return res.status(400).json({ error: 'Failed to fetch articles' });
+    return res.status(500).json({ error: 'Internal server error' });
   });
 
 
