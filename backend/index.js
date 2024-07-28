@@ -20,5 +20,5 @@ app.use('/api/articles', articlesRouter);
 app.use('/api/stocks', stocksRouter);
 
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+	console.log(`Server is running on port ${PORT}`);
 });

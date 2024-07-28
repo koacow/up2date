@@ -15,7 +15,7 @@ export default [
       "prefer-const": "error",
       "prefer-destructuring": "error",
       "semi": ["error", "always"],
-      "indent": ["error", 2],
+      "indent": ["error", "tab"],
 
     },
   },
