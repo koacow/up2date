@@ -71,7 +71,7 @@ accountRouter.post('/settings', async (req, res) => {
 });
 
 accountRouter.put('/settings',
-	// Input validation chain
+	// Validate settings object
 	body('settings').custom(settingsValue => {
 		const settingsSchema = {
 			display: {
@@ -121,12 +121,6 @@ accountRouter.put('/settings',
 
 accountRouter.delete('/settings',
 	async (req, res) => {
-		// If there are validation errors, return a 400 response
-		const validationErrors = validationResult(req);
-		if (!validationErrors.isEmpty()) {
-			return res.status(400).json({ error: 'Invalid input' });
-		};
-
 		// Upsert user settings with default settings based on the user ID
 		const { user_id } = req.query;
 		const { error } = await supabase.from('user_settings').upsert({ user_id, settings: defaultSettings });
@@ -136,16 +130,8 @@ accountRouter.delete('/settings',
 		return res.status(200).json({ message: 'Reset user\'s settings to default' });
 	});
 
-// TO DO: Create a default setting object and insert it into user_settings table when a new user registers
-
 accountRouter.get('/topics',
 	async (req, res) => {
-		// If there are validation errors, return a 400 response
-		const validationErrors = validationResult(req);
-		if (!validationErrors.isEmpty()) {
-			return res.status(400).json({ error: 'Invalid input' });
-		};
-
 		// Fetch user topics based on the user ID
 		const { user_id } = req.query;
 		const { data, error } = await supabase.from('user_topics').select('topic_id, topics(topic)').eq('user_id', user_id);
