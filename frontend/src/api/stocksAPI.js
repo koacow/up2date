@@ -1,3 +1,4 @@
+const ENDPOINT = '/api/stocks';
 export default stocksAPI = {
     searchStocksByQuery: async (query) => {
         const response = await fetch(`/api/stocks/search/?query=${query}`);
