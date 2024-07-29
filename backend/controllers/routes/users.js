@@ -95,4 +95,17 @@ usersRouter.put('/reset-password',
 		}
 		return res.status(200).json({ message: 'Password reset email sent' });
 	});
+
+usersRouter.post('/logout', async (req, res) => {
+  // Log out the current user
+  const { error } = await supabase.auth.signOut();
+  if (error) {
+    return res.status(500).json({ 
+      error: error.message,
+      code: error.code
+    });
+  }
+  return res.status(200).json({ message: 'User logged out' });
+});
+
 module.exports = usersRouter;
