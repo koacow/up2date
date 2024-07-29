@@ -2,9 +2,13 @@ import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } 
 import './App.css';
 import Index from './pages/Index';
 import NotFound from './pages/NotFound';
+import LogIn from './pages/LogIn';
+import Register from './pages/Register';
 function App() {
   const AppRouter = createBrowserRouter(createRoutesFromElements([
     <Route path="/" element={<Index />} />,
+    <Route path="/login" element={<LogIn />} />,
+    <Route path="/register" element={<Register />} />,
     <Route path="*" element={<NotFound />} />
   ]));
   return (
