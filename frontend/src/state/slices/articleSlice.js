@@ -2,10 +2,13 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getArticlesByQuery, getAllTopics, getArticlesByTopic } from '../../api/articlesAPI';
 
 const initialState = {
+    // Topics is an object with keys as topic ids and values of 'topicName': String, 'articles': Array, 'pageNum': Number
     topics: {
         topicsLoading: false,
         topicsError: null
     },
+
+    // Search is an object with keys 'query': String, 'articles': Array, 'pageNum': Number, 'totalPages': Number, 'searchLoading': Boolean, 'searchError': String
     search: {
         query: '',
         articles: [],
@@ -30,7 +33,7 @@ const articleSlice = createSlice({
         setArticles(state, action) {
             state.search.articles = action.payload;
         },
-        setPageNum(state, action) {
+        setSearchPageNum(state, action) {
             state.search.pageNum = action.payload;
         },
         setTotalPages(state, action) {
@@ -89,7 +92,7 @@ const articleSlice = createSlice({
     }
 });
 
-const fetchArticlesByQuery = createAsyncThunk(
+export const fetchArticlesByQuery = createAsyncThunk(
     'articles/fetchArticlesByQuery',
     async (query, thunkAPI) => {
         const pageNum = thunkAPI.getState().articles.search.pageNum;
@@ -101,7 +104,7 @@ const fetchArticlesByQuery = createAsyncThunk(
         }
     });
 
-const fetchAllTopics = createAsyncThunk(
+export const fetchAllTopics = createAsyncThunk(
     'articles/fetchAllTopics',
     async (_, thunkAPI) => {
         try {
@@ -112,7 +115,7 @@ const fetchAllTopics = createAsyncThunk(
         }
     });
 
-const fetchArticlesForAllTopics = createAsyncThunk(
+export const fetchArticlesForAllTopics = createAsyncThunk(
     'articles/fetchArticlesForAllTopics',
     async (_, thunkAPI) => {
         try {
