@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getArticlesByQuery, getAllTopics, getArticlesByTopic } from '../../api/articlesAPI';
+import { getArticlesByQuery } from '../../api/articlesAPI';
 
 const initialState = {
     query: '',
