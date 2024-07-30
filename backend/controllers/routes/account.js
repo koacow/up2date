@@ -171,7 +171,7 @@ accountRouter.put('/topics',
 		if (insertError) {
 			return res.status(400).json({ error: 'Failed to update user topics' });
 		}
-		return res.status(200).json({topic_ids: newTopicIds, message: 'User topics updated' });
+		return res.status(201).json({topic_ids: newTopicIds, message: 'User topics updated' });
 	});
 
 accountRouter.delete('/topics',
@@ -182,7 +182,7 @@ accountRouter.delete('/topics',
 		if (error) {
 			return res.status(500).json({ error: 'Internal server error' });
 		};
-		return res.status(200).json({ message: 'User topics deleted' });
+		return res.status(204).json({ message: 'User topics deleted' });
 	});
 
 // Get user saved stocks
@@ -226,7 +226,7 @@ accountRouter.put('/stocks',
 				return res.status(500).json({ error: 'Internal server error' });
 			}
 		}
-		return res.status(200).json({ stock_tickers, message: 'Stocks saved' });
+		return res.status(201).json({ stock_tickers, message: 'Stocks saved' });
 	});
 
 accountRouter.delete('/stocks', async (req, res) => {
@@ -235,7 +235,7 @@ accountRouter.delete('/stocks', async (req, res) => {
 	if (error) {
 		return res.status(500).json({ error: 'Internal server error' });
 	}
-	return res.status(200).json({ message: 'Saved stocks deleted' });
+	return res.status(204).json({ message: 'Saved stocks deleted' });
 });
 
 module.exports = accountRouter;

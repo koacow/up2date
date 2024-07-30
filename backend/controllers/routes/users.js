@@ -69,7 +69,7 @@ usersRouter.post('/register',
 				code: insertError.code
 			});
 		}
-		return res.status(200).json(authData);
+		return res.status(201).json(authData);
 	});
 
 usersRouter.put('/reset-password',
