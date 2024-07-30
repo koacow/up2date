@@ -18,7 +18,7 @@ articlesRouter.get('/search',
 		}
 
 		// Fetch articles from the News API based on the search query and page number
-		const { query, pageNum = '1'} = req.query;
+		const { query, pageNum } = req.query;
 		if (!query) {
 			return res.status(400).json({ error: 'Query is required' });
 		}
