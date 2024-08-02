@@ -6,66 +6,9 @@ const initialState = {
     "session": null,
     "error": null,
     "loading": false    
-}
+};
 
-const sessionSlice = createSlice({
-    name: 'session',
-    initialState,
-    reducers: {
-        setSession(state, action) {
-            state.session = action.payload;
-        },
-        setData(state, action) {
-            state.data = action.payload;
-        },
-        setError(state, action) {
-            state.error = action.payload;
-        },
-    },
-    extraReducers: {
-        [logUserIn.fulfilled]: (state, action) => {
-            state.session = action.payload;
-            state.loading = false;
-            state.error = null;
-        },
-        [logUserIn.pending]: (state) => {
-            state.loading = true;
-            state.error = null;
-        },
-        [logUserIn.rejected]: (state, action) => {
-            state.error = action.payload.error;
-            state.loading = false;
-        },
-        [registerUser.fulfilled]: (state, action) => {
-            state.session = action.payload;
-            state.loading = false;
-            state.error = null;
-        },
-        [registerUser.pending]: (state) => {
-            state.loading = true;
-            state.error = null;
-        },
-        [registerUser.rejected]: (state, action) => {
-            state.error = action.payload.error;
-            state.loading = false;
-        },
-        [logUserOut.fulfilled]: (state, action) => {
-            state.session = null;
-            state.loading = false;
-            state.error = null;
-        },
-        [logUserOut.pending]: (state) => {
-            state.loading = true;
-            state.error = null;
-        },
-        [logUserOut.rejected]: (state, action) => {
-            state.session = null;
-            state.error = action.payload.error;
-            state.loading = false;
-        },
-    }
-});
-
+// Async thunks
 export const logUserIn = createAsyncThunk(
     'session/login',
     async (credentials, thunkAPI) => {
@@ -110,6 +53,66 @@ export const fetchUserData = createAsyncThunk(
         }
     });
 
-export const { setSession, setData, setError } = sessionSlice.actions;
-export default sessionSlice.reducer;
+// Slice
+const sessionSlice = createSlice({
+    name: 'session',
+    initialState,
+    reducers: {
+        setSession(state, action) {
+            state.session = action.payload;
+        },
+        setData(state, action) {
+            state.data = action.payload;
+        },
+        setError(state, action) {
+            state.error = action.payload;
+        },
+    },
+    extraReducers: {
+        [logUserIn.fulfilled]: (state, action) => {
+            state.session = action.payload;
+            state.loading = false;
+            state.error = null;
+        },
+        [logUserIn.pending]: (state) => {
+            state.loading = true;
+            state.error = null;
+        },
+        [logUserIn.rejected]: (state, action) => {
+            state.error = action.payload.error;
+            state.loading = false;
+        },
+        [registerUser.fulfilled]: (state, action) => {
+            state.session = action.payload;
+            state.loading = false;
+            state.error = null;
+        },
+        [registerUser.pending]: (state) => {
+            state.loading = true;
+            state.error = null;
+        },
+        [registerUser.rejected]: (state, action) => {
+            state.error = action.payload.error;
+            state.loading = false;
+        },
+        [logUserOut.fulfilled]: (state) => {
+            state.session = null;
+            state.loading = false;
+            state.error = null;
+        },
+        [logUserOut.pending]: (state) => {
+            state.loading = true;
+            state.error = null;
+        },
+        [logUserOut.rejected]: (state, action) => {
+            state.session = null;
+            state.error = action.payload.error;
+            state.loading = false;
+        },
+    }
+});
+
+const { actions, reducer } = sessionSlice;
+export const { setSession, setData, setError } = actions;
+export default reducer;
 

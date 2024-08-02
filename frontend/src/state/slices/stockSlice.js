@@ -26,63 +26,7 @@ const initialState = {
     }
 };
 
-const stocksSlice = createSlice({
-    name: 'stocks',
-    initialState,
-    reducers: {
-        setQuery(state, action) {
-            state.search.query = action.payload;
-        },
-        setStocks(state, action) {
-            state.search.stocks = action.payload;
-        },
-        setError(state, action) {
-            state.search.searchError = action.payload;
-        },
-    },
-    extraReducers: {
-        [fetchStocksByQuery.fulfilled]: (state, action) => {
-            state.search.stocks = action.payload;
-            state.search.searchLoading = false;
-            state.search.searchError = null;
-        },
-        [fetchStocksByQuery.pending]: (state) => {
-            state.search.searchLoading = true;
-            state.search.searchError = null;
-        },
-        [fetchStocksByQuery.rejected]: (state, action) => {
-            state.search.searchError = action.payload.error;
-            state.search.searchLoading = false;
-        },
-        [fetchUserSavedStocks.fulfilled]: (state, action) => {
-            state.saved.stocks = action.payload.map(stock => stock.stock_ticker);
-            state.saved.savedStocksLoading = false;
-            state.saved.savedStocksError = null;
-        },
-        [fetchUserSavedStocks.pending]: (state) => {
-            state.saved.savedStocksLoading = true;
-            state.saved.savedStocksError = null;
-        },
-        [fetchUserSavedStocks.rejected]: (state, action) => {
-            state.saved.savedStocksError = action.payload.error;
-            state.saved.savedStocksLoading = false;
-        },
-        [updateUserSavedStocksThunk.fulfilled]: (state, action) => {
-            state.saved.stocks = action.payload.stock_tickers;
-            state.saved.savedStocksLoading = false;
-            state.saved.savedStocksError = null;
-        },
-        [updateUserSavedStocksThunk.pending]: (state) => {
-            state.saved.savedStocksLoading = true;
-            state.saved.savedStocksError = null;
-        },
-        [updateUserSavedStocksThunk.rejected]: (state, action) => {
-            state.saved.savedStocksError = action.payload.error;
-            state.saved.savedStocksLoading = false;
-        },
-    }
-});
-
+// Async thunks
 export const fetchStocksByQuery = createAsyncThunk(
     'stocks/fetchStocksByQuery',
     async (query, thunkAPI) => {
@@ -183,6 +127,65 @@ export const fetchStockMonthlyDataBySymbol = createAsyncThunk(
     }
 );  
 
-export const { setQuery, setStocks, setError } = stocksSlice.actions;
-export default stocksSlice.reducer;
+// Slice
+const stocksSlice = createSlice({
+    name: 'stocks',
+    initialState,
+    reducers: {
+        setQuery(state, action) {
+            state.search.query = action.payload;
+        },
+        setStocks(state, action) {
+            state.search.stocks = action.payload;
+        },
+        setError(state, action) {
+            state.search.searchError = action.payload;
+        },
+    },
+    extraReducers: {
+        [fetchStocksByQuery.fulfilled]: (state, action) => {
+            state.search.stocks = action.payload;
+            state.search.searchLoading = false;
+            state.search.searchError = null;
+        },
+        [fetchStocksByQuery.pending]: (state) => {
+            state.search.searchLoading = true;
+            state.search.searchError = null;
+        },
+        [fetchStocksByQuery.rejected]: (state, action) => {
+            state.search.searchError = action.payload.error;
+            state.search.searchLoading = false;
+        },
+        [fetchUserSavedStocks.fulfilled]: (state, action) => {
+            state.saved.stocks = action.payload.map(stock => stock.stock_ticker);
+            state.saved.savedStocksLoading = false;
+            state.saved.savedStocksError = null;
+        },
+        [fetchUserSavedStocks.pending]: (state) => {
+            state.saved.savedStocksLoading = true;
+            state.saved.savedStocksError = null;
+        },
+        [fetchUserSavedStocks.rejected]: (state, action) => {
+            state.saved.savedStocksError = action.payload.error;
+            state.saved.savedStocksLoading = false;
+        },
+        [updateUserSavedStocksThunk.fulfilled]: (state, action) => {
+            state.saved.stocks = action.payload.stock_tickers;
+            state.saved.savedStocksLoading = false;
+            state.saved.savedStocksError = null;
+        },
+        [updateUserSavedStocksThunk.pending]: (state) => {
+            state.saved.savedStocksLoading = true;
+            state.saved.savedStocksError = null;
+        },
+        [updateUserSavedStocksThunk.rejected]: (state, action) => {
+            state.saved.savedStocksError = action.payload.error;
+            state.saved.savedStocksLoading = false;
+        },
+    }
+});
+
+const { actions, reducer } = stocksSlice;
+export const { setQuery, setStocks, setError } = actions;
+export default reducer;
 

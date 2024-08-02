@@ -173,6 +173,48 @@ const initialState = {
     savedTopicsError: null,
 };
 
+
+// Async thunks
+export const fetchUserSavedTopics = createAsyncThunk(
+    'topics/fetchUserSavedTopics',
+    async (_, thunkAPI) => {
+        try {
+            const userId = thunkAPI.getState().session.data.user.id;
+            const response = await getUserSavedTopics(userId);
+            return response;
+        } catch (error) {
+            return thunkAPI.rejectWithValue({ error: error.message });
+        }
+    }
+);
+
+export const updateUserSavedTopicsThunk = createAsyncThunk(
+    'topics/updateUserSavedTopics',
+    async (topicIds, thunkAPI) => {
+        try {
+            const userId = thunkAPI.getState().session.data.user.id;
+            const response = await updateUserSavedTopics(userId, topicIds);
+            return response;
+        } catch (error) {
+            return thunkAPI.rejectWithValue({ error: error.message });
+        }
+    }
+);
+
+export const deleteUserSavedTopicsThunk = createAsyncThunk(
+    'topics/deleteUserSavedTopics',
+    async (topicIds, thunkAPI) => {
+        try {
+            const userId = thunkAPI.getState().session.data.user.id;
+            const response = await deleteUserSavedTopics(userId, topicIds);
+            return response;
+        } catch (error) {
+            return thunkAPI.rejectWithValue({ error: error.message });
+        }
+    }
+);
+
+// Slice
 const topicsSlice = createSlice({
     name: 'topics',
     initialState,
@@ -222,44 +264,6 @@ const topicsSlice = createSlice({
     }
 });
 
-export const fetchUserSavedTopics = createAsyncThunk(
-    'topics/fetchUserSavedTopics',
-    async (_, thunkAPI) => {
-        try {
-            const userId = thunkAPI.getState().session.data.user.id;
-            const response = await getUserSavedTopics(userId);
-            return response;
-        } catch (error) {
-            return thunkAPI.rejectWithValue({ error: error.message });
-        }
-    }
-);
-
-export const updateUserSavedTopicsThunk = createAsyncThunk(
-    'topics/updateUserSavedTopics',
-    async (topicIds, thunkAPI) => {
-        try {
-            const userId = thunkAPI.getState().session.data.user.id;
-            const response = await updateUserSavedTopics(userId, topicIds);
-            return response;
-        } catch (error) {
-            return thunkAPI.rejectWithValue({ error: error.message });
-        }
-    }
-);
-
-export const deleteUserSavedTopicsThunk = createAsyncThunk(
-    'topics/deleteUserSavedTopics',
-    async (topicIds, thunkAPI) => {
-        try {
-            const userId = thunkAPI.getState().session.data.user.id;
-            const response = await deleteUserSavedTopics(userId, topicIds);
-            return response;
-        } catch (error) {
-            return thunkAPI.rejectWithValue({ error: error.message });
-        }
-    }
-);
-
-export const { setTopics, setPageNumForTopic, setError } = topicsSlice.actions;
-export default topicsSlice.reducer;
+const { reducer, actions } = topicsSlice;
+export const { setTopics, setPageNumForTopic, setError } = actions;
+export default reducer;

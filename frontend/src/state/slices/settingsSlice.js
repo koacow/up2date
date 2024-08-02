@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getSettings, updateUserSettings, resetUserSettings } from '../../api/accountAPI';
+import { getUserSettings, updateUserSettings, resetUserSettings } from '../../api/accountAPI';
 
 const initialState = {
 	display: {
@@ -20,6 +20,47 @@ const initialState = {
     error: null,
 };
 
+// Async reducers
+export const fetchSettingsAsync = createAsyncThunk(
+    'settings/fetchSettingsAsync',
+    async (_, thunkAPI) => {
+        try {
+            const userId = thunkAPI.getState().session.data.user.id;
+            const response = await getSettings(userId);
+            return response;
+        } catch (error) {
+            return thunkAPI.rejectWithValue({ error: error.message });
+        }
+    }
+);
+
+export const updateSettingsAsync = createAsyncThunk(
+    'settings/updateSettingsAsync',
+    async (settings, thunkAPI) => {
+        try {
+            const userId = thunkAPI.getState().session.data.user.id;
+            await updateUserSettings(userId, settings);
+            return settings;
+        } catch (error) {
+            return thunkAPI.rejectWithValue({ error: error.message });
+        }
+    }
+);
+
+export const resetSettingsAsync = createAsyncThunk(
+    'settings/resetSettingsAsync',
+    async (_, thunkAPI) => {
+        try {
+            const userId = thunkAPI.getState().session.data.user.id;
+            await resetUserSettings(userId);
+            return initialState;
+        } catch (error) {
+            return thunkAPI.rejectWithValue({ error: error.message });
+        }
+    }
+);
+
+// Slice
 const settingsSlice = createSlice({
     name: 'settings',
     initialState,
@@ -88,45 +129,6 @@ const settingsSlice = createSlice({
     }
 });
 
-
-export const fetchSettingsAsync = createAsyncThunk(
-    'settings/fetchSettingsAsync',
-    async (_, thunkAPI) => {
-        try {
-            const userId = thunkAPI.getState().session.data.user.id;
-            const response = await getSettings(userId);
-            return response;
-        } catch (error) {
-            return thunkAPI.rejectWithValue({ error: error.message });
-        }
-    }
-);
-
-export const updateSettingsAsync = createAsyncThunk(
-    'settings/updateSettingsAsync',
-    async (settings, thunkAPI) => {
-        try {
-            const userId = thunkAPI.getState().session.data.user.id;
-            await updateUserSettings(userId, settings);
-            return settings;
-        } catch (error) {
-            return thunkAPI.rejectWithValue({ error: error.message });
-        }
-    }
-);
-
-export const resetSettingsAsync = createAsyncThunk(
-    'settings/resetSettingsAsync',
-    async (_, thunkAPI) => {
-        try {
-            const userId = thunkAPI.getState().session.data.user.id;
-            await resetUserSettings(userId);
-            return initialState;
-        } catch (error) {
-            return thunkAPI.rejectWithValue({ error: error.message });
-        }
-    }
-);
-
-export const { setLocalSettings, setLocalDarkMode, setLocalLanguage, setLocalEmailNotifications, setLocalPushNotifications } = settingsSlice.actions;
-export default settingsSlice.reducer;
+const { actions, reducer } = settingsSlice;
+export const { setLocalSettings, setLocalDarkMode, setLocalLanguage, setLocalEmailNotifications, setLocalPushNotifications } = actions;
+export default reducer;

@@ -10,6 +10,20 @@ const initialState = {
     searchError: null,
 };
 
+// Async thunk
+export const fetchArticlesByQuery = createAsyncThunk(
+    'articles/fetchArticlesByQuery',
+    async (query, thunkAPI) => {
+        const pageNum = thunkAPI.getState().search.pageNum;
+        try {
+            const response = await getArticlesByQuery(query, pageNum);
+            return response;
+        } catch (error) {
+            return thunkAPI.rejectWithValue({ error: error.message });
+        }
+    });
+
+// Slice
 const searchSlice = createSlice({
     name: 'search',
     initialState,
@@ -48,17 +62,7 @@ const searchSlice = createSlice({
     }
 });
 
-export const fetchArticlesByQuery = createAsyncThunk(
-    'articles/fetchArticlesByQuery',
-    async (query, thunkAPI) => {
-        const pageNum = thunkAPI.getState().search.pageNum;
-        try {
-            const response = await getArticlesByQuery(query, pageNum);
-            return response;
-        } catch (error) {
-            return thunkAPI.rejectWithValue({ error: error.message });
-        }
-    });
-export const { setQuery, setArticles, setSearchPageNum, setTotalPages, setError } = searchSlice.actions;
-export default articleSlice.reducer;
+const { actions, reducer } = searchSlice;
+export const { setQuery, setArticles, setSearchPageNum, setTotalPages, setError } = actions;
+export default reducer;
     
