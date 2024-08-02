@@ -242,8 +242,8 @@ const topicsSlice = createSlice({
             state.savedTopicsError = action.payload;
         },
     },
-    extraReducers: {
-        [fetchUserSavedTopics.fulfilled]: (state, action) => {
+    extraReducers: (builder) => {
+        builder.addCase(fetchUserSavedTopics.fulfilled, (state, action) => {
             state.topics = action.payload.map(topic => { 
                 return {
                     ...topic,
@@ -252,15 +252,17 @@ const topicsSlice = createSlice({
             });
             state.savedTopicsLoading = false;
             state.savedTopicsError = null;
-        },
-        [fetchUserSavedTopics.pending]: (state) => {
+        });
+
+        builder.addCase(fetchUserSavedTopics.pending, (state) => {
             state.savedTopicsLoading = true;
             state.savedTopicsError = null;
-        },
-        [fetchUserSavedTopics.rejected]: (state, action) => {
+        });
+
+        builder.addCase(fetchUserSavedTopics.rejected, (state, action) => {
             state.savedTopicsError = action.payload.error;
             state.savedTopicsLoading = false;
-        },
+        });
     }
 });
 

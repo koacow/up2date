@@ -68,47 +68,71 @@ const sessionSlice = createSlice({
             state.error = action.payload;
         },
     },
-    extraReducers: {
-        [logUserIn.fulfilled]: (state, action) => {
+    extraReducers: (builder) => {
+        builder.addCase(logUserIn.fulfilled, (state, action) => {
             state.session = action.payload;
             state.loading = false;
             state.error = null;
-        },
-        [logUserIn.pending]: (state) => {
+        });
+
+        builder.addCase(logUserIn.pending, (state) => {
             state.loading = true;
             state.error = null;
-        },
-        [logUserIn.rejected]: (state, action) => {
+        });
+
+        builder.addCase(logUserIn.rejected, (state, action) => {
             state.error = action.payload.error;
             state.loading = false;
-        },
-        [registerUser.fulfilled]: (state, action) => {
+        });
+
+        builder.addCase(registerUser.fulfilled, (state, action) => {
             state.session = action.payload;
             state.loading = false;
             state.error = null;
-        },
-        [registerUser.pending]: (state) => {
+        });
+
+        builder.addCase(registerUser.pending, (state) => {
             state.loading = true;
             state.error = null;
-        },
-        [registerUser.rejected]: (state, action) => {
+        });
+
+        builder.addCase(registerUser.rejected, (state, action) => {
             state.error = action.payload.error;
             state.loading = false;
-        },
-        [logUserOut.fulfilled]: (state) => {
+        });
+
+        builder.addCase(logUserOut.fulfilled, (state) => {
             state.session = null;
             state.loading = false;
             state.error = null;
-        },
-        [logUserOut.pending]: (state) => {
+        });
+
+        builder.addCase(logUserOut.pending, (state) => {
             state.loading = true;
             state.error = null;
-        },
-        [logUserOut.rejected]: (state, action) => {
+        });
+
+        builder.addCase(logUserOut.rejected, (state, action) => {
             state.session = null;
             state.error = action.payload.error;
             state.loading = false;
-        },
+        });
+
+        builder.addCase(fetchUserData.fulfilled, (state, action) => {
+            state.data = action.payload;
+            state.loading = false;
+            state.error = null;
+        });
+
+        builder.addCase(fetchUserData.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+        });
+
+        builder.addCase(fetchUserData.rejected, (state, action) => {
+            state.error = action.payload.error;
+            state.loading = false;
+        });
     }
 });
 

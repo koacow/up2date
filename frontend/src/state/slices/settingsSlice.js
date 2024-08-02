@@ -83,49 +83,57 @@ const settingsSlice = createSlice({
         },
     },
     // Async reducers assume that the user is already logged in
-    extraReducers: {
-        [fetchSettingsAsync.fulfilled]: (state, action) => {
+    extraReducers: (builder) => {
+        builder.addCase(fetchSettingsAsync.fulfilled, (state, action) => {
             state.display = action.payload.display;
             state.notifications = action.payload.notifications;
             state.loading = false;
             state.error = null;
-        },
-        [fetchSettingsAsync.pending]: (state) => {
+        });
+
+        builder.addCase(fetchSettingsAsync.pending, (state) => {
             state.loading = true;
             state.error = null;
-        },
-        [fetchSettingsAsync.rejected]: (state, action) => {
+        });
+
+        builder.addCase(fetchSettingsAsync.rejected, (state, action) => {
             state.error = action.payload.error;
             state.loading = false;
-        },
-        [updateSettingsAsync.fulfilled]: (state, action) => {
+        });
+
+        builder.addCase(updateSettingsAsync.fulfilled, (state, action) => {
             state.display = action.payload.display;
             state.notifications = action.payload.notifications;
             state.loading = false;
             state.error = null;
-        },
-        [updateSettingsAsync.pending]: (state) => {
+        });
+
+        builder.addCase(updateSettingsAsync.pending, (state) => {
             state.loading = true;
             state.error = null;
-        },
-        [updateSettingsAsync.rejected]: (state, action) => {
+        });
+
+        builder.addCase(updateSettingsAsync.rejected, (state, action) => {
             state.error = action.payload.error;
             state.loading = false;
-        },
-        [resetSettingsAsync.fulfilled]: (state, action) => {
+        });
+
+        builder.addCase(resetSettingsAsync.fulfilled, (state, action) => {
             state.display = action.payload.display;
             state.notifications = action.payload.notifications;
             state.loading = false;
             state.error = null;
-        },
-        [resetSettingsAsync.pending]: (state) => {
+        });
+
+        builder.addCase(resetSettingsAsync.pending, (state) => {
             state.loading = true;
             state.error = null;
-        },
-        [resetSettingsAsync.rejected]: (state, action) => {
+        });
+
+        builder.addCase(resetSettingsAsync.rejected, (state, action) => {
             state.error = action.payload.error;
             state.loading = false;
-        },
+        });
     }
 });
 

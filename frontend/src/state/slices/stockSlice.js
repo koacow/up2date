@@ -142,46 +142,54 @@ const stocksSlice = createSlice({
             state.search.searchError = action.payload;
         },
     },
-    extraReducers: {
-        [fetchStocksByQuery.fulfilled]: (state, action) => {
+    extraReducers: (builder) => {
+        builder.addCase(fetchStocksByQuery.fulfilled, (state, action) => {
             state.search.stocks = action.payload;
             state.search.searchLoading = false;
             state.search.searchError = null;
-        },
-        [fetchStocksByQuery.pending]: (state) => {
+        });
+
+        builder.addCase(fetchStocksByQuery.pending, (state) => {
             state.search.searchLoading = true;
             state.search.searchError = null;
-        },
-        [fetchStocksByQuery.rejected]: (state, action) => {
+        });
+
+        builder.addCase(fetchStocksByQuery.rejected, (state, action) => {
             state.search.searchError = action.payload.error;
             state.search.searchLoading = false;
-        },
-        [fetchUserSavedStocks.fulfilled]: (state, action) => {
-            state.saved.stocks = action.payload.map(stock => stock.stock_ticker);
+        });
+
+        builder.addCase(fetchUserSavedStocks.fulfilled, (state, action) => {
+            state.saved.stocks = action.payload;
             state.saved.savedStocksLoading = false;
             state.saved.savedStocksError = null;
-        },
-        [fetchUserSavedStocks.pending]: (state) => {
+        });
+
+        builder.addCase(fetchUserSavedStocks.pending, (state) => {
             state.saved.savedStocksLoading = true;
             state.saved.savedStocksError = null;
-        },
-        [fetchUserSavedStocks.rejected]: (state, action) => {
+        });
+
+        builder.addCase(fetchUserSavedStocks.rejected, (state, action) => {
             state.saved.savedStocksError = action.payload.error;
             state.saved.savedStocksLoading = false;
-        },
-        [updateUserSavedStocksThunk.fulfilled]: (state, action) => {
+        });
+
+        builder.addCase(updateUserSavedStocksThunk.fulfilled, (state, action) => {
             state.saved.stocks = action.payload.stock_tickers;
             state.saved.savedStocksLoading = false;
             state.saved.savedStocksError = null;
-        },
-        [updateUserSavedStocksThunk.pending]: (state) => {
+        });
+
+        builder.addCase(updateUserSavedStocksThunk.pending, (state) => {
             state.saved.savedStocksLoading = true;
             state.saved.savedStocksError = null;
-        },
-        [updateUserSavedStocksThunk.rejected]: (state, action) => {
+        });
+
+        builder.addCase(updateUserSavedStocksThunk.rejected, (state, action) => {
             state.saved.savedStocksError = action.payload.error;
             state.saved.savedStocksLoading = false;
-        },
+        });
     }
 });
 

@@ -44,21 +44,23 @@ const searchSlice = createSlice({
             state.error = action.payload;
         },
     },
-    extraReducers: {
-        [fetchArticlesByQuery.fulfilled]: (state, action) => {
-            state.search.articles = action.payload.articles;
-            state.search.totalPages = action.payload.total_pages;
-            state.search.searchLoading = false;
-            state.search.searchError = null;
-        },
-        [fetchArticlesByQuery.pending]: (state) => {
-            state.search.searchLoading = true;
-            state.search.searchError = null;
-        },
-        [fetchArticlesByQuery.rejected]: (state, action) => {
-            state.search.searchError = action.payload.error;
-            state.search.searchLoading = false;
-        },
+    extraReducers: (builder) => {
+        builder.addCase(fetchArticlesByQuery.fulfilled, (state, action) => {
+            state.articles = action.payload.articles;
+            state.totalPages = action.payload.total_pages;
+            state.searchLoading = false;
+            state.searchError = null;
+        });
+
+        builder.addCase(fetchArticlesByQuery.pending, (state) => {
+            state.searchLoading = true;
+            state.searchError = null;
+        });
+
+        builder.addCase(fetchArticlesByQuery.rejected, (state, action) => {
+            state.searchError = action.payload.error;
+            state.searchLoading = false;
+        });
     }
 });
 
