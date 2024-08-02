@@ -1,4 +1,4 @@
-const ENDPOINT = '/api/auth';
+const ENDPOINT = 'http:localhost:4000/api/auth';
 
 export const register = async (username, password, first_name, last_name) => {
     const response = await fetch(`${ENDPOINT}/register`, {

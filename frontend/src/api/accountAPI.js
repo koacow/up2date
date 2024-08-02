@@ -1,4 +1,4 @@
-const ENDPOINT = '/api/account';
+const ENDPOINT = 'http://localhost:4000/api/account';
 
 const defaultSettings = {
 	"display": {

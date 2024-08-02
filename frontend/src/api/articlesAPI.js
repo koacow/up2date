@@ -1,4 +1,4 @@
-const ENDPOINT = '/api/articles';
+const ENDPOINT = 'http://localhost:4000/api/articles';
 
 export const getArticlesByQuery = async (query, pageNum = 1) => {
     const response = await fetch(`${ENDPOINT}/search?query=${encodeURIComponent(query)}&pageNum=${pageNum}`);
