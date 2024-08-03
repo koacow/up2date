@@ -1,29 +1,11 @@
 const ENDPOINT = 'http://localhost:4000/api/account';
 
-const defaultSettings = {
-	"display": {
-		"darkMode": false,
-		"language": "en"
-	},
-	"notifications": {
-		"email": {
-			"dailyDigest": true,
-			"newsletter": true
-		},
-		"push": {
-			"dailyDigest": true,
-			"newsletter": true
-		}
-	}
-};
-
-export const getUserSettings = async () => {
-    const response = await fetch(`${ENDPOINT}/settings`);
+export const getUserSettings = async (user_id) => {
+    const response = await fetch(`${ENDPOINT}/settings?user_id=${encodeURIComponent(user_id)}`);
     switch (response.status) {
         case 200:
-            return response.json();
-        case 404:
-            return defaultSettings;
+            const data = await response.json();
+            return data[0].settings;
         default:
             throw new Error('Failed to fetch user settings');
     }
@@ -34,7 +16,7 @@ export const createUserSettingsProfile = async (user_id) => {
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(defaultSettings)
+        body: JSON.stringify()
     });
     switch (response.status) {
         case 201:
@@ -141,3 +123,15 @@ export const deleteUserSavedStocks = async (user_id) => {
             throw new Error('Failed to delete user saved stocks');
     }
 };
+
+export const getUserProfile = async (user_id) => {
+    const response = await fetch(`${ENDPOINT}/user?user_id=${encodeURIComponent(user_id)}`);
+    switch (response.status) {
+        case 200:
+            return response.json();
+        case 401:
+            throw new Error('Unauthorized');
+        default:
+            throw new Error('Failed to fetch user data');
+    }
+}

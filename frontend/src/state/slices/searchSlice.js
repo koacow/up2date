@@ -47,7 +47,7 @@ const searchSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(fetchArticlesByQuery.fulfilled, (state, action) => {
             state.articles = action.payload.articles;
-            state.totalPages = action.payload.total_pages;
+            state.totalPages = action.payload.totalResults / 10;
             state.searchLoading = false;
             state.searchError = null;
         });

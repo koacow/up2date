@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { register, login, logout, getUser } from '../../api/authAPI';
+import { register, login, logout } from '../../api/authAPI';
 
 const initialState = {
     "data": null,
@@ -13,7 +13,8 @@ export const logUserIn = createAsyncThunk(
     'session/login',
     async (credentials, thunkAPI) => {
         try {
-            const response = await login(credentials);
+            const { email, password } = credentials;
+            const response = await login(email, password);
             return response;
         } catch (error) {
             return thunkAPI.rejectWithValue({ error: error.message });
@@ -42,17 +43,6 @@ export const logUserOut = createAsyncThunk(
         }
     });
 
-export const fetchUserData = createAsyncThunk(
-    'session/getUserData',
-    async (_, thunkAPI) => {
-        try {
-            const response = await getUser();
-            return response;
-        } catch (error) {
-            return thunkAPI.rejectWithValue({ error: error.message });
-        }
-    });
-
 // Slice
 const sessionSlice = createSlice({
     name: 'session',
@@ -71,6 +61,7 @@ const sessionSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(logUserIn.fulfilled, (state, action) => {
             state.session = action.payload;
+            state.data = action.payload.user;
             state.loading = false;
             state.error = null;
         });
@@ -87,6 +78,7 @@ const sessionSlice = createSlice({
 
         builder.addCase(registerUser.fulfilled, (state, action) => {
             state.session = action.payload;
+            state.data = action.payload.user;
             state.loading = false;
             state.error = null;
         });
@@ -103,6 +95,7 @@ const sessionSlice = createSlice({
 
         builder.addCase(logUserOut.fulfilled, (state) => {
             state.session = null;
+            state.data = null;
             state.loading = false;
             state.error = null;
         });
@@ -114,22 +107,6 @@ const sessionSlice = createSlice({
 
         builder.addCase(logUserOut.rejected, (state, action) => {
             state.session = null;
-            state.error = action.payload.error;
-            state.loading = false;
-        });
-
-        builder.addCase(fetchUserData.fulfilled, (state, action) => {
-            state.data = action.payload;
-            state.loading = false;
-            state.error = null;
-        });
-
-        builder.addCase(fetchUserData.pending, (state) => {
-            state.loading = true;
-            state.error = null;
-        });
-
-        builder.addCase(fetchUserData.rejected, (state, action) => {
             state.error = action.payload.error;
             state.loading = false;
         });

@@ -14,17 +14,27 @@ const stockFunctions = {
 	'monthly': 'TIME_SERIES_MONTHLY'
 };
 
+const responseDataKeys = {
+	'search': 'bestMatches',
+	'quote': 'Global Quote',
+	'daily': 'Time Series (Daily)',
+	'weekly': 'Weekly Time Series',
+	'monthly': 'Monthly Time Series'
+};
+
 stocksRouter.get('/search', async (req, res) => {
 	// Fetch stock data based on the search query
 	const { query } = req.query;
-	const endpoint = `${STOCK_API_ENDPOINT}?function=${stockFunctions['search']}&keywords=${query}&apikey=${STOCK_API_KEY}`;
-    
-	const response = await fetch(endpoint);
-	if (response.ok) {
-		const data = await response.json();
-		return res.status(200).json(data);
+	const url = `${STOCK_API_ENDPOINT}?function=${stockFunctions['search']}&keywords=${query}&apikey=${STOCK_API_KEY}`;
+	const response = await fetch(url);
+	if (!response.ok) {
+		return res.status(500).json({ error: 'Internal server error' });
 	}
-	return res.status(500).json({ error: 'Internal server error' });
+	const data = await response.json();
+	if (data.bestMatches.length === 0) {
+		return res.status(404).json({ error: 'No results found' });
+	}
+	return res.status(200).json(data.bestMatches[0]);
 });
 
 // Validates the symbol query parameter
@@ -47,10 +57,13 @@ stocksRouter.get('/:function', async (req, res) => {
 	const endpoint = `${STOCK_API_ENDPOINT}?function=${stockFunctions[stockFunction]}&symbol=${symbol}&apikey=${STOCK_API_KEY}`;
 
 	const response = await fetch(endpoint);
-	if (response.ok) {
-		const data = await response.json();
-		return res.status(200).json(data);
+	if (!response.ok) {
+		return res.status(500).json({ error: 'Internal server error' });
 	}
-	return res.status(500).json({ error: 'Internal server error' });
+	const data = await response.json();
+	if (!data[responseDataKeys[stockFunction]]) {
+		return res.status(404).json({ error: 'No results found' });
+	}
+	return res.status(200).json(data[responseDataKeys[stockFunction]]);
 });
 module.exports = stocksRouter;

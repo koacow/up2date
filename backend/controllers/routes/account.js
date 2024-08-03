@@ -50,7 +50,7 @@ accountRouter.get('/settings',
 
 		// Fetch user settings based on the user ID
 		const { user_id } = req.query;
-		const { data, error } = await supabase.from('user_settings').select('*').eq('user_id', user_id);
+		const { data, error } = await supabase.from('user_settings').select('settings').eq('user_id', user_id);
 		if (error) {
 			return res.status(500).json({ error: 'Internal server error' });
 		}
@@ -63,7 +63,7 @@ accountRouter.get('/settings',
 accountRouter.post('/settings', async (req, res) => {
 	// Insert user settings based on the user ID
 	const { user_id } = req.query;
-	const { error } = await supabase.from('user_settings').insert({ user_id });
+	const { error } = await supabase.from('user_settings').insert({ user_id, settings: defaultSettings });
 	if (error) {
 		return res.status(500).json({ error: 'Internal server error' });
 	};
@@ -236,6 +236,15 @@ accountRouter.delete('/stocks', async (req, res) => {
 		return res.status(500).json({ error: 'Internal server error' });
 	}
 	return res.status(204).json({ message: 'Saved stocks deleted' });
+});
+
+accountRouter.get('/user', async (req, res) => {
+	const { user_id } = req.query;
+	const { data, error } = await supabase.from('user_profiles').select('user_id, first_name, last_name').eq('user_id', user_id);
+	if (error) {
+		return res.status(500).json({ error: 'Internal server error' });
+	}
+	return res.status(200).json(data);
 });
 
 module.exports = accountRouter;

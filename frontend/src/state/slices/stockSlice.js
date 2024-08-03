@@ -3,7 +3,7 @@ import { getUserSavedStocks, updateUserSavedStocks, deleteUserSavedStocks } from
 import { getStocksByQuery, getStockQuoteBySymbol, getStockDailyDataBySymbol, getStockWeeklyDataBySymbol, getStockMonthlyDataBySymbol } from '../../api/stocksAPI';
 
 const initialState = {
-    search:{
+    search: {
         query: '',
         stocks: [],
         searchLoading: false,
@@ -52,6 +52,32 @@ export const fetchUserSavedStocks = createAsyncThunk(
         }
     }
 );
+
+export const fetchSavedStocksData = createAsyncThunk(
+    'stocks/fetchSavedStocksData',
+    async (_, thunkAPI) => {
+        try{
+            const savedStocks = thunkAPI.getState().stocks.saved.stocks;
+            const stockData = savedStocks.map(async (stock) => {
+                const quote = await getStockQuoteBySymbol(stock);
+                const dailyData = await getStockDailyDataBySymbol(stock);
+                const weeklyData = await getStockWeeklyDataBySymbol(stock);
+                const monthlyData = await getStockMonthlyDataBySymbol(stock);
+                return {
+                    symbol: stock,
+                    name: quote['01. symbol'],  
+                    quote: quote['05. price'],
+                    dailyData: dailyData,
+                    weeklyData: weeklyData,
+                    monthlyData: monthlyData,
+                };
+            });
+            return stockData;
+        } catch (error) {
+            return thunkAPI.rejectWithValue({ error: error.message });
+        }
+    }
+)
 
 export const updateUserSavedStocksThunk = createAsyncThunk(
     'stocks/updateUserSavedStocks',

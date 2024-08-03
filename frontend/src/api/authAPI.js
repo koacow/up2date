@@ -1,4 +1,4 @@
-const ENDPOINT = 'http:localhost:4000/api/auth';
+const ENDPOINT = 'http://localhost:4000/api/users';
 
 export const register = async (username, password, first_name, last_name) => {
     const response = await fetch(`${ENDPOINT}/register`, {
@@ -17,13 +17,13 @@ export const register = async (username, password, first_name, last_name) => {
             throw new Error('Failed to register');
     }
 }
-export const login = async (username, password) => {
+export const login = async (email, password) => {
     const response = await fetch(`${ENDPOINT}/authenticate`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify({ email, password })
     });
     switch (response.status) {
         case 200:
@@ -41,16 +41,5 @@ export const logout = async () => {
             return response.json();
         default:
             throw new Error('Failed to logout');
-    }
-}
-export const getUser = async () => {
-    const response = await fetch(`${ENDPOINT}/user`);
-    switch (response.status) {
-        case 200:
-            return response.json();
-        case 401:
-            throw new Error('Unauthorized');
-        default:
-            throw new Error('Failed to fetch user data');
     }
 }

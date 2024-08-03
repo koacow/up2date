@@ -15,7 +15,6 @@ usersRouter.post('/authenticate',
 		if (!validationErrors.isEmpty()) {
 			return res.status(400).json({ error: 'Invalid input' });
 		}
-
 		// Authenticate user with email and password
 		const { email, password } = req.body;
 		const { data, error } = await supabase.auth.signInWithPassword({
@@ -25,7 +24,11 @@ usersRouter.post('/authenticate',
 				emailRedirectTo: 'http://localhost:5173',
 			},
 		});
+		if (error && error.message === 'Invalid login credentials') {
+			return res.status(401).json({ error: error.message });
+		}
 		if (error) {
+			console.log(error);
 			return res.status(500).json({ 
 				error: error.message,
 				code: error.code

@@ -5,8 +5,6 @@ export const getArticlesByQuery = async (query, pageNum = 1) => {
     switch (response.status) {
         case 200:
             return response.json();
-        case 404:
-            return [];
         default:
             throw new Error('Failed to fetch articles');
     }
@@ -16,8 +14,6 @@ export const getAllTopics = async () => {
     switch (response.status) {
         case 200:
             return response.json();
-        case 404:
-            return [];
         default:
             throw new Error('Failed to fetch topics');
     }
@@ -28,7 +24,7 @@ export const getArticlesByTopic = async (topic_id, pageNum = 1) => {
         case 200:
             return response.json();
         case 404:
-            return [];
+            throw new Error('Topic not found');
         default:
             throw new Error('Failed to fetch articles');
     }
