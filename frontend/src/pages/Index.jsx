@@ -32,6 +32,7 @@ export default function Index() {
                     <Typography variant='h5' component={'h2'}>
                         First time here? <Link to='/register'>Register</Link>
                     </Typography>
+                    <Link to='/register/configure-preferences'>Configure Preferences</Link>
                 </Box>
             </Container>
         </>

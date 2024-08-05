@@ -171,6 +171,8 @@ const initialState = {
     ],
     savedTopicsLoading: false,
     savedTopicsError: null,
+    updateTopicsError: null,
+    updateTopicsLoading: false,
 };
 
 
@@ -179,7 +181,7 @@ export const fetchUserSavedTopics = createAsyncThunk(
     'topics/fetchUserSavedTopics',
     async (_, thunkAPI) => {
         try {
-            const userId = thunkAPI.getState().session.data.user.id;
+            const userId = thunkAPI.getState().session.data.id;
             const response = await getUserSavedTopics(userId);
             return response;
         } catch (error) {
@@ -192,7 +194,7 @@ export const updateUserSavedTopicsThunk = createAsyncThunk(
     'topics/updateUserSavedTopics',
     async (topicIds, thunkAPI) => {
         try {
-            const userId = thunkAPI.getState().session.data.user.id;
+            const userId = thunkAPI.getState().session.data.id;
             const response = await updateUserSavedTopics(userId, topicIds);
             return response;
         } catch (error) {
@@ -205,7 +207,7 @@ export const deleteUserSavedTopicsThunk = createAsyncThunk(
     'topics/deleteUserSavedTopics',
     async (topicIds, thunkAPI) => {
         try {
-            const userId = thunkAPI.getState().session.data.user.id;
+            const userId = thunkAPI.getState().session.data.id;
             const response = await deleteUserSavedTopics(userId, topicIds);
             return response;
         } catch (error) {
@@ -263,6 +265,21 @@ const topicsSlice = createSlice({
             state.savedTopicsError = action.payload.error;
             state.savedTopicsLoading = false;
         });
+
+        builder.addCase(updateUserSavedTopicsThunk.fulfilled, (state) => {
+            state.updateTopicsLoading = false;
+            state.updateTopicsError = null;
+        });
+
+        builder.addCase(updateUserSavedTopicsThunk.pending, (state) => {
+            state.updateTopicsLoading = true;
+            state.updateTopicsError = null;
+        });
+
+        builder.addCase(updateUserSavedTopicsThunk.rejected, (state, action) => {
+            state.updateTopicsError = action.payload.error;
+            state.updateTopicsLoading = false;
+        });            
     }
 });
 

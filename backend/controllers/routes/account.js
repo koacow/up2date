@@ -167,11 +167,12 @@ accountRouter.put('/topics',
 		}
 
 		// Insert new user topics based on the user ID
-		const { error: insertError } = await supabase.from('user_topics').insert(newTopicIds.map(topic_id => ({ user_id, topic_id })));
+		const { data: insertedData, error: insertError } = await supabase.from('user_topics').insert(newTopicIds.map(topic_id => ({ user_id, topic_id }))).select();
 		if (insertError) {
 			return res.status(400).json({ error: 'Failed to update user topics' });
 		}
-		return res.status(201).json({topic_ids: newTopicIds, message: 'User topics updated' });
+		console.log(insertedData);
+		return res.status(201).json({ topics: insertedData, message: 'User topics updated' });
 	});
 
 accountRouter.delete('/topics',
