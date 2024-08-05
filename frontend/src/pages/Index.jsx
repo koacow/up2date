@@ -1,21 +1,39 @@
 import { React, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { logUserIn } from '../state/slices/sessionSlice';
+import { Box, Container, Typography } from '@mui/material';
 
 export default function Index() {
-    const session = useSelector((state) => state.session);
-    const dispatch = useDispatch();
-
-    useEffect(() => {
-        dispatch(logUserIn({ email: 'khoa.nd.cao@gmail.com', password: 'shibboleth' })); 
-    }, [dispatch]);
+     
     return (
         <>
-            <h1>Up2Date</h1>
-            <h2>An independent, fully customizable news application.</h2>
-            <p>Get started by <Link to="/register">registering</Link> or <Link to="/login">logging in</Link>.</p>
-            <p>{session.error}</p>
+            <Container>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        height: '100vh',
+                    }}
+                >
+                    <Typography 
+                        variant='h1' 
+                        component={'h1'} 
+                        sx={{
+                            letterSpacing: '0.1em',
+                            lineHeight: '1.2',
+                        }}>
+                            UP2DATE
+                    </Typography>
+                    <Typography variant='h3' component={'h2'}>An Independent Fully Customizable News App</Typography>
+                    <Typography variant='h5' component={'h2'}>
+                        Already have an account with us? <Link to='/login'>Login</Link>
+                    </Typography>
+                    <Typography variant='h5' component={'h2'}>
+                        First time here? <Link to='/register'>Register</Link>
+                    </Typography>
+                </Box>
+            </Container>
         </>
     );
 }
