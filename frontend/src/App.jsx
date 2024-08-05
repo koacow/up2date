@@ -1,6 +1,6 @@
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { createTheme, ThemeProvider, CssBaseline } from '@mui/material';
-import { useSelector, useDispatch } from 'react-redux';
 import './App.css';
 import Index from './pages/Index';
 import NotFound from './pages/NotFound';
@@ -8,17 +8,10 @@ import LogIn from './pages/LogIn';
 import Register from './pages/Register';
 function App() {
   const darkMode = useSelector(state => state.settings.display.darkMode);
-  const AppRouter = createBrowserRouter(createRoutesFromElements([
-    <Route path="/" element={<Index />} />,
-    <Route path="/login" element={<LogIn />} />,
-    <Route path="/register" element={<Register />} />,
-    <Route path="*" element={<NotFound />} />
-  ]));
-
   const getDesignTokens = () => ({
     palette: {
       mode: darkMode ? 'dark' : 'light',
-      ...(darkMode === false 
+      ...(darkMode === false
         ? {
           // palette values for light mode
           primary: {
@@ -37,10 +30,21 @@ function App() {
             main: '#f48fb1',
           },
         }),
-    }
+    },
+    typography: {
+      fontFamily: ['Poppins', 'sans-serif'].join(','),
+    },
   });
 
   const theme = createTheme(getDesignTokens());
+
+  const AppRouter = createBrowserRouter(createRoutesFromElements([
+    <Route path="/" element={<Index />} />,
+    <Route path="/login" element={<LogIn />} />,
+    <Route path="/register" element={<Register />} />,
+    <Route path="*" element={<NotFound />} />
+  ]));
+
   return (
     <>
       <ThemeProvider theme={theme}>

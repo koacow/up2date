@@ -25,7 +25,8 @@ export const registerUser = createAsyncThunk(
     'session/register',
     async (credentials, thunkAPI) => {
         try {
-            const response = await register(credentials);
+            const { email, password, first_name, last_name } = credentials;
+            const response = await register(email, password, first_name, last_name);
             return response;
         } catch (error) {
             return thunkAPI.rejectWithValue({ error: error.message });

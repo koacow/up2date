@@ -56,6 +56,16 @@ usersRouter.post('/register',
 			email,
 			password
 		});
+		switch (authError?.code) {
+			case 'email_exists':
+				return res.status(409).json({ error: 'Email already exists' });
+			case 'identity_already_exists':
+			case 'user_already_exists':
+				return res.status(409).json({ error: 'Email already exists' });
+			default:
+				break;
+		}
+			
 		if (authError) {
 			return res.status(500).json({ 
 				error: authError.message,
