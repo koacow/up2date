@@ -35,7 +35,7 @@ export default function LogIn() {
   const loading = useSelector((state) => state.session.loading);
 
   useEffect(() => {
-    if (session) navigate('/home');
+    if (session) navigate('/');
   }, [session, navigate]);
 
   const handleSubmit = async (e) => {

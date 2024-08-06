@@ -1,9 +1,9 @@
 import {
     Box,
     Container,
-    Typography,
 } from '@mui/material';
 import TopicCard from '../components/TopicCard';
+import NavBar from '../components/NavBar';
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchUserSavedTopics, setPageNumForTopic } from '../state/slices/topicsSlice';
@@ -24,21 +24,11 @@ export default function Home() {
 
     return (
         <>
-            <Box component='header'>
-                <Typography
-                    variant='h1'
-                    component={'h1'}
-                    align='center'
-                    >
-                    UP2DATE
-                </Typography>
-            </Box>
             <Container component='main'>
                 {
                     Object.keys(articlesBySavedTopics).map((topicId) => {
                         const topicName = savedTopics.find((topic) => topic.id === parseInt(topicId)).topic;
                         const articlesByTopic = articlesBySavedTopics[topicId].articles;
-                        console.log
                         return (
                             <Box key={topicId}>
                                 <TopicCard articlesByTopic={articlesByTopic} topicName={topicName} />

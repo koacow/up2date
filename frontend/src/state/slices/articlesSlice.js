@@ -66,7 +66,7 @@ const articlesSlice = createSlice({
         });
         builder.addCase(fetchArticlesByQuery.fulfilled, (state, action) => {
             state.search.articles = action.payload.articles;
-            state.search.totalPages = int(action.payload.totalResults/10);
+            state.search.totalPages = Math.round(action.payload.totalResults/10);
             state.search.loading = false;
         });
         builder.addCase(fetchArticlesByQuery.rejected, (state, action) => {

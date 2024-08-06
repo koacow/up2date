@@ -5,16 +5,14 @@ import {
     CardActions,
     Typography,
     CardMedia,
-    Link,
+    Button,
 } from "@mui/material";
 
 export default function ArticleCard({ article }) {
-    console.log(article)
     return (
         <Card>
             <CardHeader
                 title={article.title}
-                
             />
             <CardContent>
                 <Typography variant='body1'>
@@ -35,9 +33,9 @@ export default function ArticleCard({ article }) {
                 />
             </CardContent>
             <CardActions>
-                <Link href={article.url} target='_blank'>
-                    Read More At {article.source.name}
-                </Link>
+                <Button href={article.url} target='_blank' variant='contained' >
+                    Continue Reading At {article.source.name}
+                </Button>
             </CardActions>
         </Card>
     )

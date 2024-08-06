@@ -8,6 +8,8 @@ import LogIn from './pages/LogIn';
 import Register from './pages/Register';
 import ConfigurePreferences from './pages/ConfigurePreferences';
 import Home from './pages/Home';
+import MainTemplate from './pages/MainTemplate';
+
 function App() {
   const darkMode = useSelector(state => state.settings.display.darkMode);
   const getDesignTokens = () => ({
@@ -41,11 +43,13 @@ function App() {
   const theme = createTheme(getDesignTokens());
 
   const AppRouter = createBrowserRouter(createRoutesFromElements([
-    <Route path="/" element={<Index />} />,
+    <Route path="/about" element={<Index />} />,
     <Route path="/login" element={<LogIn />} />,
     <Route path="/register" element={<Register />} />,
     <Route path="/register/configure-preferences" element={<ConfigurePreferences />} />,
-    <Route path='/home' element={<Home />} />,
+    <Route path='/' element={<MainTemplate />} >
+      <Route index element={<Home />} />
+    </Route>,
     <Route path="*" element={<NotFound />} />
   ]));
 
