@@ -11,6 +11,14 @@ const initialState = {
         error: null,    
     },
     articlesBySavedTopics: {}
+    /**
+     * articlesBySavedTopics: {
+     *     1: {
+     *          name: 'Gaming',
+     *        articles: [],
+     *      loading: false,
+     *    error: null
+     */
 };
 
 // Async thunk
@@ -28,10 +36,15 @@ export const fetchArticlesByQuery = createAsyncThunk(
 
 export const fetchArticlesForSavedTopic = createAsyncThunk(
     'articles/fetchArticlesForOneSavedTopic',
-    async (topicId, thunkAPI) => {
-        const pageNum = thunkAPI.getState().topics.topics.find(topic => topic.id === topicId).pageNum;
-        const response = await getArticlesByTopic(topicId, pageNum);
-        return response;
+    async (topicObject, thunkAPI) => {
+        const pageNum = topicObject.pageNum;
+        const topicId = topicObject.id;
+        try {
+            const response = await getArticlesByTopic(topicId, pageNum);
+            return { topicId, ...response };
+        } catch (error) {
+            return thunkAPI.rejectWithValue({ topicId, error: error.message });
+        }
     });
 // Slice
 const articlesSlice = createSlice({
@@ -43,7 +56,8 @@ const articlesSlice = createSlice({
         },
         setSearchPageNum(state, action) {
             state.search.pageNum = action.payload;
-        }
+        },
+
     },
     extraReducers: (builder) => {
         builder.addCase(fetchArticlesByQuery.pending, (state) => {
@@ -60,17 +74,12 @@ const articlesSlice = createSlice({
             state.search.error = action.payload.error;
         });
         builder.addCase(fetchArticlesForSavedTopic.fulfilled, (state, action) => {
-            state.articlesBySavedTopics[action.payload.topic_id] = action.payload.articles;
-            state.articlesBySavedTopics[action.payload.topic_id].loading = false;
-            state.articlesBySavedTopics[action.payload.topic_id].error = null;
-        });
-        builder.addCase(fetchArticlesForSavedTopic.pending, (state, action) => {
-            state.articlesBySavedTopics[action.payload].loading = true;
-            state.articlesBySavedTopics[action.payload].error = null;
-        });
-        builder.addCase(fetchArticlesForSavedTopic.rejected, (state, action) => {
-            state.articlesBySavedTopics[action.payload.topic_id].loading = false;
-            state.articlesBySavedTopics[action.payload.topic_id].error = action.payload.error;
+            const topicId = action.payload.topicId;
+            state.articlesBySavedTopics[topicId] = {
+                articles: action.payload.articles,
+                loading: false,
+                error: null
+            };
         });
     }
 });

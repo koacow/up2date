@@ -35,7 +35,7 @@ export default function LogIn() {
   const loading = useSelector((state) => state.session.loading);
 
   useEffect(() => {
-    if (session) navigate('/'); // TO DO: Redirect to the home page
+    if (session) navigate('/home');
   }, [session, navigate]);
 
   const handleSubmit = async (e) => {

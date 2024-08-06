@@ -12,7 +12,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { updateUserSavedTopicsThunk } from "../state/slices/topicsSlice";
 
-export default function YourPreferences() {
+export default function ConfigurePreferences() {
     const navigate = useNavigate();
     const session = useSelector(state => state.session.session);
     useEffect(() => {

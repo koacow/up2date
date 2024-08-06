@@ -68,8 +68,9 @@ articlesRouter.get('/:topic_id',
 		const response = await fetch(`https://newsapi.org/v2/everything?q=${topic}&apiKey=${NEWS_API_KEY}&sortBy=publishedAt&language=en&pageSize=10&page=${pageNum}`);
 		if (response.ok) {
 			const articles = await response.json();
-			return res.status(200).json({ topic_id, articles });
+			return res.status(200).json({ topic_id, ...articles });
 		}
+		console.log(response);
 		return res.status(500).json({ error: 'Internal server error' });
 	});
 

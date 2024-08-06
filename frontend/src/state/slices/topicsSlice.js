@@ -221,28 +221,6 @@ const topicsSlice = createSlice({
     name: 'topics',
     initialState,
     reducers: {
-        setTopics(state, action) {
-            state.topics = action.payload.map(topic => { 
-                return {
-                    ...topic,
-                    pageNum: 1
-                }
-        });
-        },
-        setPageNumForTopic(state, action) {
-            state.topics = state.topics.map((topic) => {
-                if (topic.id === action.payload.id) {
-                    return {
-                        ...topic,
-                        pageNum: action.payload.pageNum
-                    };
-                }
-                return topic;
-            })
-        },            
-        setError(state, action) {
-            state.savedTopicsError = action.payload;
-        },
     },
     extraReducers: (builder) => {
         builder.addCase(fetchUserSavedTopics.fulfilled, (state, action) => {

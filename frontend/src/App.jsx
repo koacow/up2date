@@ -6,7 +6,8 @@ import Index from './pages/Index';
 import NotFound from './pages/NotFound';
 import LogIn from './pages/LogIn';
 import Register from './pages/Register';
-import YourPreferences from './pages/YourPreferences';
+import ConfigurePreferences from './pages/ConfigurePreferences';
+import Home from './pages/Home';
 function App() {
   const darkMode = useSelector(state => state.settings.display.darkMode);
   const getDesignTokens = () => ({
@@ -43,7 +44,8 @@ function App() {
     <Route path="/" element={<Index />} />,
     <Route path="/login" element={<LogIn />} />,
     <Route path="/register" element={<Register />} />,
-    <Route path="/register/configure-preferences" element={<YourPreferences />} />,
+    <Route path="/register/configure-preferences" element={<ConfigurePreferences />} />,
+    <Route path='/home' element={<Home />} />,
     <Route path="*" element={<NotFound />} />
   ]));
 
