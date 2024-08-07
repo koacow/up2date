@@ -28,7 +28,6 @@ usersRouter.post('/authenticate',
 			return res.status(401).json({ error: error.message });
 		}
 		if (error) {
-			console.log(error);
 			return res.status(500).json({ 
 				error: error.message,
 				code: error.code

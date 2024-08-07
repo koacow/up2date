@@ -55,7 +55,14 @@ export const getUserSavedTopics = async (user_id) => {
     const response = await fetch(`${ENDPOINT}/topics?user_id=${encodeURIComponent(user_id)}`);
     switch (response.status) {
         case 200:
-            return response.json();
+            const json = await response.json();
+            return json.map(topicObject => {
+                return {
+                    id: topicObject.topic_id,
+                    topic: topicObject.topics.topic,
+                    pageNum: 1
+                }
+            })
         default:
             throw new Error('Failed to fetch user topics');
     }

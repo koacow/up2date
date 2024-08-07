@@ -81,6 +81,14 @@ const articlesSlice = createSlice({
                 error: null
             };
         });
+        builder.addCase(fetchArticlesForSavedTopic.rejected, (state, action) => {
+            const topicId = action.payload.topicId;
+            state.articlesBySavedTopics[topicId] = {
+                articles: [],
+                loading: false,
+                error: action.payload.error
+            };
+        });
     }
 });
 

@@ -47,7 +47,12 @@ export const login = async (email, password) => {
     }
 }
 export const logout = async () => {
-    const response = await fetch(`${ENDPOINT}/logout`);
+    const response = await fetch(`${ENDPOINT}/logout`,
+        {
+            method: 'POST'
+        }
+    );
+    console.log(response);
     switch (response.status) {
         case 200:
             return response.json();

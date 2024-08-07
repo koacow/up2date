@@ -26,7 +26,6 @@ export const getArticlesByTopic = async (topic_id, pageNum = 1) => {
         case 404:
             throw new Error('Topic not found');
         default:
-            console.log('something went wrong');
             throw new Error('Failed to fetch articles');
     }
 };

@@ -171,7 +171,6 @@ accountRouter.put('/topics',
 		if (insertError) {
 			return res.status(400).json({ error: 'Failed to update user topics' });
 		}
-		console.log(insertedData);
 		return res.status(201).json({ topics: insertedData, message: 'User topics updated' });
 	});
 
