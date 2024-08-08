@@ -84,6 +84,14 @@ const articlesSlice = createSlice({
                 error: null
             };
         });
+        builder.addCase(fetchArticlesForSavedTopic.pending, (state, action) => {
+            const topicId = action.meta.arg.id;
+            state.articlesBySavedTopics[topicId] = {
+                articles: [],
+                loading: true,
+                error: null
+            };
+        });
         builder.addCase(fetchArticlesForSavedTopic.rejected, (state, action) => {
             const topicId = action.payload.topicId;
             state.articlesBySavedTopics[topicId] = {

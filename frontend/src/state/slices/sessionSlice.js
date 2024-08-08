@@ -15,7 +15,7 @@ export const logUserIn = createAsyncThunk(
     'session/login',
     async (credentials, thunkAPI) => {
         try {
-            thunkAPI.dispatch(setTopics([]));
+            thunkAPI.dispatch(setTopics([])); // TO DO - fetch default topics from database instead of hardcoding them
             thunkAPI.dispatch(setArticlesBySavedTopics({}));
             const { email, password } = credentials;
             const response = await login(email, password);
