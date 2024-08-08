@@ -6,7 +6,6 @@ const initialState = {
         query: '',
         articles: [],
         pageNum: 1,
-        totalPages: 1,
         loading: false,
         error: null,    
     },
@@ -24,8 +23,9 @@ const initialState = {
 // Async thunk
 export const fetchArticlesByQuery = createAsyncThunk(
     'articles/fetchArticlesByQuery',
-    async (query, thunkAPI) => {
-        const pageNum = thunkAPI.getState().search.pageNum;
+    async (_, thunkAPI) => {
+        const pageNum = thunkAPI.getState().articles.search.pageNum;
+        const query = thunkAPI.getState().articles.search.query;
         try {
             const response = await getArticlesByQuery(query, pageNum);
             return response;
@@ -69,12 +69,11 @@ const articlesSlice = createSlice({
         });
         builder.addCase(fetchArticlesByQuery.fulfilled, (state, action) => {
             state.search.articles = action.payload.articles;
-            state.search.totalPages = Math.round(action.payload.totalResults/10);
             state.search.loading = false;
         });
         builder.addCase(fetchArticlesByQuery.rejected, (state, action) => {
             state.search.loading = false;
-            state.search.error = action.payload.error;
+            state.search.error = true;
         });
         builder.addCase(fetchArticlesForSavedTopic.fulfilled, (state, action) => {
             const topicId = action.payload.topicId;
@@ -104,6 +103,6 @@ const articlesSlice = createSlice({
 });
 
 const { actions, reducer } = articlesSlice;
-export const { setQuery, setArticlesBySavedTopics } = actions;
+export const { setSearchQuery, setArticlesBySavedTopics, setSearchPageNum } = actions;
 export default reducer;
     

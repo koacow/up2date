@@ -2,13 +2,14 @@ import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } 
 import { useSelector } from 'react-redux';
 import { createTheme, ThemeProvider, CssBaseline } from '@mui/material';
 import './App.css';
-import Index from './pages/Index';
+import About from './pages/About';
 import NotFound from './pages/NotFound';
 import LogIn from './pages/LogIn';
 import Register from './pages/Register';
 import ConfigurePreferences from './pages/ConfigurePreferences';
 import Home from './pages/Home';
 import MainTemplate from './pages/MainTemplate';
+import Search from './pages/Search';
 
 function App() {
   const darkMode = useSelector(state => state.settings.display.darkMode);
@@ -43,12 +44,13 @@ function App() {
   const theme = createTheme(getDesignTokens());
 
   const AppRouter = createBrowserRouter(createRoutesFromElements([
-    <Route path="/about" element={<Index />} />,
+    <Route path="/about" element={<About />} />,
     <Route path="/login" element={<LogIn />} />,
     <Route path="/register" element={<Register />} />,
     <Route path="/register/configure-preferences" element={<ConfigurePreferences />} />,
     <Route path='/' element={<MainTemplate />} >
-      <Route index element={<Home />} />
+      <Route index element={<Home />} />,
+      <Route path='/search' element={<Search />} />
     </Route>,
     <Route path="*" element={<NotFound />} />
   ]));

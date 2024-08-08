@@ -2,6 +2,7 @@ const ENDPOINT = 'http://localhost:4000/api/articles';
 
 export const getArticlesByQuery = async (query, pageNum = 1) => {
     const response = await fetch(`${ENDPOINT}/search?query=${encodeURIComponent(query)}&pageNum=${pageNum}`);
+    console.log(response);
     switch (response.status) {
         case 200:
             return response.json();

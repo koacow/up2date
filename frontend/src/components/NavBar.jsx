@@ -80,7 +80,6 @@ export default function NavBar() {
                 <Typography
                     variant="h6"
                     noWrap
-                    component="a"
                     sx={{
                     mr: 2,
                     display: { xs: 'none', md: 'flex' },
@@ -134,7 +133,6 @@ export default function NavBar() {
                 <Typography
                     variant="h5"
                     noWrap
-                    component="a"
                     sx={{
                     mr: 2,
                     display: { xs: 'flex', md: 'none' },

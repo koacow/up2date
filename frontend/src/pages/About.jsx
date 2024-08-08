@@ -2,7 +2,7 @@ import { React } from 'react';
 import { Link } from 'react-router-dom';
 import { Box, Container, Typography } from '@mui/material';
 
-export default function Index() {
+export default function About() {
      
     return (
         <>

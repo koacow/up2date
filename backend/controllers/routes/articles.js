@@ -22,7 +22,7 @@ articlesRouter.get('/search',
 		if (!query) {
 			return res.status(400).json({ error: 'Query is required' });
 		}
-		const response = await fetch(`https://newsapi.org/v2/everything?q=${query}&apiKey=${NEWS_API_KEY}&sortBy=relevancy&language=en&pageSize=1&page=${pageNum}`);
+		const response = await fetch(`https://newsapi.org/v2/everything?q=${query}&apiKey=${NEWS_API_KEY}&sortBy=relevancy&language=en&pageSize=10&page=${pageNum}`);
 		if (response.ok) {
 			const data = await response.json();
 			return res.status(200).json(data);
@@ -65,7 +65,7 @@ articlesRouter.get('/:topic_id',
 		const { pageNum } = req.query;
 
 		// Fetch articles from the News API based on the topic and page number
-		const response = await fetch(`https://newsapi.org/v2/everything?q=${topic}&apiKey=${NEWS_API_KEY}&sortBy=publishedAt&language=en&pageSize=1&page=${pageNum}`);
+		const response = await fetch(`https://newsapi.org/v2/everything?q=${topic}&apiKey=${NEWS_API_KEY}&sortBy=publishedAt&language=en&pageSize=10&page=${pageNum}`);
 		if (response.ok) {
 			const articles = await response.json();
 			return res.status(200).json({ topic_id, ...articles });
