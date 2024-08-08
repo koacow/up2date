@@ -11,19 +11,18 @@ import { fetchArticlesForSavedTopic } from "../state/slices/articlesSlice";
 import ArticleCard from "./ArticleCard";
 
 export default function TopicCard({ topic }) {
+    const session = useSelector((state) => state.session.session);
     const dispatch = useDispatch();
-    const articlesByTopic = useSelector((state) => state.articles.articlesBySavedTopics[topic.id]);
-
-    
     const { id, topic: topicName, pageNum } = topic;
-    const { articles, loading, error } = articlesByTopic;
-    
     const [paginationDisplayedNum, setPaginationDisplayedNum] = useState(pageNum);
 
     useEffect(() => {
         dispatch(fetchArticlesForSavedTopic(topic));
-    }, [paginationDisplayedNum]);
+    }, [session, paginationDisplayedNum]);
     
+    const articlesByTopic = useSelector((state) => state.articles.articlesBySavedTopics[topic.id]);
+    const { articles, loading, error } = articlesByTopic ? articlesByTopic : { articles: [], loading: true, error: null };
+
     const handlePageChange = (e, value) => {
         dispatch(setPageNumForTopic({ topicId: id, pageNum: value }));
         setPaginationDisplayedNum(value);
