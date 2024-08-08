@@ -57,6 +57,9 @@ const articlesSlice = createSlice({
         setSearchPageNum(state, action) {
             state.search.pageNum = action.payload;
         },
+        setArticlesBySavedTopics(state, action) {
+            state.articlesBySavedTopics = action.payload;
+        }
 
     },
     extraReducers: (builder) => {
@@ -93,6 +96,6 @@ const articlesSlice = createSlice({
 });
 
 const { actions, reducer } = articlesSlice;
-export const { setQuery, setArticles, setSearchPageNum, setTotalPages, setError } = actions;
+export const { setQuery, setArticlesBySavedTopics } = actions;
 export default reducer;
     

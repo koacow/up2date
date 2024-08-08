@@ -1,5 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { register, login, logout } from '../../api/authAPI';
+import { setTopics } from './topicsSlice';
+import { setArticlesBySavedTopics } from './articlesSlice';
 
 const initialState = {
     "data": null,
@@ -13,6 +15,8 @@ export const logUserIn = createAsyncThunk(
     'session/login',
     async (credentials, thunkAPI) => {
         try {
+            thunkAPI.dispatch(setTopics([]));
+            thunkAPI.dispatch(setArticlesBySavedTopics({}));
             const { email, password } = credentials;
             const response = await login(email, password);
             return response;
@@ -25,6 +29,8 @@ export const registerUser = createAsyncThunk(
     'session/register',
     async (credentials, thunkAPI) => {
         try {
+            thunkAPI.dispatch(setTopics([]));
+            thunkAPI.dispatch(setArticlesBySavedTopics({}));
             const { email, password, first_name, last_name } = credentials;
             const response = await register(email, password, first_name, last_name);
             return response;
@@ -38,6 +44,8 @@ export const logUserOut = createAsyncThunk(
     async (_, thunkAPI) => {
         try {
             await logout();
+            thunkAPI.dispatch(setTopics([]));
+            thunkAPI.dispatch(setArticlesBySavedTopics({}));
         } catch (error) {
             return thunkAPI.rejectWithValue({ error: error.message });
         }

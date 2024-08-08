@@ -3,7 +3,7 @@ import {
     Container,
 } from '@mui/material';
 import TopicCard from '../components/TopicCard';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchUserSavedTopics, setPageNumForTopic, setTopics } from '../state/slices/topicsSlice';
 import { fetchArticlesForSavedTopic } from '../state/slices/articlesSlice';
@@ -11,14 +11,10 @@ import { fetchArticlesForSavedTopic } from '../state/slices/articlesSlice';
 export default function Home() {
     const session = useSelector((state) => state.session.session);
     const dispatch = useDispatch();
-    const articlesBySavedTopicsInStore = useSelector((state) => state.articles.articlesBySavedTopics);
-    const savedTopicsInStore = useSelector((state) => state.topics.topics);
-
-    const [articlesByTopic, setArticlesByTopic] = useState(articlesBySavedTopicsInStore);
-    const [topics, setTopics] = useState(savedTopicsInStore);
+    const articlesBySavedTopics = useSelector((state) => state.articles.articlesBySavedTopics);
+    const savedTopics = useSelector((state) => state.topics.topics);
 
     const fetchAuthenticatedUserSavedTopics = async () => {
-        dispatch(setTopics([]));
         const fetchedUserSavedTopics = await dispatch(fetchUserSavedTopics()).unwrap(); 
         for (const topic of fetchedUserSavedTopics) {
             dispatch(fetchArticlesForSavedTopic(topic));
@@ -28,36 +24,27 @@ export default function Home() {
     useEffect(() => {
         if (session) {
             fetchAuthenticatedUserSavedTopics();
-            setArticlesByTopic(articlesBySavedTopicsInStore);
-            setTopics(savedTopicsInStore);
         } else {
-            for (const topic of topics) {
+            for (const topic of savedTopics) {
                 dispatch(fetchArticlesForSavedTopic(topic));
             }
-            setArticlesByTopic(articlesBySavedTopicsInStore);
-            setTopics(savedTopicsInStore);
         }
-    }, [session, articlesBySavedTopicsInStore, savedTopicsInStore]);
+    }, [session]);
 
     return (
         <>
             <Container component='main'>
                 {
                     // TO DO: fix the problem of old topics persisting in the render after logging in.
-                    Object.keys(articlesByTopic).map((topicId) => {
-                        const topic = topics.find((topic) => topic.id === parseInt(topicId));
-                        if (!topic) {
-                            return <Box key={topicId}>
-                                <TopicCard  error='Something went wrong when we were scouring the internet for news.' />
-                            </Box>
-                        }
+                    Object.keys(articlesBySavedTopics).map((topicId) => {
+                        const topic = savedTopics.find((topic) => topic.id === parseInt(topicId));
                         const topicName = topic.topic;
-                        const articlesByTopic = articlesByTopic[topicId].articles;
-                        const articlesByTopicError = articlesByTopic[topicId].error;
-                        const articlesBytopicLoading = articlesByTopic[topicId].loading;
+                        const articlesByTopic = articlesBySavedTopics[topicId].articles;
+                        const articlesByTopicError = articlesBySavedTopics[topicId].error;
+                        const articlesBytopicLoading = articlesBySavedTopics[topicId].loading;
                         return (
                             <Box key={topicId}>
-                                <TopicCard articlesByTopic={articlesByTopic} topicName={topicName} />
+                                <TopicCard articlesByTopic={articlesByTopic} topicName={topicName} loading={articlesBytopicLoading} error={articlesByTopicError} />
                             </Box>
                         )
                     })
