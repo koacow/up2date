@@ -7,7 +7,7 @@ const supabase = require('../../models/db');
 
 usersRouter.post('/authenticate', 
 	// Input validation chain
-	body('email').isEmail().normalizeEmail(),
+	body('email').isEmail().normalizeEmail({ gmail_remove_dots: false }),
 	body('password').isLength({ min: 6 }),
 	async (req, res) => {
 		// If there are validation errors, return a 400 response
@@ -38,7 +38,7 @@ usersRouter.post('/authenticate',
 
 usersRouter.post('/register',
 	// Input validation chain
-	body('email').notEmpty().isEmail().normalizeEmail(),
+	body('email').notEmpty().isEmail().normalizeEmail({ gmail_remove_dots: false}),
 	body('password').notEmpty().isLength({ min: 6 }),
 	body('first_name').notEmpty().isString().escape(),
 	body('last_name').notEmpty().isString().escape(),
