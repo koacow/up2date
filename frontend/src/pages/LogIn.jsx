@@ -1,15 +1,11 @@
 import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
-import { useEffect } from 'react';
+import LoginForm from '../components/LoginForm';
+import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import { logUserIn } from '../state/slices/sessionSlice';
@@ -31,8 +27,11 @@ export default function LogIn() {
   const dispatch = useDispatch();
   const session = useSelector((state) => state.session.session);
   const navigate = useNavigate();
-  const error = useSelector((state) => state.session.error);
-  const loading = useSelector((state) => state.session.loading);
+  const loginError = useSelector((state) => state.session.error);
+  const loginLoading = useSelector((state) => state.session.loading);
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   useEffect(() => {
     if (session) navigate('/');
@@ -40,15 +39,11 @@ export default function LogIn() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const data = new FormData(e.currentTarget);
-    const email = data.get('email');
-    const password = data.get('password');
     dispatch(logUserIn({ email, password }));
   };
 
   return (
     <Grid container component="main" sx={{ height: '100vh' }}>
-      <CssBaseline />
       <Grid
         item
         xs={false}
@@ -79,52 +74,16 @@ export default function LogIn() {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-            />
-            {
-              error && <Typography color="error">{error}</Typography>
-            }
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              {loading ? 'Logging you in...' : 'Log In'}
-            </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link to='/'>
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link to="/register" >
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
-            </Grid>
-            <Copyright sx={{ mt: 5 }} />
-          </Box>
+          <LoginForm
+            email={email}
+            setEmail={setEmail}
+            password={password}
+            setPassword={setPassword}
+            handleSubmit={handleSubmit}
+            loginError={loginError}
+            loginLoading={loginLoading}
+          />
+          <Copyright sx={{ mt: 5 }} />
         </Box>
       </Grid>
     </Grid>

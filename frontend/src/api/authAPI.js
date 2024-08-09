@@ -14,11 +14,12 @@ export const register = async (email, password, first_name, last_name) => {
         },
         body: JSON.stringify({ email, password, first_name, last_name })
     });
+    console.log(response);
     switch (response.status) {
         case 201:
             return response.json();
         case 409:
-            throw new Error('Username already exists');
+            throw new Error('User already exists');
         case 500:
             throw new Error('Oops! Something went wrong');
         default:
