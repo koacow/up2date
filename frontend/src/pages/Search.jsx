@@ -28,6 +28,7 @@ export default function Search() {
     const handlePageChange = (e, value) => {
         setDisplayedSearchPage(value);
         dispatch(setSearchPageNum(value));
+        dispatch(fetchArticlesByQuery());
     }
 
     const handleSubmit = (e) => {
@@ -52,10 +53,6 @@ export default function Search() {
             )
         }
     }
-
-    useEffect(() => {
-        dispatch(fetchArticlesByQuery());
-    }, [displayedSearchPage]);
 
     return (
         <Container>

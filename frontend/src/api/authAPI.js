@@ -14,7 +14,6 @@ export const register = async (email, password, first_name, last_name) => {
         },
         body: JSON.stringify({ email, password, first_name, last_name })
     });
-    console.log(response);
     switch (response.status) {
         case 201:
             return response.json();
@@ -59,5 +58,24 @@ export const logout = async () => {
             return response.json();
         default:
             throw new Error('Failed to logout');
+    }
+}
+
+export const resetPassword = async (email) => {
+    if (!email) throw new Error('Email is required');
+    const response = await fetch(`${ENDPOINT}/reset-password`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email })
+    });
+    switch (response.status) {
+        case 200:
+            return response.json();
+        case 400:
+            throw new Error('Invalid email');
+        default:
+            throw new Error('Failed to reset password');
     }
 }

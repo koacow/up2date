@@ -40,7 +40,11 @@ export default function RegistrationForm({ handleSubmit, error, loading, firstNa
         setPasswordErrorMessage(errorMessage ? errorMessage : '');
     };
 
-    const allowSubmit = () => (firstName !== '' && lastName !== '' && email !== '' && !emailError && passwordErrorMessage !== '');
+    const allowSubmit = () => {
+        if (firstName === '' || lastName === '' || email === '' || password === '') return false;
+        if (emailError || passwordErrorMessage !== '') return false;
+        return true;
+    }
 
     return (
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>

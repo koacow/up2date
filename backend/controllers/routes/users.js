@@ -55,6 +55,7 @@ usersRouter.post('/register',
 			email,
 			password
 		});
+		console.log('authError:', authError);
 		switch (authError?.code) {
 			case 'email_exists':
 				return res.status(409).json({ error: 'Email already exists' });
@@ -81,6 +82,8 @@ usersRouter.post('/register',
 				code: insertError.code
 			});
 		}
+
+		console.log('insertError:', insertError);
 		return res.status(201).json(authData);
 	});
 
@@ -99,6 +102,7 @@ usersRouter.put('/reset-password',
 		const { error} = await supabase.auth.resetPasswordForEmail(email, {
 			redirectTo: 'http://localhost:5173',
 		});
+		console.log('error:', error);
 		if (error) {
 			return res.status(500).json({ 
 				error: error.message,

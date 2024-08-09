@@ -64,7 +64,7 @@ export default function LoginForm({ email, setEmail, password, setPassword, hand
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link to='/'>
+                <Link to='/reset-password'>
                     Forgot password?
                 </Link>
               </Grid>

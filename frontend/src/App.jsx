@@ -10,6 +10,7 @@ import ConfigurePreferences from './pages/ConfigurePreferences';
 import Home from './pages/Home';
 import MainTemplate from './pages/MainTemplate';
 import Search from './pages/Search';
+import ResetPassword from './pages/ResetPassword';
 
 function App() {
   const darkMode = useSelector(state => state.settings.display.darkMode);
@@ -48,6 +49,7 @@ function App() {
     <Route path="/login" element={<LogIn />} />,
     <Route path="/register" element={<Register />} />,
     <Route path="/register/configure-preferences" element={<ConfigurePreferences />} />,
+    <Route path='/reset-password' element={<ResetPassword />} />,
     <Route path='/' element={<MainTemplate />} >
       <Route index element={<Home />} />,
       <Route path='/search' element={<Search />} />
