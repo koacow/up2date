@@ -11,6 +11,7 @@ import Home from './pages/Home';
 import MainTemplate from './pages/MainTemplate';
 import Search from './pages/Search';
 import ResetPassword from './pages/ResetPassword';
+import Stocks from './pages/Stocks';
 
 function App() {
   const darkMode = useSelector(state => state.settings.display.darkMode);
@@ -52,7 +53,8 @@ function App() {
     <Route path='/reset-password' element={<ResetPassword />} />,
     <Route path='/' element={<MainTemplate />} >
       <Route index element={<Home />} />,
-      <Route path='/search' element={<Search />} />
+      <Route path='/search' element={<Search />} />,
+      <Route path='/stocks' element={<Stocks />} />
     </Route>,
     <Route path="*" element={<NotFound />} />
   ]));

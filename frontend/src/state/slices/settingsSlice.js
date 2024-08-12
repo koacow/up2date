@@ -25,7 +25,7 @@ export const fetchSettingsAsync = createAsyncThunk(
     'settings/fetchSettingsAsync',
     async (_, thunkAPI) => {
         try {
-            const userId = thunkAPI.getState().session.data.user.id;
+            const userId = thunkAPI.getState().session.data.id;
             const response = await getSettings(userId);
             return response;
         } catch (error) {
@@ -38,7 +38,7 @@ export const updateSettingsAsync = createAsyncThunk(
     'settings/updateSettingsAsync',
     async (settings, thunkAPI) => {
         try {
-            const userId = thunkAPI.getState().session.data.user.id;
+            const userId = thunkAPI.getState().session.data.id;
             await updateUserSettings(userId, settings);
             return settings;
         } catch (error) {
@@ -51,7 +51,7 @@ export const resetSettingsAsync = createAsyncThunk(
     'settings/resetSettingsAsync',
     async (_, thunkAPI) => {
         try {
-            const userId = thunkAPI.getState().session.data.user.id;
+            const userId = thunkAPI.getState().session.data.id;
             await resetUserSettings(userId);
             return initialState;
         } catch (error) {

@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getUserSavedStocks, updateUserSavedStocks, deleteUserSavedStocks } from '../../api/accountAPI';
-import { getStocksByQuery, getStockQuoteBySymbol, getStockDailyDataBySymbol, getStockWeeklyDataBySymbol, getStockMonthlyDataBySymbol } from '../../api/stocksAPI';
+import { searchStocksByQuery, getStockQuoteBySymbol, getStockDailyDataBySymbol, getStockWeeklyDataBySymbol, getStockMonthlyDataBySymbol } from '../../api/stocksAPI';
 
 const initialState = {
     search: {
@@ -21,17 +21,43 @@ const initialState = {
          *      monthlyData: [],
          * }]
          */
-        savedStocksLoading: false,
-        savedStocksError: null,
+        loading: false,
+        error: null,
+    },
+    overview: {
+        "Americas": [
+            "INDU:IND",
+            "SPX:IND",
+            "CCMP:IND",
+            "NYA:IND",
+            "SPTSX:IND"
+        ],
+        "Europe, Middle East, & Africa": [
+            "SX5E:IND",
+            "UKX:IND",
+            "DAX:IND",
+            "CAC:IND",
+            "IBEX:IND"
+        ],
+        "Asia Pacific": [
+            "NKY:IND",
+            "HSI:IND",
+            "TPX:IND",
+            "SHSZ300:IND",
+            "AS51:IND",
+            "MXAP:IND"
+        ]
     }
+    
 };
 
 // Async thunks
 export const fetchStocksByQuery = createAsyncThunk(
     'stocks/fetchStocksByQuery',
-    async (query, thunkAPI) => {
+    async (_, thunkAPI) => {
         try {
-            const response = await getStocksByQuery(query);
+            const query = thunkAPI.getState().stocks.search.query;
+            const response = await searchStocksByQuery(query);
             return response;
         } catch (error) {
             return thunkAPI.rejectWithValue({ error: error.message });
@@ -44,7 +70,7 @@ export const fetchUserSavedStocks = createAsyncThunk(
     'stocks/fetchUserSavedStocks',
     async (_, thunkAPI) => {
         try {
-            const userId = thunkAPI.getState().session.data.user.id;
+            const userId = thunkAPI.getState().session.data.id;
             const data = await getUserSavedStocks(userId);
             return data.stock_tickers;
         } catch (error) {
@@ -83,7 +109,7 @@ export const updateUserSavedStocksThunk = createAsyncThunk(
     'stocks/updateUserSavedStocks',
     async (stockTickers, thunkAPI) => {
         try {
-            const userId = thunkAPI.getState().session.data.user.id;
+            const userId = thunkAPI.getState().session.data.id;
             const data = await updateUserSavedStocks(userId, stockTickers);
             return data.stock_tickers;
         } catch (error) {
@@ -96,7 +122,7 @@ export const deleteUserSavedStocksThunk = createAsyncThunk(
     'stocks/deleteUserSavedStocks',
     async (_, thunkAPI) => {
         try {
-            const userId = thunkAPI.getState().session.data.user.id;
+            const userId = thunkAPI.getState().session.data.id;
             await deleteUserSavedStocks(userId);
             return [];
         } catch (error) {
@@ -187,34 +213,34 @@ const stocksSlice = createSlice({
 
         builder.addCase(fetchUserSavedStocks.fulfilled, (state, action) => {
             state.saved.stocks = action.payload;
-            state.saved.savedStocksLoading = false;
-            state.saved.savedStocksError = null;
+            state.saved.loading = false;
+            state.saved.error = null;
         });
 
         builder.addCase(fetchUserSavedStocks.pending, (state) => {
-            state.saved.savedStocksLoading = true;
-            state.saved.savedStocksError = null;
+            state.saved.loading = true;
+            state.saved.error = null;
         });
 
         builder.addCase(fetchUserSavedStocks.rejected, (state, action) => {
-            state.saved.savedStocksError = action.payload.error;
-            state.saved.savedStocksLoading = false;
+            state.saved.error = action.payload.error;
+            state.saved.loading = false;
         });
 
         builder.addCase(updateUserSavedStocksThunk.fulfilled, (state, action) => {
             state.saved.stocks = action.payload.stock_tickers;
-            state.saved.savedStocksLoading = false;
-            state.saved.savedStocksError = null;
+            state.saved.loading = false;
+            state.saved.error = null;
         });
 
         builder.addCase(updateUserSavedStocksThunk.pending, (state) => {
-            state.saved.savedStocksLoading = true;
-            state.saved.savedStocksError = null;
+            state.saved.loading = true;
+            state.saved.error = null;
         });
 
         builder.addCase(updateUserSavedStocksThunk.rejected, (state, action) => {
-            state.saved.savedStocksError = action.payload.error;
-            state.saved.savedStocksLoading = false;
+            state.saved.error = action.payload.error;
+            state.saved.loading = false;
         });
     }
 });

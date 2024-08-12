@@ -34,7 +34,7 @@ stocksRouter.get('/search', async (req, res) => {
 	if (data.bestMatches.length === 0) {
 		return res.status(404).json({ error: 'No results found' });
 	}
-	return res.status(200).json(data.bestMatches[0]);
+	return res.status(200).json(data.bestMatches);
 });
 
 // Validates the symbol query parameter
