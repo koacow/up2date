@@ -2,41 +2,26 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getUserSavedTopics, updateUserSavedTopics, deleteUserSavedTopics } from '../../api/accountAPI';
 
 const initialState = {
-    topics: [
-            {
-                "id": 1,
-                "topic": "AI",
-                "pageNum": 1
-            },
-            {
-                "id": 2,
-                "topic": "Finance",
-                "pageNum": 1
-            },
-            {
-                "id": 3,
-                "topic": "Politics",
-                "pageNum": 1
-            },
-            {
-                "id": 4,
-                "topic": "Economy",
-                "pageNum": 1
-            },
-            {
-                "id": 5,
-                "topic": "Technology",
-                "pageNum": 1
-            }
-    ],
+    topics: [],
     savedTopicsLoading: false,
     savedTopicsError: null,
     updateTopicsError: null,
     updateTopicsLoading: false,
 };
 
-
 // Async thunks
+export const initiateInitialTopics = createAsyncThunk(
+    'topics/initiateInitialTopics',
+    async (_, thunkAPI) => {
+        try {
+            const response = await getAllTopics();
+            return response;
+        } catch (error) {
+            return thunkAPI.rejectWithValue({ error: error.message });
+        }
+    }
+);
+
 export const fetchUserSavedTopics = createAsyncThunk(
     'topics/fetchUserSavedTopics',
     async (_, thunkAPI) => {
@@ -91,10 +76,33 @@ const topicsSlice = createSlice({
         }
     },
     extraReducers: (builder) => {
+        builder.addCase(initiateInitialTopics.fulfilled, (state, action) => {
+            state.topics = action.payload.map(topic => {
+                return {
+                    topic: topic.topic,
+                    id: topic.id,
+                    pageNum: 1
+                };
+            });
+            state.savedTopicsLoading = false;
+            state.savedTopicsError = null;
+        });
+
+        builder.addCase(initiateInitialTopics.pending, (state) => {
+            state.savedTopicsLoading = true;
+            state.savedTopicsError = null;
+        });
+
+        builder.addCase(initiateInitialTopics.rejected, (state, action) => {
+            state.savedTopicsError = action.payload.error;
+            state.savedTopicsLoading = false;
+        });
+
         builder.addCase(fetchUserSavedTopics.fulfilled, (state, action) => {
             state.topics = action.payload.map(topic => { 
                 return {
-                    ...topic,
+                    topic: topic.topic,
+                    id: topic.id,
                     pageNum: 1
                 }
             });
