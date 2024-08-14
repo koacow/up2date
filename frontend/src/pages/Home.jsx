@@ -5,7 +5,7 @@ import {
 import TopicCard from '../components/TopicCard';
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchUserSavedTopics } from '../state/slices/topicsSlice';
+import { fetchUserSavedTopics, initiateInitialTopics } from '../state/slices/topicsSlice';
 
 export default function Home() {
     const session = useSelector((state) => state.session.session);
@@ -15,6 +15,8 @@ export default function Home() {
     useEffect(() => {
         if (session) {
             dispatch(fetchUserSavedTopics());
+        } else {
+            dispatch(initiateInitialTopics());
         }
     }, [session]);
 

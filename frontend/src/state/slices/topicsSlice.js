@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getUserSavedTopics, updateUserSavedTopics, deleteUserSavedTopics } from '../../api/accountAPI';
+import { getAllTopics } from '../../api/articlesAPI';
 
 const initialState = {
     topics: [],
@@ -15,7 +16,7 @@ export const initiateInitialTopics = createAsyncThunk(
     async (_, thunkAPI) => {
         try {
             const response = await getAllTopics();
-            return response;
+            return response.slice(0, 5);
         } catch (error) {
             return thunkAPI.rejectWithValue({ error: error.message });
         }
