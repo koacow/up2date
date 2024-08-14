@@ -6,6 +6,7 @@ const initialState = {
         query: '',
         articles: [],
         pageNum: 1,
+        totalPages: 0,
         loading: false,
         error: null,    
     },
@@ -15,6 +16,7 @@ const initialState = {
      *     1: {
      *          name: 'Gaming',
      *        articles: [],
+     *      totalPages: 32,
      *      loading: false,
      *    error: null
      */
@@ -65,13 +67,17 @@ const articlesSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(fetchArticlesByQuery.pending, (state) => {
             state.search.loading = true;
+            state.search.totalPages = 0;
             state.search.error = null;
         });
         builder.addCase(fetchArticlesByQuery.fulfilled, (state, action) => {
             state.search.articles = action.payload.articles;
+            state.search.totalPages = action.payload.totalPages;
             state.search.loading = false;
         });
         builder.addCase(fetchArticlesByQuery.rejected, (state, action) => {
+            state.search.articles = [];
+            state.search.totalPages = 0;
             state.search.loading = false;
             state.search.error = true;
         });
@@ -79,6 +85,7 @@ const articlesSlice = createSlice({
             const topicId = action.payload.topicId;
             state.articlesBySavedTopics[topicId] = {
                 articles: action.payload.articles,
+                totalPages: action.payload.totalPages,
                 loading: false,
                 error: null
             };
@@ -87,6 +94,7 @@ const articlesSlice = createSlice({
             const topicId = action.meta.arg.id;
             state.articlesBySavedTopics[topicId] = {
                 articles: [],
+                totalPages: 0,
                 loading: true,
                 error: null
             };
@@ -95,6 +103,7 @@ const articlesSlice = createSlice({
             const topicId = action.payload.topicId;
             state.articlesBySavedTopics[topicId] = {
                 articles: [],
+                totalPages: 0,                
                 loading: false,
                 error: action.payload.error
             };

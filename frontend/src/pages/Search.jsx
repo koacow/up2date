@@ -15,6 +15,7 @@ export default function Search() {
     const loading = useSelector(state => state.articles.search.loading);
     const error = useSelector(state => state.articles.search.error);
     const articles = useSelector(state => state.articles.search.articles);
+    const totalPages = useSelector(state => state.articles.search.totalPages);
 
     const [displayedQuery, setDisplayedQuery] = useState(searchQuery);
     const [displayedSearchPage, setDisplayedSearchPage] = useState(searchPage);
@@ -59,7 +60,7 @@ export default function Search() {
             <SearchBar query={searchQuery} displayedQuery={displayedQuery} handleSearchQueryChange={handleSearchQueryChange} handleSubmit={handleSubmit} />
             {renderSearchResults()}
             {
-                articles.length > 0 && <Pagination count={10} page={displayedSearchPage} onChange={handlePageChange} color='primary' />
+                articles.length > 0 && <Pagination count={totalPages} page={displayedSearchPage} onChange={handlePageChange} color='primary' />
             }
         </Container>
     );

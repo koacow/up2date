@@ -6,6 +6,8 @@ const articlesRouter = require('express').Router();
 const supabase = require('../../models/db');
 const { NEWS_API_KEY } = process.env;
 
+const PAGE_SIZE = 10;
+
 articlesRouter.get('/search',
 	// Input validation chain 
 	query('query').isString().escape(),
@@ -22,10 +24,12 @@ articlesRouter.get('/search',
 		if (!query) {
 			return res.status(400).json({ error: 'Query is required' });
 		}
-		const response = await fetch(`https://newsapi.org/v2/everything?q=${query}&apiKey=${NEWS_API_KEY}&sortBy=relevancy&language=en&pageSize=10&page=${pageNum}`);
+		const response = await fetch(`https://newsapi.org/v2/everything?q=${query}&apiKey=${NEWS_API_KEY}&sortBy=relevancy&language=en&pageSize=${PAGE_SIZE}&page=${pageNum}`);
 		if (response.ok) {
-			const data = await response.json();
-			return res.status(200).json(data);
+			const articles = await response.json();
+			const { totalResults } = articles;
+			const totalPages = Math.ceil(totalResults / PAGE_SIZE);
+			return res.status(200).json({ ...articles, totalPages });
 		}
 		return res.status(500).json({ error: 'Internal server error' });
 	});
@@ -65,10 +69,12 @@ articlesRouter.get('/:topic_id',
 		const { pageNum } = req.query;
 
 		// Fetch articles from the News API based on the topic and page number
-		const response = await fetch(`https://newsapi.org/v2/everything?q=${topic}&apiKey=${NEWS_API_KEY}&sortBy=publishedAt&language=en&pageSize=10&page=${pageNum}`);
+		const response = await fetch(`https://newsapi.org/v2/everything?q=${topic}&apiKey=${NEWS_API_KEY}&sortBy=publishedAt&language=en&pageSize=${PAGE_SIZE}&page=${pageNum}`);
 		if (response.ok) {
 			const articles = await response.json();
-			return res.status(200).json({ topic_id, ...articles });
+			const { totalResults } = articles;
+			const totalPages = Math.ceil(totalResults / PAGE_SIZE);
+			return res.status(200).json({ topic_id, ...articles, totalPages });
 		}
 		return res.status(500).json({ error: 'Internal server error' });
 	});

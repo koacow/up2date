@@ -21,7 +21,7 @@ export default function TopicCard({ topic }) {
     }, [session, paginationDisplayedNum]);
     
     const articlesByTopic = useSelector((state) => state.articles.articlesBySavedTopics[topic.id]);
-    const { articles, loading, error } = articlesByTopic ? articlesByTopic : { articles: [], loading: true, error: null };
+    const { articles, totalPages, loading, error } = articlesByTopic ? articlesByTopic : { articles: [], totalPages: 0, loading: true, error: null };
 
     const handlePageChange = (e, value) => {
         dispatch(setPageNumForTopic({ topicId: id, pageNum: value }));
@@ -39,7 +39,7 @@ export default function TopicCard({ topic }) {
                     {articles.map((article, index) => {
                         return <ArticleCard key={index} article={article} />
                     })}
-                    <Pagination count={10} page={paginationDisplayedNum} onChange={handlePageChange} color='primary' />
+                    <Pagination count={totalPages} page={paginationDisplayedNum} onChange={handlePageChange} color='primary' />
                 </Stack>
             )
         }
