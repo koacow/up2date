@@ -6,9 +6,9 @@ An independent news application that allows users full customizability.
 
 Frontend built with **React**, **Material UI**, **Tailwind**. Backend built with **Node**, **Express**, and **Supabase's PostgreSQL**.
 
-News collected from the **News API**[https://newsapi.org/]
+News collected from the [News API](https://newsapi.org/)
 
-Stocks featuree powered by **Alphavantage API**[https://www.alphavantage.co/]
+Stocks featuree powered by [AlphaVantage](https://www.alphavantage.co/)
 
 ## Features
 
