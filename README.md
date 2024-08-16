@@ -4,7 +4,7 @@
 ## Overview
 An independent news application that allows users full customizability.
 
-Frontend built with **React**, **Material UI**, **Tailwind**. Backend built with **Node**, **Express**, and **Supabase's PostgreSQL**.
+Frontend built with **React** ⚛️, **Material UI** 🔬, **Tailwind**💨. Backend built with **Node**, **Express** 🌐, and **Supabase's PostgreSQL** 🐘.
 
 News collected from the [News API](https://newsapi.org/)
 
