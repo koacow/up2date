@@ -15,7 +15,7 @@ accountRouter.use(query('user_id').isUUID().escape(), async (req, res, next) => 
 		return res.status(400).json({ error: 'Invalid input' });
 	}
 	const { user_id } = req.query;
-	const { data, error } = await supabase.from('user_profiles').select('user_id').eq('user_id', user_id);
+	const { data, error } = await supabase.from('user_profiles').select('*').eq('user_id', user_id);
 	if (error) {
 		return res.status(500).json({ error: 'Internal server error' });
 	}

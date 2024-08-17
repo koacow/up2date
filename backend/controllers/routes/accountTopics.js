@@ -23,8 +23,8 @@ accountTopicsRouter.put('/',
 		}
 	}),
 	async (req, res) => {
-		// If there are validation errors, return a 400 response
 		const validationErrors = validationResult(req);
+		// If there are validation errors, return a 400 response
 		if (!validationErrors.isEmpty()) {
 			return res.status(400).json({ error: 'Invalid input' });
 		};
