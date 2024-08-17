@@ -65,22 +65,7 @@ const settingsSlice = createSlice({
     name: 'settings',
     initialState,
     reducers: {
-        setLocalSettings(state, action) {
-            state.display = action.payload.display;
-            state.notifications = action.payload.notifications;
-        },
-        setLocalDarkMode(state, action) {
-            state.display.darkMode = action.payload;
-        },
-        setLocalLanguage(state, action) {
-            state.display.language = action.payload;
-        },
-        setLocalEmailNotifications(state, action) {
-            state.notifications.email = action.payload;
-        },
-        setLocalPushNotifications(state, action) {
-            state.notifications.push = action.payload;
-        },
+
     },
     // Async reducers assume that the user is already logged in
     extraReducers: (builder) => {
