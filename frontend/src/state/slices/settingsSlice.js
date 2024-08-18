@@ -28,7 +28,7 @@ export const fetchSettingsAsync = createAsyncThunk(
     async (_, thunkAPI) => {
         try {
             const userId = thunkAPI.getState().session.data.id;
-            const response = await getSettings(userId);
+            const response = await getUserSettings(userId);
             return response;
         } catch (error) {
             return thunkAPI.rejectWithValue({ error: error.message });
@@ -67,7 +67,9 @@ const settingsSlice = createSlice({
     name: 'settings',
     initialState,
     reducers: {
-
+        resetToDefaultSettings(state) {
+            state.settings = initialState.settings;
+        }
     },
     // Async reducers assume that the user is already logged in
     extraReducers: (builder) => {
@@ -124,6 +126,6 @@ const settingsSlice = createSlice({
     }
 });
 
-const { reducer } = settingsSlice;
-// export const {  } = actions;
+const { actions, reducer } = settingsSlice;
+export const { resetToDefaultSettings } = actions;
 export default reducer;

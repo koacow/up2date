@@ -5,14 +5,14 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Collapse from '@mui/material/Collapse';
 import ExpandMore from '../components/ExpandMore';
-import SavedStocksSettings from '../components/SavedStocksSettings';
+import SavedStocksSettings from '../components/WatchListSettings';
 import SavedTopicsSettings from '../components/SavedTopicsSettings';
 import AppearanceSettings from '../components/AppearanceSettings';
 import { useState } from 'react';
 
 export default function Settings() {
     const session = useSelector(state => state.session.session);
-    const [ savedStocksSettingsCollapsed, setSavedStocksSettingsCollapsed ]= useState(true);
+    const [ watchListSettingsCollapsed, setWatchListSettingsCollapsed ]= useState(true);
     const [ savedTopicsSettingsCollapsed, setSavedTopicsSettingsCollapsed ]= useState(true);
     const [ appearanceSettingsCollapsed, setAppearanceSettingsCollapsed ]= useState(true);
 
@@ -46,9 +46,9 @@ export default function Settings() {
                         <CardContent>
                             <Typography variant='h6'>
                                 Your Saved Stocks
-                                <ExpandMore expanded={!savedStocksSettingsCollapsed} onClick={() => setSavedStocksSettingsCollapsed(prev => !prev)} />
+                                <ExpandMore expanded={!watchListSettingsCollapsed} onClick={() => setWatchListSettingsCollapsed(prev => !prev)} />
                             </Typography>
-                            <Collapse in={!savedStocksSettingsCollapsed} unmountOnExit >
+                            <Collapse in={!watchListSettingsCollapsed} unmountOnExit >
                                 <SavedStocksSettings />
                             </Collapse>
                         </CardContent>

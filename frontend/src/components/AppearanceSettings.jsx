@@ -26,10 +26,6 @@ export default function AppearanceSettings() {
         }));
     }
 
-    useEffect(() => {
-        dispatch(fetchSettingsAsync());
-    }, []);
-
     return (
         <Card>
             <CardHeader title='Appearance' />

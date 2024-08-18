@@ -1,24 +1,11 @@
 import {
-    Box,
     Container,
 } from '@mui/material';
 import TopicCard from '../components/TopicCard';
-import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchUserSavedTopics, initiateInitialTopics } from '../state/slices/topicsSlice';
 
 export default function Home() {
-    const session = useSelector((state) => state.session.session);
-    const dispatch = useDispatch();
-    const savedTopics = useSelector((state) => state.topics.topics);
-
-    useEffect(() => {
-        if (session) {
-            dispatch(fetchUserSavedTopics());
-        } else {
-            dispatch(initiateInitialTopics());
-        }
-    }, [session]);
+    const savedTopics = useSelector((state) => state.topics.topics);  
 
     return (
         <>

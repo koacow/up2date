@@ -1,5 +1,6 @@
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { createTheme, ThemeProvider, CssBaseline } from '@mui/material';
 import './App.css';
 import About from './pages/About';
@@ -13,6 +14,9 @@ import Search from './pages/Search';
 import ResetPassword from './pages/ResetPassword';
 import Stocks from './pages/Stocks';
 import Settings from './pages/Settings';
+import { fetchUserSavedTopics, initiateInitialTopics } from './state/slices/topicsSlice';
+import { fetchUserSavedStocks } from './state/slices/stockSlice';
+import { fetchSettingsAsync } from './state/slices/settingsSlice';
 
 function App() {
   const darkMode = useSelector(state => state.settings.settings.display.darkMode);
@@ -60,6 +64,18 @@ function App() {
     </Route>,
     <Route path="*" element={<NotFound />} />
   ]));
+
+  const dispatch = useDispatch();
+  const session = useSelector(state => state.session.session);
+  useEffect(() => {
+    if (session) {
+      dispatch(fetchUserSavedTopics());
+      dispatch(fetchUserSavedStocks());
+      dispatch(fetchSettingsAsync());
+    } else {
+      dispatch(initiateInitialTopics());
+    }
+  }, [session]);
 
   return (
     <>

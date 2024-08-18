@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { register, login, logout } from '../../api/authAPI';
 import { setTopics } from './topicsSlice';
 import { setArticlesBySavedTopics } from './articlesSlice';
+import { resetToDefaultSettings } from './settingsSlice';
 
 const initialState = {
     "data": null,
@@ -46,6 +47,7 @@ export const logUserOut = createAsyncThunk(
             await logout();
             thunkAPI.dispatch(setTopics([]));
             thunkAPI.dispatch(setArticlesBySavedTopics({}));
+            thunkAPI.dispatch(resetToDefaultSettings());
         } catch (error) {
             return thunkAPI.rejectWithValue({ error: error.message });
         }
