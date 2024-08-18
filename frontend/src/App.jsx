@@ -15,7 +15,7 @@ import Stocks from './pages/Stocks';
 import Settings from './pages/Settings';
 
 function App() {
-  const darkMode = useSelector(state => state.settings.display.darkMode);
+  const darkMode = useSelector(state => state.settings.settings.display.darkMode);
   const getDesignTokens = () => ({
     palette: {
       mode: darkMode ? 'dark' : 'light',

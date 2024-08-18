@@ -86,6 +86,7 @@ accountSettingsRouter.put('/',
 		// If there are validation errors, return a 400 response
 		const validationErrors = validationResult(req);
 		if (!validationErrors.isEmpty()) {
+			console.log(validationErrors);	
 			return res.status(400).json({ error: 'Invalid input' });
 		};
 

@@ -2,20 +2,22 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getUserSettings, updateUserSettings, resetUserSettings } from '../../api/accountAPI';
 
 const initialState = {
-	display: {
-		darkMode: false,
-		language: "en"
-	},
-	notifications: {
-		email: {
-			dailyDigest: true,
-			newsletter: true
-		},
-		push: {
-			dailyDigest: true,
-			newsletter: true
-		}
-	},
+    settings: {
+        display: {
+            darkMode: false,
+            language: "en"
+        },
+        notifications: {
+            email: {
+                dailyDigest: true,
+                newsletter: true
+            },
+            push: {
+                dailyDigest: true,
+                newsletter: true
+            }
+        },
+    },
     loading: false,
     error: null,
 };
@@ -70,8 +72,8 @@ const settingsSlice = createSlice({
     // Async reducers assume that the user is already logged in
     extraReducers: (builder) => {
         builder.addCase(fetchSettingsAsync.fulfilled, (state, action) => {
-            state.display = action.payload.display;
-            state.notifications = action.payload.notifications;
+            state.settings.display = action.payload.display;
+            state.settings.notifications = action.payload.notifications;
             state.loading = false;
             state.error = null;
         });
@@ -87,8 +89,8 @@ const settingsSlice = createSlice({
         });
 
         builder.addCase(updateSettingsAsync.fulfilled, (state, action) => {
-            state.display = action.payload.display;
-            state.notifications = action.payload.notifications;
+            state.settings.display = action.payload.display;
+            state.settings.notifications = action.payload.notifications;
             state.loading = false;
             state.error = null;
         });
@@ -104,8 +106,8 @@ const settingsSlice = createSlice({
         });
 
         builder.addCase(resetSettingsAsync.fulfilled, (state, action) => {
-            state.display = action.payload.display;
-            state.notifications = action.payload.notifications;
+            state.settings.display = action.payload.display;
+            state.settings.notifications = action.payload.notifications;
             state.loading = false;
             state.error = null;
         });
@@ -122,6 +124,6 @@ const settingsSlice = createSlice({
     }
 });
 
-const { actions, reducer } = settingsSlice;
-export const { setLocalSettings, setLocalDarkMode, setLocalLanguage, setLocalEmailNotifications, setLocalPushNotifications } = actions;
+const { reducer } = settingsSlice;
+// export const {  } = actions;
 export default reducer;

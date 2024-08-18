@@ -2,7 +2,6 @@ import { updateUserSavedTopicsThunk, fetchUserSavedTopics } from '../state/slice
 import { getAllTopics } from '../api/articlesAPI';
 import { useSelector, useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
-import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';

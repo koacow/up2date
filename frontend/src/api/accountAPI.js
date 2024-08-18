@@ -31,7 +31,7 @@ export const updateUserSettings = async (user_id, settings) => {
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(settings)
+        body: JSON.stringify({ settings })
     });
     switch (response.status) {
         case 200:
