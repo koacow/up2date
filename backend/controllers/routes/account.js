@@ -37,5 +37,4 @@ accountRouter.get('/user', async (req, res) => {
 	}
 	return res.status(200).json(data);
 });
-
 module.exports = accountRouter;

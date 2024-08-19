@@ -3,67 +3,80 @@
 // Import required modules
 const { query, param, validationResult } = require('express-validator');
 const stocksRouter = require('express').Router();
-const { STOCK_API_KEY } = process.env;
-const STOCK_API_ENDPOINT = 'https://www.alphavantage.co/query';
-
-const stockFunctions = {
-	'search': 'SYMBOL_SEARCH',
-	'quote': 'GLOBAL_QUOTE',
-	'daily': 'TIME_SERIES_DAILY',
-	'weekly': 'TIME_SERIES_WEEKLY',
-	'monthly': 'TIME_SERIES_MONTHLY'
-};
-
-const responseDataKeys = {
-	'search': 'bestMatches',
-	'quote': 'Global Quote',
-	'daily': 'Time Series (Daily)',
-	'weekly': 'Weekly Time Series',
-	'monthly': 'Monthly Time Series'
-};
+const yahooFinance = require('yahoo-finance2').default;
 
 stocksRouter.get('/search', async (req, res) => {
 	// Fetch stock data based on the search query
 	const { query } = req.query;
-	const url = `${STOCK_API_ENDPOINT}?function=${stockFunctions['search']}&keywords=${query}&apikey=${STOCK_API_KEY}`;
-	const response = await fetch(url);
-	if (!response.ok) {
+	try {
+		const data = await yahooFinance.search(query);
+		return res.status(200).json(data);
+	} catch(err) {
 		return res.status(500).json({ error: 'Internal server error' });
 	}
-	const data = await response.json();
-	if (data.bestMatches.length === 0) {
-		return res.status(404).json({ error: 'No results found' });
-	}
-	return res.status(200).json(data.bestMatches);
 });
 
 // Validates the symbol query parameter
-stocksRouter.use('/:function', 
-	param('function').isIn(Object.keys(stockFunctions)).escape(),
-	query('symbol').isString().escape().notEmpty(),
+stocksRouter.use('/*/:ticker', 
+	param('ticker').isString().escape().notEmpty(),
 	(req, res, next) => {
 		const validationErrors = validationResult(req);
 		if (!validationErrors.isEmpty()) {
-			return res.status(400).json({ error: 'Bad request. Check endpoint or query.' });
+			return res.status(400).json({ error: 'Invalid input' });
 		}
 		next();
 	}
 );
 
-stocksRouter.get('/:function', async (req, res) => {
-	// Fetch stock data based on the function and symbol
-	const { symbol } = req.query;
-	const { function: stockFunction } = req.params;
-	const endpoint = `${STOCK_API_ENDPOINT}?function=${stockFunctions[stockFunction]}&symbol=${symbol}&apikey=${STOCK_API_KEY}`;
-
-	const response = await fetch(endpoint);
-	if (!response.ok) {
+stocksRouter.get('/quote/:ticker', async (req, res) => {
+	// Fetch stock quote data based on the stock symbol
+	const { ticker } = req.params;
+	try {
+		const data = await yahooFinance.quote(ticker);
+		return res.status(200).json(data);
+	} catch(err) {
 		return res.status(500).json({ error: 'Internal server error' });
 	}
-	const data = await response.json();
-	if (!data[responseDataKeys[stockFunction]]) {
-		return res.status(404).json({ error: 'No results found' });
+});	
+
+const getIntervalFromRange = (range) => {
+	switch (range) {
+		case 1:
+			return '1m';
+		case 5: 
+			return '30m'
+		case 30:
+		case 180:
+			return '1d';
+		case 365:
+			return '1wk';
+		case 1825:
+			return '1mo';
+		default:
+			return '3mo';
 	}
-	return res.status(200).json(data[responseDataKeys[stockFunction]]);
+}
+
+stocksRouter.get('/chart/:ticker', 
+	query('range').isInt().toInt().notEmpty().custom(val => val > 0),
+	async (req, res) => {
+		const { ticker } = req.params;
+		const { range } = req.query;
+
+		const startDate = new Date() - (range * 24 * 60 * 60 * 1000);
+		const interval = getIntervalFromRange(range);
+
+		const queryOptions = {
+			period1: new Date(startDate).toISOString(),
+			interval
+		}
+		try {
+			const data = await yahooFinance.chart(ticker, queryOptions);
+			return res.status(200).json(data);
+		} catch(error) {
+			console.log(error);
+			return res.status(500).json({ error: 'Internal server error' });
+		}
 });
+
 module.exports = stocksRouter;
