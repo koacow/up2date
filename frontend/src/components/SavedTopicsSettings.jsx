@@ -17,14 +17,16 @@ import Add from '@mui/icons-material/Add';
 
 export default function SavedTopicsSettings () {
     const savedTopics = useSelector(state => state.topics.topics);
+    const updateLoading = useSelector(state => state.topics.updateTopicsLoading);
+    const updateError = useSelector(state => state.topics.updateTopicsError);
     const [displayedSavedTopics, setDisplayedSavedTopics] = useState([]);
     const [displayedUnsavedTopics, setDisplayedUnsavedTopics] = useState([]);
 
     useEffect(() => {
-        getAllTopics().then(topics => {
-            setDisplayedUnsavedTopics(topics.filter(topic => !displayedSavedTopics.some(savedTopic => savedTopic.topic === topic.topic)));
-        });
         setDisplayedSavedTopics(savedTopics);
+        getAllTopics().then(topics => {
+            setDisplayedUnsavedTopics(topics.filter(topic => !displayedSavedTopics.some(savedTopic => savedTopic.id === topic.id)));
+        });
     }, []);
 
     const dispatch = useDispatch();
@@ -43,8 +45,18 @@ export default function SavedTopicsSettings () {
 
     const confirmChanges = () => {
         const topicIds = displayedSavedTopics.map(savedTopic => savedTopic.id);
-        console.log(topicIds);
         dispatch(updateUserSavedTopicsThunk(topicIds));
+    }
+
+    const confirmButtonDisabled = updateLoading || updateError;
+    const confirmButtonLabel = () => {
+        if (updateLoading) {
+            return 'Updating your topics...';
+        } else if (updateError) {
+            return 'Oops! Something went wrong. Please try again.';
+        } else {
+            return 'Confirm Changes';
+        }
     }
     return (
         <Card>
@@ -52,6 +64,7 @@ export default function SavedTopicsSettings () {
                 <CardHeader title='Your Saved Topics' />
                 <List>
                     {
+                        savedTopics.length === 0 ? <ListItem>You have no saved topics.</ListItem> :
                         displayedSavedTopics.map((savedTopic, index) => {
                             return (
                                 <ListItem key={index}>
@@ -88,7 +101,13 @@ export default function SavedTopicsSettings () {
                     }
                 </List>
                 <CardActions>
-                    <Button variant='contained' onClick={confirmChanges}>Confirm Changes</Button>
+                    <Button 
+                        variant='contained' 
+                        onClick={confirmChanges}
+                        disabled={confirmButtonDisabled}
+                    >
+                        {confirmButtonLabel()}
+                    </Button>
                 </CardActions>
             </CardContent>
         </Card>

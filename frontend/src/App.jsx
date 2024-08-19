@@ -65,18 +65,6 @@ function App() {
     <Route path="*" element={<NotFound />} />
   ]));
 
-  const dispatch = useDispatch();
-  const session = useSelector(state => state.session.session);
-  useEffect(() => {
-    if (session) {
-      dispatch(fetchUserSavedTopics());
-      dispatch(fetchUserSavedStocks());
-      dispatch(fetchSettingsAsync());
-    } else {
-      dispatch(initiateInitialTopics());
-    }
-  }, [session]);
-
   return (
     <>
       <ThemeProvider theme={theme}>

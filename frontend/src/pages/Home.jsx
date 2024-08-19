@@ -5,7 +5,8 @@ import TopicCard from '../components/TopicCard';
 import { useSelector, useDispatch } from 'react-redux';
 
 export default function Home() {
-    const savedTopics = useSelector((state) => state.topics.topics);  
+    const savedTopics = useSelector((state) => state.topics.topics);
+      
 
     return (
         <>

@@ -39,7 +39,7 @@ accountTopicsRouter.put('/',
 		}
 
 		// Insert new user topics based on the user ID
-		const { data: insertedData, error: insertError } = await supabase.from('user_topics').insert(newTopicIds.map(topic_id => ({ user_id, topic_id }))).select();
+		const {data: insertedData, error: insertError } = await supabase.from('user_topics').insert(newTopicIds.map(topic_id => ({ user_id, topic_id }))).select();
 		if (insertError) {
 			return res.status(400).json({ error: 'Failed to update user topics' });
 		}
