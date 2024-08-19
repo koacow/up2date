@@ -1,6 +1,5 @@
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom';
-import { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { createTheme, ThemeProvider, CssBaseline } from '@mui/material';
 import './App.css';
 import About from './pages/About';
@@ -14,9 +13,8 @@ import Search from './pages/Search';
 import ResetPassword from './pages/ResetPassword';
 import Stocks from './pages/Stocks';
 import Settings from './pages/Settings';
-import { fetchUserSavedTopics, initiateInitialTopics } from './state/slices/topicsSlice';
-import { fetchUserSavedStocks } from './state/slices/stockSlice';
-import { fetchSettingsAsync } from './state/slices/settingsSlice';
+import ErrorBoundary from './ErrorBoundary.jsx'
+import AppError from './AppError.jsx'
 
 function App() {
   const darkMode = useSelector(state => state.settings.settings.display.darkMode);
@@ -52,15 +50,15 @@ function App() {
 
   const AppRouter = createBrowserRouter(createRoutesFromElements([
     <Route path="/about" element={<About />} />,
-    <Route path="/login" element={<LogIn />} />,
-    <Route path="/register" element={<Register />} />,
-    <Route path="/register/configure-preferences" element={<ConfigurePreferences />} />,
-    <Route path='/reset-password' element={<ResetPassword />} />,
-    <Route path='/' element={<MainTemplate />} >
-      <Route index element={<Home />} />,
-      <Route path='/search' element={<Search />} />,
-      <Route path='/stocks' element={<Stocks />} />
-      <Route path='/settings' element={<Settings />} />,
+    <Route path="/login" element={<LogIn />} errorElement={<AppError />} />,
+    <Route path="/register" element={<Register />} errorElement={<AppError />} />,
+    <Route path="/register/configure-preferences" element={<ConfigurePreferences />} errorElement={<AppError />} />,
+    <Route path='/reset-password' element={<ResetPassword />} errorElement={<AppError />} />,
+    <Route path='/' element={<MainTemplate />} errorElement={<AppError />} >
+      <Route index element={<Home />} errorElement={<AppError />} />,
+      <Route path='/search' element={<Search />} errorElement={<AppError />} />,
+      <Route path='/stocks' element={<Stocks />} errorElement={<AppError />} />
+      <Route path='/settings' element={<Settings />} errorElement={<AppError />} />,
     </Route>,
     <Route path="*" element={<NotFound />} />
   ]));
@@ -69,7 +67,9 @@ function App() {
     <>
       <ThemeProvider theme={theme}>
         <CssBaseline/>
-        <RouterProvider router={AppRouter} />
+        <ErrorBoundary fallback={<AppError />}>
+          <RouterProvider router={AppRouter} />
+        </ErrorBoundary>
       </ThemeProvider>
     </>
   )

@@ -21,6 +21,7 @@ export default function SavedTopicsSettings () {
     const updateError = useSelector(state => state.topics.updateTopicsError);
     const [displayedSavedTopics, setDisplayedSavedTopics] = useState([]);
     const [displayedUnsavedTopics, setDisplayedUnsavedTopics] = useState([]);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         setDisplayedSavedTopics(savedTopics);
@@ -29,7 +30,6 @@ export default function SavedTopicsSettings () {
         });
     }, []);
 
-    const dispatch = useDispatch();
 
     const removeSavedTopic = (id) => {
         const removedTopics = displayedSavedTopics.find(savedTopic => savedTopic.id === id);
