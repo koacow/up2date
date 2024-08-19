@@ -11,8 +11,8 @@ export const searchStocksByQuery = async (query) => {
             throw new Error('Failed to fetch stocks');
     }
 };
-export const getStockQuoteBySymbol = async (symbol) => {
-    const response = await fetch(`${ENDPOINT}/quote/?symbol=${encodeURIComponent(symbol)}`);
+export const getStockQuoteByTicker = async (ticker) => {
+    const response = await fetch(`${ENDPOINT}/quote/${ticker}`);
     switch (response.status) {
         case 200:
             return response.json();
@@ -20,30 +20,12 @@ export const getStockQuoteBySymbol = async (symbol) => {
             throw new Error('Failed to fetch stock quote');
     }
 };
-export const getStockDailyDataBySymbol = async (symbol) => {
-    const response = await fetch(`${ENDPOINT}/daily/?symbol=${encodeURIComponent(symbol)}`);
+export const getStockChartByTicker = async (ticker, range) => {
+    const response = await fetch(`${ENDPOINT}/chart/${ticker}?range=${range}`);
     switch (response.status) {
         case 200:
             return response.json();
         default:
-            throw new Error('Failed to fetch daily stock data');
-    }
-};
-export const getStockWeeklyDataBySymbol = async (symbol) => {
-    const response = await fetch(`${ENDPOINT}/weekly/?symbol=${encodeURIComponent(symbol)}`);
-    switch (response.status) {
-        case 200:
-            return response.json();
-        default:
-            throw new Error('Failed to fetch weekly stock data');
-    }
-};
-export const getStockMonthlyDataBySymbol = async (symbol) => {
-    const response = await fetch(`${ENDPOINT}/monthly/?symbol=${encodeURIComponent(symbol)}`);
-    switch (response.status) {
-        case 200:
-            return response.json();
-        default:
-            throw new Error('Failed to fetch monthly stock data');
+            throw new Error('Failed to fetch stock chart data');
     }
 };

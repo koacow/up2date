@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getUserSavedStocks, updateUserSavedStocks, deleteUserSavedStocks } from '../../api/accountAPI';
-import { searchStocksByQuery, getStockQuoteBySymbol, getStockDailyDataBySymbol, getStockWeeklyDataBySymbol, getStockMonthlyDataBySymbol } from '../../api/stocksAPI';
+import { getUserWatchList, updateUserWatchList, deleteUserWatchList } from '../../api/accountAPI';
+import { searchStocksByQuery, getStockQuoteByTicker, getStockChartByTicker } from '../../api/stocksAPI';
 
 const initialState = {
     search: {
@@ -13,12 +13,8 @@ const initialState = {
         stocks: [],
         /**
          * stocks: [{
-         *      symbol: 'AAPL',
-         *      name: 'Apple Inc.',
-         *      quote: 123.45,
-         *      dailyData: [],
-         *      weeklyData: [],
-         *      monthlyData: [],
+         *      ticker: 'AAPL',
+         *      data: {}
          * }]
          */
         loading: false,
@@ -26,28 +22,43 @@ const initialState = {
     },
     overview: {
         regions: {
-            "Americas": {
-                "INDU": {},
-                "SPX": {},
-                "CCMP": {},
-                "NYA": {},
-                "SPTSX": {},
-            },
-            "Europe, Middle East, & Africa": {
-                "SX5E": {},
-                "UKX": {},
-                "DAX": {},
-                "CAC": {},
-                "IBEX": {}
-            },
-            "Asia Pacific": {
-                "NKY": {},
-                "HSI": {},
-                "TPX": {},
-                "SHSZ300": {},
-                "AS51": {},
-                "MXAP": {}
-            }
+            "Americas": [
+                {
+                    ticker: "INDU",
+                    data: {}
+                },
+                {
+                    ticker: "SPX",
+                    data: {}
+                },
+                {
+                    ticker: "CCMP",
+                    data: {}
+                },
+                {
+                    ticker: "NYA",
+                    data: {}
+                },
+                {
+                    ticker: "SPTSX",
+                    data: {}
+                },
+            ],
+            // "Europe, Middle East, & Africa": {
+            //     "SX5E": {},
+            //     "UKX": {},
+            //     "DAX": {},
+            //     "CAC": {},
+            //     "IBEX": {}
+            // },
+            // "Asia Pacific": {
+            //     "NKY": {},
+            //     "HSI": {},
+            //     "TPX": {},
+            //     "SHSZ300": {},
+            //     "AS51": {},
+            //     "MXAP": {}
+            // }
         },
         loading: false,
         error: null,
@@ -68,39 +79,30 @@ export const fetchStocksByQuery = createAsyncThunk(
     }
 );
 
-// TODO: figure out naming schemes for these thunks
-export const fetchUserSavedStocks = createAsyncThunk(
-    'stocks/fetchUserSavedStocks',
+export const fetchUserWatchList = createAsyncThunk(
+    'stocks/fetchUserWatchList',
     async (_, thunkAPI) => {
         try {
             const userId = thunkAPI.getState().session.data.id;
-            const data = await getUserSavedStocks(userId);
-            return data.stock_tickers;
+            const data = await getUserWatchList(userId);
+            return data;
         } catch (error) {
             return thunkAPI.rejectWithValue({ error: error.message });
         }
     }
 );
 
-export const fetchSavedStocksData = createAsyncThunk(
-    'stocks/fetchSavedStocksData',
+export const fetchQuotesForWatchList = createAsyncThunk(
+    'stocks/fetchQuotesForWatchList',
     async (_, thunkAPI) => {
         try{
-            const savedStocks = thunkAPI.getState().stocks.saved.stocks;
-            const stockData = savedStocks.map(async (stock) => {
-                const quote = await getStockQuoteBySymbol(stock);
-                const dailyData = await getStockDailyDataBySymbol(stock);
-                const weeklyData = await getStockWeeklyDataBySymbol(stock);
-                const monthlyData = await getStockMonthlyDataBySymbol(stock);
+            const watchList = thunkAPI.getState().stocks.saved.stocks;
+            const stockData = await Promise.all(watchList.map(async (stock) => {
                 return {
-                    symbol: stock,
-                    name: quote['01. symbol'],  
-                    quote: quote['05. price'],
-                    dailyData: dailyData,
-                    weeklyData: weeklyData,
-                    monthlyData: monthlyData,
-                };
-            });
+                    ticker: stock.ticker,
+                    data: await getStockQuoteByTicker(stock.ticker)
+                }
+            }));
             return stockData;
         } catch (error) {
             return thunkAPI.rejectWithValue({ error: error.message });
@@ -108,12 +110,12 @@ export const fetchSavedStocksData = createAsyncThunk(
     }
 )
 
-export const updateUserSavedStocksThunk = createAsyncThunk(
-    'stocks/updateUserSavedStocks',
-    async (stockTickers, thunkAPI) => {
+export const updateUserWatchListThunk = createAsyncThunk(
+    'stocks/updateUserWatchList',
+    async (tickers, thunkAPI) => {
         try {
             const userId = thunkAPI.getState().session.data.id;
-            const data = await updateUserSavedStocks(userId, stockTickers);
+            const data = await updateUserWatchList(userId, tickers);
             return data.stock_tickers;
         } catch (error) {
             return thunkAPI.rejectWithValue({ error: error.message });
@@ -121,12 +123,12 @@ export const updateUserSavedStocksThunk = createAsyncThunk(
     }
 );
 
-export const deleteUserSavedStocksThunk = createAsyncThunk(
-    'stocks/deleteUserSavedStocks',
+export const deleteUserWatchListThunk = createAsyncThunk(
+    'stocks/deleteUserWatchList',
     async (_, thunkAPI) => {
         try {
             const userId = thunkAPI.getState().session.data.id;
-            await deleteUserSavedStocks(userId);
+            await deleteUserWatchList(userId);
             return [];
         } catch (error) {
             return thunkAPI.rejectWithValue({ error: error.message });
@@ -134,24 +136,33 @@ export const deleteUserSavedStocksThunk = createAsyncThunk(
     }
 );
 
-export const fetchOverviewData = createAsyncThunk(
-    'stocks/fetchOverviewData',
+export const fetchOverviewQuotes = createAsyncThunk(
+    'stocks/fetchOverviewQuotes',
     async (_, thunkAPI) => {
         try {
             const regions = thunkAPI.getState().stocks.overview.regions;
-            const americasData = await Promise.all(Object.keys(regions["Americas"]).map(async (symbol) => {
-                return getStockQuoteBySymbol(symbol);
+            const americasData = await Promise.all(regions['Americas'].map(async (element) => {
+                return {
+                    ticker: element.ticker,
+                    data: await getStockQuoteByTicker(element.ticker)
+                };
             }));
-            const emeaData = await Promise.all(Object.keys(regions["Europe, Middle East, & Africa"]).map(async (symbol) => {
-                return getStockQuoteBySymbol(symbol);
-            }));
-            const apacData = await Promise.all(Object.keys(regions["Asia Pacific"]).map(async (symbol) => {
-                return getStockQuoteBySymbol(symbol);
-            }));
+            // const emeaData = await Promise.all(Object.keys(regions["Europe, Middle East, & Africa"]).map(async (ticker) => {
+            //     return {
+            //         ticker: ticker,
+            //         data: await getStockQuoteByTicker(ticker)
+            //     }
+            // }));
+            // const apacData = await Promise.all(Object.keys(regions["Asia Pacific"]).map(async (ticker) => {
+            //     return {
+            //         ticker: ticker,
+            //         data: await getStockQuoteByTicker(ticker)
+            //     }
+            // }));
             return {
                 "Americas": americasData,
-                "Europe, Middle East, & Africa": emeaData,
-                "Asia Pacific": apacData,
+                // "Europe, Middle East, & Africa": emeaData,
+                // "Asia Pacific": apacData,
             }
         } catch (error) {
             return thunkAPI.rejectWithValue({ error: error.message });
@@ -175,69 +186,62 @@ const stocksSlice = createSlice({
         },
     },
     extraReducers: (builder) => {
-        builder.addCase(fetchStocksByQuery.fulfilled, (state, action) => {
-            state.search.stocks = action.payload;
-            state.search.searchLoading = false;
-            state.search.searchError = null;
-        });
-
         builder.addCase(fetchStocksByQuery.pending, (state) => {
             state.search.searchLoading = true;
             state.search.searchError = null;
         });
-
-        builder.addCase(fetchStocksByQuery.rejected, (state, action) => {
-            state.search.searchError = action.payload.error;
+        builder.addCase(fetchStocksByQuery.fulfilled, (state, action) => {
+            state.search.stocks = action.payload.quotes;
             state.search.searchLoading = false;
         });
+        builder.addCase(fetchStocksByQuery.rejected, (state, action) => {
+            state.search.searchLoading = false;
+            state.search.searchError = action.payload.error;
+        });
 
-        builder.addCase(fetchUserSavedStocks.fulfilled, (state, action) => {
+        builder.addCase(fetchUserWatchList.pending, (state) => {
+            state.saved.loading = true;
+            state.saved.error = null;
+        });
+        builder.addCase(fetchUserWatchList.fulfilled, (state, action) => {
+            state.saved.stocks = action.payload.map(data => {
+                return {
+                    ticker: data.stock_ticker
+                }
+            });
+            state.saved.loading = false;
+        });
+        builder.addCase(fetchUserWatchList.rejected, (state, action) => {
+            state.saved.loading = false;
+            state.saved.error = action.payload.error;
+        });
+        
+        builder.addCase(fetchQuotesForWatchList.pending, (state) => {
+            state.saved.loading = true;
+            state.saved.error = null;
+        });
+        builder.addCase(fetchQuotesForWatchList.fulfilled, (state, action) => {
             state.saved.stocks = action.payload;
             state.saved.loading = false;
-            state.saved.error = null;
         });
-
-        builder.addCase(fetchUserSavedStocks.pending, (state) => {
-            state.saved.loading = true;
-            state.saved.error = null;
-        });
-
-        builder.addCase(fetchUserSavedStocks.rejected, (state, action) => {
+        builder.addCase(fetchQuotesForWatchList.rejected, (state, action) => {
+            state.saved.loading = false;
             state.saved.error = action.payload.error;
-            state.saved.loading = false;
         });
 
-        builder.addCase(updateUserSavedStocksThunk.fulfilled, (state, action) => {
-            state.saved.stocks = action.payload.stock_tickers;
-            state.saved.loading = false;
-            state.saved.error = null;
-        });
-
-        builder.addCase(updateUserSavedStocksThunk.pending, (state) => {
-            state.saved.loading = true;
-            state.saved.error = null;
-        });
-
-        builder.addCase(updateUserSavedStocksThunk.rejected, (state, action) => {
-            state.saved.error = action.payload.error;
-            state.saved.loading = false;
-        });
-
-        builder.addCase(fetchOverviewData.fulfilled, (state, action) => {
-            state.overview.regions = action.payload;
-            state.overview.loading = false;
-            state.overview.error = null;
-        });
-
-        builder.addCase(fetchOverviewData.pending, (state) => {
+        builder.addCase(fetchOverviewQuotes.pending, (state) => {
             state.overview.loading = true;
             state.overview.error = null;
         });
-
-        builder.addCase(fetchOverviewData.rejected, (state, action) => {
-            state.overview.error = action.payload.error;
+        builder.addCase(fetchOverviewQuotes.fulfilled, (state, action) => {
+            state.overview.regions = action.payload;
             state.overview.loading = false;
         });
+        builder.addCase(fetchOverviewQuotes.rejected, (state, action) => {
+            state.overview.loading = false;
+            state.overview.error = action.payload.error;
+        });
+
     }
 });
 

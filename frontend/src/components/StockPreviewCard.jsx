@@ -1,22 +1,25 @@
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardHeader from '@mui/material/CardHeader';
+import TableRow from '@mui/material/TableRow';
+import TableCell from '@mui/material/TableCell';
 import Typography from '@mui/material/Typography';
 
-export default function StockPreviewCard({ stock }) {
-    const { symbol, name, quote } = stock;
+export default function StockPreviewCard({ ticker, data }) {
+    const { shortName, ask, regularMarketChange, regularMarketChangePercent } = data;
 
     return (
-        <Card>
-            <CardHeader
-                title={symbol}
-                subheader={name}
-            />
-            <CardContent>
-                <Typography variant='h4'>
-                    {quote}
-                </Typography>
-            </CardContent>
-        </Card>
+        <TableRow hover>
+            <TableCell>
+                <Typography variant='h3' component='h3'>{ticker}</Typography>
+                <Typography variant='h6' component='h6'>{shortName}</Typography>
+            </TableCell>
+            <TableCell>
+                <Typography variant='h6' component='h6'>{ask}</Typography>
+            </TableCell>
+            <TableCell>
+                <Typography variant='h6' component='h6'>{regularMarketChange}</Typography>
+            </TableCell>
+            <TableCell>
+                <Typography variant='h6' component='h6'>{regularMarketChangePercent}</Typography>
+            </TableCell>
+        </TableRow>
     )
 }

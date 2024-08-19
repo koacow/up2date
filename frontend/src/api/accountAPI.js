@@ -93,17 +93,17 @@ export const deleteUserSavedTopics = async (user_id) => {
             throw new Error('Failed to delete user topics');
     }
 };
-export const getUserSavedStocks = async (user_id) => {
+export const getUserWatchList = async (user_id) => {
     const response = await fetch(`${ENDPOINT}/stocks?user_id=${encodeURIComponent(user_id)}`);
     switch(response.status){
         case 200:
             return response.json();
         default:
-            throw new Error('Failed to fetch user saved stocks');
+            throw new Error('Failed to fetch user watch list');
     }
 };
 
-export const updateUserSavedStocks = async (user_id, stock_tickers) => {
+export const updateUserWatchList = async (user_id, stock_tickers) => {
     const response = await fetch(`${ENDPOINT}/stocks?user_id=${encodeURIComponent(user_id)}`, {
         method: 'PUT',
         headers: {
@@ -115,11 +115,11 @@ export const updateUserSavedStocks = async (user_id, stock_tickers) => {
         case 201:
             return response.json();
         default:
-            throw new Error('Failed to update user saved stocks');
+            throw new Error('Failed to update user watch list');
     }
 };
 
-export const deleteUserSavedStocks = async (user_id) => {
+export const deleteUserWatchList = async (user_id) => {
     const response = await fetch(`${ENDPOINT}/stocks?user_id=${encodeURIComponent(user_id)}`, {
         method: 'DELETE'
     });
@@ -127,7 +127,7 @@ export const deleteUserSavedStocks = async (user_id) => {
         case 204:
             return;
         default:
-            throw new Error('Failed to delete user saved stocks');
+            throw new Error('Failed to delete user watch list');
     }
 };
 

@@ -1,5 +1,4 @@
-import { updateUserSavedStocksThunk } from '../state/slices/stockSlice';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useState } from 'react';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
@@ -13,11 +12,9 @@ import SearchBar from './SearchBar';
 
 export default function WatchListSettings(){
     const watchList = useSelector(state => state.stocks.saved.stocks);
-    const dispatch = useDispatch();
 
     const removeStock = (tickerToRemove) => {
         const newWatchList = watchList.filter(ticker => ticker !== tickerToRemove);
-        dispatch(updateUserSavedStocksThunk(newWatchList));
     }
 
     const [tickerQuery, setTickerQuery] = useState('');
