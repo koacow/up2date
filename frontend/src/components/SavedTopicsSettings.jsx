@@ -25,7 +25,7 @@ export default function SavedTopicsSettings () {
     useEffect(() => {
         setDisplayedSavedTopics(savedTopics);
         getAllTopics().then(topics => {
-            setDisplayedUnsavedTopics(topics.filter(topic => !displayedSavedTopics.some(savedTopic => savedTopic.id === topic.id)));
+            setDisplayedUnsavedTopics(topics.filter(topic => !savedTopics.some(savedTopic => savedTopic.id === topic.id)));
         });
     }, []);
 
@@ -43,9 +43,12 @@ export default function SavedTopicsSettings () {
         setDisplayedSavedTopics(prev => [...prev, addedTopic]);
     }
 
-    const confirmChanges = () => {
+    const confirmChanges = async () => {
         const topicIds = displayedSavedTopics.map(savedTopic => savedTopic.id);
-        dispatch(updateUserSavedTopicsThunk(topicIds));
+        const res = await dispatch(updateUserSavedTopicsThunk(topicIds));
+        if (res.meta.requestStatus === 'fulfilled') {
+            dispatch(fetchUserSavedTopics());
+        }
     }
 
     const confirmButtonDisabled = updateLoading || updateError;
