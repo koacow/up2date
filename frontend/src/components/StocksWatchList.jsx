@@ -1,7 +1,8 @@
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { getStockQuoteByTicker } from '../api/stocksAPI';
+
 import Typography from '@mui/material/Typography';
-import { useEffect } from 'react';
-import { fetchQuotesForWatchList } from '../state/slices/stockSlice';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableHead from '@mui/material/TableHead';
@@ -13,15 +14,34 @@ import StockPreviewCard from '../components/StockPreviewCard';
 
 export default function StocksWatchList() {
     const session = useSelector((state) => state.session.session);
-    const watchList = useSelector((state) => state.stocks.saved.stocks);
-    const watchListLoading = useSelector((state) => state.stocks.saved.loading);    
-    const watchListError = useSelector((state) => state.stocks.saved.error);
+    const watchList = useSelector((state) => state.stocks.watchList.stocks);
+    const [ watchListData, setWatchListData ] = useState([]);
+    const watchListLoading = useSelector((state) => state.stocks.watchList.loading);    
+    const watchListError = useSelector((state) => state.stocks.watchList.error);
     const columns = ['Ticker', 'Last Price', 'Change', 'Change %'];
-    const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(fetchQuotesForWatchList());
-    }, []);
+        const getWatchListData = async () => {
+            if (session) {
+                const data = [];
+                for (let ticker of watchList) {
+                    try {
+                        const quote = await getStockQuoteByTicker(ticker);
+                        data.push({ ticker, data: quote });
+                    } catch (error) {
+                        console.error(error);
+                        if (error.message === 'Stock not found') {
+                            data.push({ ticker, data: null, error: error.message });
+                        }
+                    }
+                }
+                setWatchListData(data);
+            }
+        }
+        if (session) {
+            getWatchListData();
+        }
+    }, [watchList])
 
 
     const render = () => {
@@ -47,7 +67,7 @@ export default function StocksWatchList() {
                             </TableHead>
                             <TableBody>
                                 {
-                                    watchList.map((stock, index) => {
+                                    watchListData.map((stock, index) => {
                                         return (
                                             <StockPreviewCard key={index} ticker={stock.ticker} data={stock.data} />
                                         )

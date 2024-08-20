@@ -16,6 +16,8 @@ export const getStockQuoteByTicker = async (ticker) => {
     switch (response.status) {
         case 200:
             return response.json();
+        case 404:
+            throw new Error('Stock not found');
         default:
             throw new Error('Failed to fetch stock quote');
     }

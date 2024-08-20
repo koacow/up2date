@@ -6,20 +6,36 @@ import TableRow from '@mui/material/TableRow';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import Typography from '@mui/material/Typography';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchOverviewQuotes } from '../state/slices/stockSlice';
-import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { getStockQuoteByTicker } from '../api/stocksAPI';
 
 export default function StocksOverview() {
-    const dispatch = useDispatch();
-    const regionsData = useSelector((state) => state.stocks.overview.regions);
-    const loading = useSelector((state) => state.stocks.overview.loading);
-    const error = useSelector((state) => state.stocks.overview.error);
+    const regions = useSelector((state) => state.stocks.overview.regions);
+    const [ overviewData, setOverviewData ] = useState(regions);
     const columns = ['Ticker', 'Last Price', 'Change', 'Change %'];
 
     useEffect(() => {
-        dispatch(fetchOverviewQuotes());
-    }, []);
+        const getOverviewData = async () => {
+            const data = {};
+            for (let region in regions) {
+                const stocks = await Promise.all(regions[region].map(async (ticker) => {
+                    try {
+                        const data = await getStockQuoteByTicker(ticker);
+                        return { ticker, data, error: null };
+                    } catch (error) {
+                        console.error(error);
+                        return { ticker, data: null, error: error.message };
+                    }
+                }));
+                data[region] = stocks;
+            }
+            setOverviewData(data);
+        }
+        if(regions) {
+            getOverviewData();
+        }
+    }, [regions]);
 
     return (
         <TableContainer>
@@ -42,7 +58,7 @@ export default function StocksOverview() {
                 </TableHead>
                 <TableBody>
                     {
-                        regionsData['Americas'].map((stock, index) => {
+                        overviewData["Americas"].map((stock, index) => {
                             return (
                                 <StockPreviewCard key={index} ticker={stock.ticker} data={stock.data} />
                             )

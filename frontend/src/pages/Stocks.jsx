@@ -6,7 +6,7 @@ import { useState } from 'react';
 import StocksWatchList from '../components/StocksWatchList';
 
 export default function Stocks() {
-    const [currentTab, setCurrentTab] = useState('overview');
+    const [currentTab, setCurrentTab] = useState('watchlist');
 
     const handleTabChange = (event, newValue) => {
         setCurrentTab(newValue);
@@ -14,7 +14,7 @@ export default function Stocks() {
 
     const getRenderedTab = () => {
         switch (currentTab) {
-            case 'watch-list':
+            case 'watchlist':
                 return <StocksWatchList />;
             case 'overview':
                 return <StocksOverview />;
@@ -27,7 +27,7 @@ export default function Stocks() {
         <Box>
             <Tabs value={currentTab} onChange={handleTabChange}>
                 <Tab value='overview' label='Overview' />
-                <Tab value='watch-list' label='Watch List' />
+                <Tab value='watchlist' label='Watch List' />
             </Tabs>
             {getRenderedTab()}
         </Box>

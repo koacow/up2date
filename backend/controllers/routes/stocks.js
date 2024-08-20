@@ -33,6 +33,9 @@ stocksRouter.get('/quote/:ticker', async (req, res) => {
 	const { ticker } = req.params;
 	try {
 		const data = await yahooFinance.quote(ticker);
+		if (!data.symbol) {
+			return res.status(404).json();
+		}
 		return res.status(200).json(data);
 	} catch(err) {
 		return res.status(500).json({ error: 'Internal server error' });
