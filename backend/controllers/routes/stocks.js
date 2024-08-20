@@ -63,6 +63,10 @@ const getIntervalFromRange = (range) => {
 stocksRouter.get('/chart/:ticker', 
 	query('range').isInt().toInt().notEmpty().custom(val => val > 0),
 	async (req, res) => {
+		const validationErrors = validationResult(req);
+		if (!validationErrors.isEmpty()) {
+			return res.status(400).json({ error: 'Invalid input' });
+		}
 		const { ticker } = req.params;
 		const { range } = req.query;
 
@@ -75,6 +79,9 @@ stocksRouter.get('/chart/:ticker',
 		}
 		try {
 			const data = await yahooFinance.chart(ticker, queryOptions);
+			if (!data.meta) {
+				return res.status(404).json();
+			}
 			return res.status(200).json(data);
 		} catch(error) {
 			console.log(error);

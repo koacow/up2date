@@ -27,6 +27,8 @@ export const getStockChartByTicker = async (ticker, range) => {
     switch (response.status) {
         case 200:
             return response.json();
+        case 404:
+            throw new Error('Stock not found');
         default:
             throw new Error('Failed to fetch stock chart data');
     }

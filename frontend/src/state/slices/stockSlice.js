@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getUserWatchList, updateUserWatchList, deleteUserWatchList } from '../../api/accountAPI';
-import { searchStocksByQuery, getStockQuoteByTicker, getStockChartByTicker } from '../../api/stocksAPI';
 
 const initialState = {
     search: {

@@ -12,6 +12,7 @@ import MainTemplate from './pages/MainTemplate';
 import Search from './pages/Search';
 import ResetPassword from './pages/ResetPassword';
 import Stocks from './pages/Stocks';
+import Stock from './pages/Stock';
 import Settings from './pages/Settings';
 import ErrorBoundary from './ErrorBoundary.jsx'
 import AppError from './AppError.jsx'
@@ -57,7 +58,8 @@ function App() {
     <Route path='/' element={<MainTemplate />} errorElement={<AppError />} >
       <Route index element={<Home />} errorElement={<AppError />} />,
       <Route path='/search' element={<Search />} errorElement={<AppError />} />,
-      <Route path='/stocks' element={<Stocks />} errorElement={<AppError />} />
+      <Route path='/stocks' element={<Stocks />} errorElement={<AppError />} />,
+      <Route path='/stocks/:ticker' element={<Stock />} errorElement={<AppError />} />, 
       <Route path='/settings' element={<Settings />} errorElement={<AppError />} />,
     </Route>,
     <Route path="*" element={<NotFound />} />

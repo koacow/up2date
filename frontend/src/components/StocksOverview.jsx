@@ -42,7 +42,7 @@ export default function StocksOverview() {
             <Table stickyHeader>
                 <TableHead>
                     <TableRow>
-                        <TableCell>
+                        <TableCell colSpan={columns.length}>
                             <Typography variant='h4' component='h4'>Americas</Typography>
                         </TableCell>
                     </TableRow>
