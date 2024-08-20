@@ -1,17 +1,20 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getStockChartByTicker } from "../api/stocksAPI";
+import { getStockChartByTicker, getStockQuoteByTicker } from "../api/stocksAPI";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import StockChart from "../components/StockChart";
+import Grid from "@mui/material/Grid";
 
 
 export default function Stock(){
     const { ticker } = useParams();
 
-    const [chartRange, setChartRange] = useState('1D');
+    const [ quoteData, setQuoteData ] = useState({});
+
+    const [ chartRange, setChartRange ] = useState('1D');
     const possibleRanges = {
         '1D': 1,
         '5D': 5,
@@ -21,9 +24,9 @@ export default function Stock(){
         '5Y': 1825,
         'MAX': 1826
     }
-    const [chartData, setChartData] = useState({});
-    const [ loading, setLoading ] = useState(true);
-    const [ error, setError ] = useState(null);
+    const [ chartData, setChartData ] = useState({});
+    const [ chartLoading, setChartLoading ] = useState(true);
+    const [ chartError, setChartError ] = useState(null);
 
     const handleTabChange = (e, newValue) => {
         setChartRange(newValue);
@@ -33,7 +36,7 @@ export default function Stock(){
         const getChartData = async () => {
             try {
                 const range = possibleRanges[chartRange];
-                setLoading(true);
+                setChartLoading(true);
                 const data = await getStockChartByTicker(ticker, range);
                 setChartData({
                     ...data,
@@ -46,15 +49,27 @@ export default function Stock(){
                     })
                 });
             } catch (error) {
-                setError(error.message);
+                setChartError(error.message);
             }
-            setLoading(false);
+            setChartLoading(false);
         }
         getChartData();
     }, [chartRange, ticker])
 
+    useEffect(() => {
+        const getQuoteData = async () => {
+            try {
+                const data = await getStockQuoteByTicker(ticker);
+                setQuoteData(data);
+            } catch (error) {
+                setQuoteData({ error: error.message });
+            }
+        }
+        getQuoteData();
+    }, [ticker])
+
     const render = () => {
-        if (error) {
+        if (chartError) {
             return <Typography>Error: {error}</Typography>
         } else if (!chartData.meta) {
             return <Typography>Loading...</Typography>
@@ -71,7 +86,27 @@ export default function Stock(){
                             })
                         }
                     </Tabs>
-                    <StockChart data={chartData} range={chartRange} loading={loading}/>
+                    <StockChart data={chartData} range={chartRange} loading={chartLoading}/>
+                    <Grid container spacing={2}>
+                        <Grid item xs={4}>
+                            <Typography variant='h6' component='h3'>Previous close: {quoteData.regularMarketPreviousClose}</Typography>
+                        </Grid>
+                        <Grid item xs={4}>
+                            <Typography variant='h6' component='h3'>Regular Market Volume: {quoteData.regularMarketPreviousClose}</Typography>
+                        </Grid>
+                        <Grid item xs={4}>
+                            <Typography variant='h6' component='h3'>52 Week Range: {quoteData.fiftyTwoWeekRange.low} - {quoteData.fiftyTwoWeekRange.high}</Typography>
+                        </Grid>
+                        <Grid item xs={4}>
+                            <Typography variant='h6' component='h3'>Open: {quoteData.regularMarketOpen}</Typography>
+                        </Grid>
+                        <Grid item xs={4}>
+                            <Typography variant='h6' component='h3'>Day's Range: {quoteData.regularMarketDayRange.low} - {quoteData.regularMarketDayRange.high}</Typography>
+                        </Grid>
+                        <Grid item xs={4}>
+                            <Typography variant='h6' component='h3'>Avg. Volume: {quoteData.averageDailyVolume3Month}</Typography>
+                        </Grid>
+                    </Grid>
                 </Box>
             )
         }
