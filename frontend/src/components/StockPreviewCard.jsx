@@ -1,8 +1,14 @@
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import Typography from '@mui/material/Typography';
+import { useNavigate } from 'react-router-dom';
 
 export default function StockPreviewCard({ ticker, data, error }) {
+    const navigate = useNavigate();
+    const goToStockPage = () => {
+        navigate(`/stocks/${ticker}`);
+    }
+
     const render = () => {
         if (error) {
             return (
@@ -25,7 +31,7 @@ export default function StockPreviewCard({ ticker, data, error }) {
         } else {
             const { shortName, ask, regularMarketChange, regularMarketChangePercent } = data; 
             return (
-                <TableRow hover>
+                <TableRow onClick={goToStockPage} hover>
                     <TableCell>
                         <Typography variant='h3' component='h3'>{ticker}</Typography>
                         <Typography variant='h6' component='h6'>{shortName}</Typography>

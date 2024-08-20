@@ -45,7 +45,7 @@ stocksRouter.get('/quote/:ticker', async (req, res) => {
 const getIntervalFromRange = (range) => {
 	switch (range) {
 		case 1:
-			return '1m';
+			return '15m';
 		case 5: 
 			return '30m'
 		case 30:

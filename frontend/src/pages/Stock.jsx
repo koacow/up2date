@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import { LineChart } from '@mui/x-charts/LineChart';
+import StockChart from "../components/StockChart";
 
 
 export default function Stock(){
@@ -22,6 +22,7 @@ export default function Stock(){
         'MAX': 1826
     }
     const [chartData, setChartData] = useState({});
+    const [ loading, setLoading ] = useState(true);
     const [ error, setError ] = useState(null);
 
     const handleTabChange = (e, newValue) => {
@@ -32,6 +33,7 @@ export default function Stock(){
         const getChartData = async () => {
             try {
                 const range = possibleRanges[chartRange];
+                setLoading(true);
                 const data = await getStockChartByTicker(ticker, range);
                 setChartData({
                     ...data,
@@ -46,6 +48,7 @@ export default function Stock(){
             } catch (error) {
                 setError(error.message);
             }
+            setLoading(false);
         }
         getChartData();
     }, [chartRange, ticker])
@@ -68,25 +71,7 @@ export default function Stock(){
                             })
                         }
                     </Tabs>
-                    <LineChart
-                        dataset={chartData.quotes}
-                        xAxis={[
-                            {
-                                dataKey: 'date',
-                                valueFormatter: (date) => new Date(date).getMinutes().toString(),
-                                label: 'Date',
-                            }
-                        ]}
-                        series={[
-                            {
-                                dataKey: 'close',
-                                showMark: false,
-                                label: 'Close',
-                            }
-                        ]}
-                        height={700}
-                        width={1200}
-                    />
+                    <StockChart data={chartData} range={chartRange} loading={loading}/>
                 </Box>
             )
         }
