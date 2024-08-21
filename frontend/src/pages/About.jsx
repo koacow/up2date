@@ -26,11 +26,15 @@ export default function About() {
                             UP2DATE
                     </Typography>
                     <Typography variant='h3' component={'h2'}>An Independent Fully Customizable News App</Typography>
+                    <Typography variant='h5' component={'h2'}>Powered by NewsAPI, Yahoo Finance, and Supabase</Typography>
+                    <Typography variant='h4' component={'h2'}>
+                        <Link reloadDocument to='/'>Explore Up2Date</Link>
+                    </Typography>
                     <Typography variant='h5' component={'h2'}>
                         Already have an account with us? <Link to='/login'>Login</Link>
                     </Typography>
                     <Typography variant='h5' component={'h2'}>
-                        First time here? <Link to='/register'>Register</Link>
+                        First time here? <Link reloadDocument to='/register'>Register</Link>
                     </Typography>
                 </Box>
             </Container>

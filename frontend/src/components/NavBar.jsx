@@ -87,7 +87,7 @@ export default function NavBar() {
                     textDecoration: 'none',
                     }}
                 >
-                    <Link to="/">Up2Date</Link> 
+                    <Link reloadDocument to="/about">Up2Date</Link> 
                 </Typography>
 
                 <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -141,7 +141,7 @@ export default function NavBar() {
                     textDecoration: 'none',
                     }}
                 >
-                    <Link to="/">Up2Date</Link>
+                    <Link reloadDocument to="/about">Up2Date</Link>
                 </Typography>
                 <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                     {Object.keys(pagesToLinks).map((page) => (
@@ -157,11 +157,11 @@ export default function NavBar() {
 
                 <Box sx={{ flexGrow: 0 }}>
                     <Tooltip title="Open settings">
-                    <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                        <Avatar alt="Settings menu icon" >
-                            <AccountBoxOutlined />
-                        </Avatar>   
-                    </IconButton>
+                        <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                            <Avatar alt="Settings menu icon" >
+                                <AccountBoxOutlined />
+                            </Avatar>   
+                        </IconButton>
                     </Tooltip>
                     <Menu
                     sx={{ mt: '45px' }}

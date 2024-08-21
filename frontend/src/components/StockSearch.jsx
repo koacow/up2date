@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import AddIcon from '@mui/icons-material/Add';
 import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
@@ -62,18 +63,27 @@ export default function StockSearch(){
                     return (
                         <Card 
                             key={stock.symbol} 
-                            onClick={() => navigate(`/stocks/${stock.symbol}`)}
-                            sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}
                         >
-                            <CardHeader title={stock.symbol} subheader={stock.shortname} />
+                            <CardHeader 
+                                title={stock.symbol} 
+                                subheader={stock.shortname} 
+                                onClick={() => navigate(`/stocks/${stock.symbol}`)}
+                                sx={{ cursor: 'pointer' }}
+                            />
                             <CardActions>
-                                <IconButton 
-                                    aria-label='add to watchlist' 
+                                <Tooltip 
                                     title={session ? 'Add To Watchlist' : 'Login To Add To Watchlist'}
-                                    disabled={!session}
+                                    disableFocusListener={!session}
+                                    disableHoverListener={!session}
+                                    aria-disabled={!session}
+                                    aria-label={session ? 'Add To Watchlist' : 'Login To Add To Watchlist'}
                                 >
-                                    <AddIcon />
-                                </IconButton>
+                                    <IconButton 
+                                        disabled={!session}
+                                    >
+                                        <AddIcon />
+                                    </IconButton>
+                                </Tooltip>
                             </CardActions>
                         </Card>
                     )

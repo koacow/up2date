@@ -1,6 +1,7 @@
 const accountStocksRouter = require('express').Router();
 const supabase = require('../../models/db');
-const { body, validationResult } = require('express-validator');
+const { body, validationResult, header } = require('express-validator');
+const yahooFinance = require('yahoo-finance2').default;
 
 // Get user saved stocks
 accountStocksRouter.get('/', async (req, res) => {
@@ -13,16 +14,27 @@ accountStocksRouter.get('/', async (req, res) => {
 });
 
 accountStocksRouter.put('/',
-	body('stock_tickers').isArray(),
-	body('stock_tickers.*').isString().escape().custom(async (value) => {
-		const {STOCK_API_KEY} = process.env;
-		const STOCK_API_ENDPOINT = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${value}&apikey=${STOCK_API_KEY}`;
-		const response = await fetch(STOCK_API_ENDPOINT);
-		if (!response.ok) {
-			throw new Error('Failed to fetch stock data');
+	header('Action').exists().isString().escape().custom((value) => {
+		return ['add', 'addMany', 'remove'].includes(value);
+	}),
+	body('stock_ticker').optional().isString().escape().custom((value) => {
+		try {
+			const stock = yahooFinance.quote(value);
+			if (!stock) {
+				throw new Error('Invalid stock ticker');
+			}
+		} catch (error) {
+			throw new Error('Invalid stock ticker');
 		}
-		const data = await response.json();
-		if (!data['Global Quote'] || !data['Global Quote']['01. symbol']) {
+	}),
+	body('stock_tickers').optional().isArray(),
+	body('stock_tickers.*').optional().isString().escape().custom((value) => {
+		try {
+			const stock = yahooFinance.quote(value);
+			if (!stock) {
+				throw new Error('Invalid stock ticker');
+			}
+		} catch (error) {
 			throw new Error('Invalid stock ticker');
 		}
 	}),
@@ -32,18 +44,31 @@ accountStocksRouter.put('/',
 			return res.status(400).json({ error: 'Invalid input' });
 		}
 		const { user_id } = req.query;
-		const { error: deleteError } = await supabase.from('saved_stocks').delete().eq('user_id', user_id);
-		if (deleteError) {
-			return res.status(500).json({ error: 'Internal server error' });
-		}
-		const { stock_tickers } = req.body;
-		for (const stock_ticker of stock_tickers) {
+		const action = req.header('Action');
+				if (action === 'add') {
+			const { stock_ticker } = req.body;
 			const { error } = await supabase.from('saved_stocks').upsert({ user_id, stock_ticker });
 			if (error) {
 				return res.status(500).json({ error: 'Internal server error' });
 			}
+			return res.status(201).json({ message: 'Stock saved' });
+		} else if (action === 'addMany') {
+			const { stock_tickers } = req.body;
+			const { error } = await supabase.from('saved_stocks').upsert(stock_tickers.map(stock_ticker => ({ user_id, stock_ticker })));
+			if (error) {
+				return res.status(500).json({ error: 'Internal server error' });
+			}
+			return res.status(201).json({ message: 'Stocks saved' });
+		} else if (action === 'remove') {
+			const { stock_ticker } = req.body;
+			const { error } = await supabase.from('saved_stocks').delete().eq('user_id', user_id).eq('stock_ticker', stock_ticker);
+			if (error) {
+				return res.status(500).json({ error: 'Internal server error' });
+			}
+			return res.status(204).json({ message: 'Stock removed' });
+		} else {
+			return res.status(400).json({ error: 'Invalid action' });
 		}
-		return res.status(201).json({ stock_tickers, message: 'Stocks saved' });
 	});
 
 accountStocksRouter.delete('/', async (req, res) => {
