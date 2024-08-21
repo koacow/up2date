@@ -18,6 +18,7 @@ export default function StockSearch(){
     const [searchResults, setSearchResults] = useState([]);
     const [searchError, setSearchError] = useState(null);
     const [query, setQuery] = useState('');
+    const [searched, setSearched] = useState(false);
 
     const navigate = useNavigate();
     const session = useSelector(state => state.session.session);
@@ -27,17 +28,20 @@ export default function StockSearch(){
 
     const handleAddToWatchlist = async (ticker) => {
         const res = await dispatch(addStockToUserWatchListThunk(ticker));      
-        if (res.meta.requestStatus === 'fulfilled') { 
+        if (res.meta.requestStatus === 'fulfilled') {
+            alert('Stock added to watchlist'); 
             dispatch(fetchUserWatchList());
         }
     }
 
     const handleQueryChange = (e) => {
+        setSearched(false);
         setQuery(e.target.value);
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setSearched(true);
         try {
             const results = await searchStocksByQuery(query);
             setSearchResults(results.quotes);
@@ -47,7 +51,7 @@ export default function StockSearch(){
     }
 
     const renderSearchResults = () => {
-        if (searchResults.length === 0) {
+        if (searchResults.length === 0 && searched) {
             return (
                 <Card>
                     <CardHeader title='No Results' />
