@@ -69,7 +69,7 @@ export default function StocksWatchList() {
                                 {
                                     watchListData.map((stock, index) => {
                                         return (
-                                            <StockPreviewCard key={index} ticker={stock.ticker} data={stock.data} />
+                                            <StockPreviewCard key={index} ticker={stock.ticker} data={stock.data} action={'remove'} />
                                         )
                                     })
                                 }

@@ -60,7 +60,7 @@ export default function StocksOverview() {
                     {
                         overviewData["Americas"].map((stock, index) => {
                             return (
-                                <StockPreviewCard key={index} ticker={stock.ticker} data={stock.data} />
+                                <StockPreviewCard key={index} ticker={stock.ticker} data={stock.data} action={'add'} />
                             )
                         })
                     }
