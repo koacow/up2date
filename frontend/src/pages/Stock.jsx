@@ -5,15 +5,14 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
+import WarningAmberOutlined from "@mui/icons-material/WarningAmberOutlined";
 import StockChart from "../components/StockChart";
-import Grid from "@mui/material/Grid";
-
+import StockQuote from "../components/StockQuote";
 
 export default function Stock(){
     const { ticker } = useParams();
 
-    const [ quoteData, setQuoteData ] = useState({});
-
+    
     const [ chartRange, setChartRange ] = useState('1D');
     const possibleRanges = {
         '1D': 1,
@@ -27,16 +26,21 @@ export default function Stock(){
     const [ chartData, setChartData ] = useState({});
     const [ chartLoading, setChartLoading ] = useState(true);
     const [ chartError, setChartError ] = useState(null);
+    
+    const [ quoteData, setQuoteData ] = useState({});
+    const [ quoteLoading, setQuoteLoading ] = useState(true);
+    const [ quoteError, setQuoteError ] = useState(null);
 
     const handleTabChange = (e, newValue) => {
         setChartRange(newValue);
     }
 
+    // Fetch stock chart data
     useEffect(() => {
         const getChartData = async () => {
+            setChartLoading(true);
             try {
                 const range = possibleRanges[chartRange];
-                setChartLoading(true);
                 const data = await getStockChartByTicker(ticker, range);
                 setChartData({
                     ...data,
@@ -56,60 +60,44 @@ export default function Stock(){
         getChartData();
     }, [chartRange, ticker])
 
+    // Fetch stock quote data
     useEffect(() => {
         const getQuoteData = async () => {
+            setChartLoading(true);
             try {
                 const data = await getStockQuoteByTicker(ticker);
                 setQuoteData(data);
             } catch (error) {
-                setQuoteData({ error: error.message });
+                setQuoteError(error.message);
             }
+            setQuoteLoading(false);
         }
         getQuoteData();
     }, [ticker])
 
-    const render = () => {
-        if (chartError) {
-            return <Typography>Error: {error}</Typography>
-        } else if (chartLoading || !quoteData || !chartData.meta) {
-            return <Typography>Loading...</Typography>
-        } else {
-            return (
-                <Box>
-                    <Typography variant='h6' component='h2'>{ticker}</Typography>
-                    <Typography variant='h4' component='h1'>{chartData.meta.shortName}</Typography>
-                    <Typography variant='h4' component='h1'>{chartData.meta.regularMarketPrice}</Typography>
-                    <Tabs value={chartRange} onChange={handleTabChange} >
-                        {
-                            Object.keys(possibleRanges).map((range) => {
-                                return <Tab key={range} label={range} value={range} />
-                            })
-                        }
-                    </Tabs>
-                    <StockChart data={chartData} range={chartRange} loading={chartLoading}/>
-                    <Grid container spacing={2}>
-                        <Grid item xs={4}>
-                            <Typography variant='h6' component='h3'>Previous close: {quoteData.regularMarketPreviousClose}</Typography>
-                        </Grid>
-                        <Grid item xs={4}>
-                            <Typography variant='h6' component='h3'>Regular Market Volume: {quoteData.regularMarketPreviousClose}</Typography>
-                        </Grid>
-                        <Grid item xs={4}>
-                            <Typography variant='h6' component='h3'>52 Week Range: {quoteData.fiftyTwoWeekRange.low} - {quoteData.fiftyTwoWeekRange.high}</Typography>
-                        </Grid>
-                        <Grid item xs={4}>
-                            <Typography variant='h6' component='h3'>Open: {quoteData.regularMarketOpen}</Typography>
-                        </Grid>
-                        <Grid item xs={4}>
-                            <Typography variant='h6' component='h3'>Day's Range: {quoteData.regularMarketDayRange.low} - {quoteData.regularMarketDayRange.high}</Typography>
-                        </Grid>
-                        <Grid item xs={4}>
-                            <Typography variant='h6' component='h3'>Avg. 3mo. Volume: {quoteData.averageDailyVolume3Month}</Typography>
-                        </Grid>
-                    </Grid>
-                </Box>
-            )
-        }
-    }
-    return render();
+    if (chartError) {
+        return (
+            <Box>
+                <Typography variant='h6' component='h2'>{ticker}</Typography>
+                <WarningAmberOutlined />
+                <Typography variant='h4' component='h1'>Error</Typography>
+                <Typography variant='body1'>{chartError}</Typography>
+            </Box>
+        )
+    } else return (
+        <Box>
+            <Typography variant='h6' component='h2'>{ticker}</Typography>
+            <Typography variant='h4' component='h1'>{chartLoading ? 'Loading...' : chartData.meta.shortName}</Typography>
+            <Typography variant='h4' component='h1'>{chartLoading ? 'Loading...' : chartData.meta.regularMarketPrice}</Typography>
+            <Tabs value={chartRange} onChange={handleTabChange} >
+                {
+                    Object.keys(possibleRanges).map((range) => {
+                        return <Tab key={range} label={range} value={range} />
+                    })
+                }
+            </Tabs>
+            <StockChart data={chartData} range={chartRange} loading={chartLoading} error={chartError} />
+            <StockQuote data={quoteData} loading={quoteLoading} error={quoteError} />
+        </Box>
+    )
 }

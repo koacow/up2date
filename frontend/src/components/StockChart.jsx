@@ -1,7 +1,7 @@
 import { LineChart } from "@mui/x-charts";
-import { ResponsiveChartContainer } from "@mui/x-charts/ResponsiveChartContainer";
-export default function StockChart({ data, range, loading }){
+import Typography from "@mui/material/Typography";
 
+export default function StockChart({ data, loading, error, range }){
     const timeFormatter = (date) => {
         if (range === '1D') {
             const hour = new Date(date).getHours() > 12 ? new Date(date).getHours() - 12 : new Date(date).getHours();
@@ -13,14 +13,23 @@ export default function StockChart({ data, range, loading }){
             return new Date(date).toLocaleDateString();
         }
     }
-
+    
     const currencyFormatter = (value) => {
         const string = value.toFixed(2).toString();
         const [ dollars, cents ] = string.split('.');
         const dollarsString = dollars.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
         return cents ? `$${dollarsString}.${cents}` : `$${dollarsString}:00`;
     }
-    
+
+    if (error) {
+        return (
+            <Typography variant='h6' component='h3'>Error: {error}</Typography>
+        )
+    } else if (!data.quotes) {
+        return (
+            <Typography variant='h6' component='h3'>No data</Typography>
+        )
+    }
     return (
         <LineChart
             dataset={data.quotes}
@@ -59,13 +68,6 @@ export default function StockChart({ data, range, loading }){
                     valueFormatter: currencyFormatter,
                 }
             ]}
-            slotProps={{
-                legend: {
-                    hidden: true
-                },
-                loadingOverlay:{},
-                noDataOverlay: {},
-            }}
             axisHighlight={{
                 x: 'line',
                 y: 'line',
