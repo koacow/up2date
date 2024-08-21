@@ -17,9 +17,9 @@ accountStocksRouter.put('/',
 	header('Action').exists().isString().escape().custom((value) => {
 		return ['add', 'addMany', 'remove'].includes(value);
 	}),
-	body('stock_ticker').optional().isString().escape().custom((value) => {
+	body('stock_ticker').optional().isString().escape().custom(async (value) => {
 		try {
-			const stock = yahooFinance.quote(value);
+			const stock = await yahooFinance.quote(value);
 			if (!stock) {
 				throw new Error('Invalid stock ticker');
 			}
@@ -28,9 +28,9 @@ accountStocksRouter.put('/',
 		}
 	}),
 	body('stock_tickers').optional().isArray(),
-	body('stock_tickers.*').optional().isString().escape().custom((value) => {
+	body('stock_tickers.*').optional().isString().escape().custom(async (value) => {
 		try {
-			const stock = yahooFinance.quote(value);
+			const stock = await yahooFinance.quote(value);
 			if (!stock) {
 				throw new Error('Invalid stock ticker');
 			}

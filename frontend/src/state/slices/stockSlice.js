@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getUserWatchList, updateUserWatchList, deleteUserWatchList } from '../../api/accountAPI';
+import { getUserWatchList, addStockToWatchList, removeStockFromWatchList, deleteUserWatchList } from '../../api/accountAPI';
 
 const initialState = {
     watchList: {
@@ -35,13 +35,26 @@ export const fetchUserWatchList = createAsyncThunk(
     }
 );
 
-export const updateUserWatchListThunk = createAsyncThunk(
-    'stocks/updateUserWatchList',
-    async (tickers, thunkAPI) => {
+export const addStockToUserWatchListThunk = createAsyncThunk(
+    'stocks/addStockToUserWatchList',
+    async (ticker, thunkAPI) => {
         try {
             const userId = thunkAPI.getState().session.data.id;
-            const data = await updateUserWatchList(userId, tickers);
-            return data.stock_tickers;
+            await addStockToWatchList(userId, ticker);
+            return ticker;
+        } catch (error) {
+            return thunkAPI.rejectWithValue({ error: error.message });
+        }
+    }
+);
+
+export const removeStockFromUserWatchListThunk = createAsyncThunk(
+    'stocks/removeStockFromUserWatchList',
+    async (ticker, thunkAPI) => {
+        try {
+            const userId = thunkAPI.getState().session.data.id;
+            await removeStockFromWatchList(userId, ticker);
+            return ticker;
         } catch (error) {
             return thunkAPI.rejectWithValue({ error: error.message });
         }
@@ -89,6 +102,17 @@ const stocksSlice = createSlice({
             state.watchList.error = action.payload.error;
         });
 
+        builder.addCase(addStockToUserWatchListThunk.pending, (state) => {
+            state.watchList.loading = true;
+            state.watchList.error = null;
+        });
+        builder.addCase(addStockToUserWatchListThunk.fulfilled, (state, action) => {
+            state.watchList.loading = false;
+        });
+        builder.addCase(addStockToUserWatchListThunk.rejected, (state, action) => {
+            state.watchList.loading = false;
+            state.watchList.error = action.payload.error;
+        });
     }
 });
 

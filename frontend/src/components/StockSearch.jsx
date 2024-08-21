@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { searchStocksByQuery } from '../api/stocksAPI';
+import { fetchUserWatchList, addStockToUserWatchListThunk } from '../state/slices/stockSlice';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardHeader from '@mui/material/CardHeader';
@@ -9,7 +10,7 @@ import AddIcon from '@mui/icons-material/Add';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import SearchBar from './SearchBar';
 
@@ -17,8 +18,19 @@ export default function StockSearch(){
     const [searchResults, setSearchResults] = useState([]);
     const [searchError, setSearchError] = useState(null);
     const [query, setQuery] = useState('');
+
     const navigate = useNavigate();
     const session = useSelector(state => state.session.session);
+    const watchListLoading = useSelector(state => state.stocks.watchList.loading);
+    const watchListError = useSelector(state => state.stocks.watchList.error);
+    const dispatch = useDispatch();
+
+    const handleAddToWatchlist = async (ticker) => {
+        const res = await dispatch(addStockToUserWatchListThunk(ticker));      
+        if (res.meta.requestStatus === 'fulfilled') { 
+            dispatch(fetchUserWatchList());
+        }
+    }
 
     const handleQueryChange = (e) => {
         setQuery(e.target.value);
@@ -80,6 +92,7 @@ export default function StockSearch(){
                                 >
                                     <IconButton 
                                         disabled={!session}
+                                        onClick={() => handleAddToWatchlist(stock.symbol)}
                                     >
                                         <AddIcon />
                                     </IconButton>

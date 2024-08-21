@@ -103,19 +103,37 @@ export const getUserWatchList = async (user_id) => {
     }
 };
 
-export const updateUserWatchList = async (user_id, stock_tickers) => {
+export const addStockToWatchList = async (user_id, stock_ticker) => {
     const response = await fetch(`${ENDPOINT}/stocks?user_id=${encodeURIComponent(user_id)}`, {
         method: 'PUT',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Action': 'add'
         },
-        body: JSON.stringify({ stock_tickers })
+        body: JSON.stringify({ stock_ticker })
     });
     switch(response.status){
         case 201:
             return response.json();
         default:
-            throw new Error('Failed to update user watch list');
+            throw new Error('Failed to add stock to watch list');
+    }
+};
+
+export const removeStockFromWatchList = async (user_id, stock_ticker) => {
+    const response = await fetch(`${ENDPOINT}/stocks?user_id=${encodeURIComponent(user_id)}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'Action': 'remove'
+        },
+        body: JSON.stringify({ stock_ticker })
+    });
+    switch(response.status){
+        case 204:
+            return;
+        default:
+            throw new Error('Failed to remove stock from watch list');
     }
 };
 
