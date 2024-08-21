@@ -71,7 +71,7 @@ export default function Stock(){
     const render = () => {
         if (chartError) {
             return <Typography>Error: {error}</Typography>
-        } else if (!chartData.meta) {
+        } else if (chartLoading || !quoteData || !chartData.meta) {
             return <Typography>Loading...</Typography>
         } else {
             return (
@@ -104,7 +104,7 @@ export default function Stock(){
                             <Typography variant='h6' component='h3'>Day's Range: {quoteData.regularMarketDayRange.low} - {quoteData.regularMarketDayRange.high}</Typography>
                         </Grid>
                         <Grid item xs={4}>
-                            <Typography variant='h6' component='h3'>Avg. Volume: {quoteData.averageDailyVolume3Month}</Typography>
+                            <Typography variant='h6' component='h3'>Avg. 3mo. Volume: {quoteData.averageDailyVolume3Month}</Typography>
                         </Grid>
                     </Grid>
                 </Box>

@@ -50,8 +50,6 @@ export default function NavBar() {
     }
     
     const settingsToLinks = {
-        Preferences: 'edit-preferences',
-        Account: 'account',
         Settings: 'settings',
     }
 

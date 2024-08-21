@@ -1,9 +1,11 @@
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';    
 import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
 import StocksOverview from '../components/StocksOverview';
-import { useState } from 'react';
 import StocksWatchList from '../components/StocksWatchList';
+import StockSearch from '../components/StockSearch';
+import { useState } from 'react';
 
 export default function Stocks() {
     const [currentTab, setCurrentTab] = useState('watchlist');
@@ -24,12 +26,17 @@ export default function Stocks() {
     }
 
     return (
-        <Box>
-            <Tabs value={currentTab} onChange={handleTabChange}>
-                <Tab value='overview' label='Overview' />
-                <Tab value='watchlist' label='Watch List' />
-            </Tabs>
-            {getRenderedTab()}
-        </Box>
+        <>
+            <Container>
+                <StockSearch />
+            </Container>
+            <Box>
+                <Tabs value={currentTab} onChange={handleTabChange}>
+                    <Tab value='overview' label='Overview' />
+                    <Tab value='watchlist' label='Watch List' />
+                </Tabs>
+                {getRenderedTab()}
+            </Box>
+        </>
     )
 }

@@ -2,11 +2,6 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getUserWatchList, updateUserWatchList, deleteUserWatchList } from '../../api/accountAPI';
 
 const initialState = {
-    search: {
-        query: '',
-        searchLoading: false,
-        searchError: null,
-    },
     watchList: {
         stocks: [],
         /**
@@ -71,9 +66,6 @@ const stocksSlice = createSlice({
     name: 'stocks',
     initialState,
     reducers: {
-        setQuery(state, action) {
-            state.search.query = action.payload;
-        },
         setStocks(state, action) {
             state.search.stocks = action.payload;
         },
