@@ -45,3 +45,19 @@ export const resetPassword = async (email) => {
         }
     );
 }
+
+export const fetchSession = async () => {
+    const { data, error } = await supabase.auth.getSession();
+    if (error) {
+        throw new Error(error.message);
+    }
+    return data;
+}
+
+export const fetchUserData = async () => {
+    const { data, error } = await supabase.auth.getUser();
+    if (error) {
+        throw new Error(error.message);
+    }
+    return data.user;
+}

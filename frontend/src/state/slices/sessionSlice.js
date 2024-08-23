@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { register, login, logout } from '../../api/authAPI';
+import { register, login, logout, fetchSession, fetchUserData } from '../../api/authAPI';
 import { setTopics } from './topicsSlice';
 import { setArticlesBySavedTopics } from './articlesSlice';
 import { resetToDefaultSettings } from './settingsSlice';
@@ -48,6 +48,28 @@ export const logUserOut = createAsyncThunk(
             thunkAPI.dispatch(setTopics([]));
             thunkAPI.dispatch(setArticlesBySavedTopics({}));
             thunkAPI.dispatch(resetToDefaultSettings());
+        } catch (error) {
+            return thunkAPI.rejectWithValue({ error: error.message });
+        }
+    });
+
+export const fetchSessionThunk = createAsyncThunk(
+    'session/fetchSession',
+    async (_, thunkAPI) => {
+        try {
+            const data = await fetchSession();
+            return data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue({ error: error.message });
+        }
+    });
+
+export const fetchUserDataThunk = createAsyncThunk(
+    'session/fetchUserData',
+    async (_, thunkAPI) => {
+        try {
+            const data = await fetchUserData();
+            return data;
         } catch (error) {
             return thunkAPI.rejectWithValue({ error: error.message });
         }
@@ -117,6 +139,39 @@ const sessionSlice = createSlice({
 
         builder.addCase(logUserOut.rejected, (state, action) => {
             state.session = null;
+            state.error = action.payload.error;
+            state.loading = false;
+        });
+
+        builder.addCase(fetchSessionThunk.fulfilled, (state, action) => {
+            if (!action.payload.session) {
+                state.loading = false;
+                state.error = null;
+                return;
+            }
+            state.session = action.payload.session;
+            state.loading = false;
+            state.error = null;
+        });
+        builder.addCase(fetchSessionThunk.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+        });
+        builder.addCase(fetchSessionThunk.rejected, (state, action) => {
+            state.error = action.payload.error;
+            state.loading = false;
+        });
+
+        builder.addCase(fetchUserDataThunk.fulfilled, (state, action) => {
+            state.data = action.payload;
+            state.loading = false;
+            state.error = null;
+        });
+        builder.addCase(fetchUserDataThunk.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+        });
+        builder.addCase(fetchUserDataThunk.rejected, (state, action) => {
             state.error = action.payload.error;
             state.loading = false;
         });

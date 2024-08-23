@@ -3,6 +3,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
 require('dotenv').config();
+const supabase = require('./models/db');
 
 // Import routers
 const accountRouter = require('./controllers/routes/account');
