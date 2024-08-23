@@ -12,6 +12,6 @@ export const store = configureStore({
         topics: topicsReducer,
         articles: articlesReducer,
         stocks: stocksReducer
-    }
+    },
 });
 

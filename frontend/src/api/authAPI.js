@@ -1,4 +1,4 @@
-const ENDPOINT = 'http://localhost:4000/api/users';
+import supabase from '../lib/supabase';
 
 export const register = async (email, password, first_name, last_name) => {
     if (!first_name) throw new Error('First name is required');
@@ -7,75 +7,41 @@ export const register = async (email, password, first_name, last_name) => {
     if (!password) throw new Error('Password is required');
 
     if (password.length < 6) throw new Error('Password must be at least 6 characters long');
-    const response = await fetch(`${ENDPOINT}/register`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ email, password, first_name, last_name })
+    
+    const { data, error } = await supabase.auth.signUp({
+        email,
+        password
     });
-    switch (response.status) {
-        case 201:
-            return response.json();
-        case 409:
-            throw new Error('User already exists');
-        case 500:
-            throw new Error('Oops! Something went wrong');
-        default:
-            throw new Error('Failed to register');
+
+    if (error) {
+        throw new Error(error.message);
     }
+    return data;
 }
 export const login = async (email, password) => {
     if (!email) throw new Error('Email is required');
     if (!password) throw new Error('Password is required');
-    const response = await fetch(`${ENDPOINT}/authenticate`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ email, password })
+
+    const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password
     });
-    switch (response.status) {
-        case 200:
-            return response.json();
-        case 400:
-            throw new Error('Invalid credentials');
-        case 401:
-            throw new Error('Invalid credentials');
-        default:
-            throw new Error('Failed to login');
-    }
+    if (error) {
+        throw new Error(error.message);
+    } 
+    return data;
 }
 export const logout = async () => {
-    const response = await fetch(`${ENDPOINT}/logout`,
-        {
-            method: 'POST'
-        }
-    );
-    console.log(response);
-    switch (response.status) {
-        case 200:
-            return response.json();
-        default:
-            throw new Error('Failed to logout');
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+        throw new Error(error.message);
     }
 }
 
 export const resetPassword = async (email) => {
-    if (!email) throw new Error('Email is required');
-    const response = await fetch(`${ENDPOINT}/reset-password`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ email })
-    });
-    switch (response.status) {
-        case 200:
-            return response.json();
-        case 400:
-            throw new Error('Invalid email');
-        default:
-            throw new Error('Failed to reset password');
-    }
+    await supabase.auth.resetPasswordForEmail(email,
+        {
+            redirectTo: 'http://localhost:5173/set-new-password',
+        }
+    );
 }

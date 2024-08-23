@@ -6,13 +6,14 @@ import Container from '@mui/material/Container';
 import RegistrationForm from '../components/RegistrationForm';
 import Copyright from '../components/Copyright';
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { registerUser } from '../state/slices/sessionSlice';
 
 export default function Register() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const session = useSelector((state) => state.session.session);
   const registrationError = useSelector((state) => state.session.error);
   const registrationLoading = useSelector((state) => state.session.loading);
   const [firstName, setFirstName] = useState('');
@@ -22,8 +23,10 @@ export default function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(registerUser({ first_name: firstName, last_name: lastName, email, password }));
-    navigate('/register/configure-preferences');
+    await dispatch(registerUser({ first_name: firstName, last_name: lastName, email, password }));
+    if (session){
+      navigate('/register/configure-preferences');
+    }
   };
 
   return (

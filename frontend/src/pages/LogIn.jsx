@@ -6,14 +6,13 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import LoginForm from '../components/LoginForm';
 import Copyright from '../components/Copyright';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { logUserIn } from '../state/slices/sessionSlice';
 
 export default function LogIn() {
   const dispatch = useDispatch();
-  const session = useSelector((state) => state.session.session);
   const navigate = useNavigate();
   const loginError = useSelector((state) => state.session.error);
   const loginLoading = useSelector((state) => state.session.loading);
@@ -21,13 +20,12 @@ export default function LogIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  useEffect(() => {
-    if (session) navigate('/');
-  }, [session, navigate]);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(logUserIn({ email, password }));
+    await dispatch(logUserIn({ email, password }));
+    if (!loginError) {
+      navigate('/');
+    }
   };
 
   return (
