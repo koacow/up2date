@@ -24,9 +24,7 @@ export default function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     await dispatch(registerUser({ first_name: firstName, last_name: lastName, email, password }));
-    if (session){
-      navigate('/register/configure-preferences');
-    }
+    navigate('/register/configure-preferences');
   };
 
   return (

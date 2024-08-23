@@ -1,0 +1,17 @@
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import Typography from '@mui/material/Typography';
+import WarningAmberIcon from '@mui/icons-material/WarningAmber'; 
+
+export default function ArticleCardError() {
+    return (
+        <Card>
+            <CardHeader
+                avatar={<WarningAmberIcon />}
+                title={<Typography variant='h6' component='h3'>
+                    Something went wrong when loading these articles. Try refreshing the page.
+                </Typography>}
+            />
+        </Card>
+    )
+}

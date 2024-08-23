@@ -1,14 +1,14 @@
-import { 
-    Box,
-    Typography,
-    Stack,
-    Pagination
- } from "@mui/material";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Stack from "@mui/material/Stack";
+import Pagination from "@mui/material/Pagination";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setPageNumForTopic } from "../state/slices/topicsSlice";
 import { fetchArticlesForSavedTopic } from "../state/slices/articlesSlice";
-import ArticleCard from "./ArticleCard";
+import ArticleCard from "./ArticleCard/ArticleCard";
+import ArticleCardLoading from "./ArticleCard/ArticleCardLoading";
+import ArticleCardError from "./ArticleCard/ArticleCardError";
 
 export default function TopicCard({ topic }) {
     const session = useSelector((state) => state.session.session);
@@ -30,9 +30,9 @@ export default function TopicCard({ topic }) {
 
     const renderArticles = () => {
         if (loading) {
-            return <Typography>Loading...</Typography>
+            return <ArticleCardLoading />
         } else if (error) {
-            return <Typography color='error'></Typography>
+            return <ArticleCardError />
         } else {
             return (
                 <Stack spacing={2}>
