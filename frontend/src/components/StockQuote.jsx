@@ -1,6 +1,7 @@
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import WarningAmberOutlined from "@mui/icons-material/WarningAmberOutlined";
+import { currencyFormatter } from "../utils/formatters";
 
 export default function StockQuote ({ data, loading, error }){
     if (loading) {
@@ -38,19 +39,19 @@ export default function StockQuote ({ data, loading, error }){
     } else return (
         <Grid container spacing={2}>
             <Grid item xs={4}>
-                <Typography variant='h6' component='h3'>Previous close: {data.regularMarketPreviousClose}</Typography>
+                <Typography variant='h6' component='h3'>Previous close: {currencyFormatter(data.regularMarketPreviousClose)}</Typography>
             </Grid>
             <Grid item xs={4}>
-                <Typography variant='h6' component='h3'>Regular Market Volume: {data.regularMarketPreviousClose}</Typography>
+                <Typography variant='h6' component='h3'>Regular Market Volume: {currencyFormatter(data.regularMarketPreviousClose)}</Typography>
             </Grid>
             <Grid item xs={4}>
-                <Typography variant='h6' component='h3'>52 Week Range: {data.fiftyTwoWeekRange.low} - {data.fiftyTwoWeekRange.high}</Typography>
+                <Typography variant='h6' component='h3'>52 Week Range: {currencyFormatter(data.fiftyTwoWeekRange.low)} - {currencyFormatter(data.fiftyTwoWeekRange.high)}</Typography>
             </Grid>
             <Grid item xs={4}>
-                <Typography variant='h6' component='h3'>Open: {data.regularMarketOpen}</Typography>
+                <Typography variant='h6' component='h3'>Open: {currencyFormatter(data.regularMarketOpen)}</Typography>
             </Grid>
             <Grid item xs={4}>
-                <Typography variant='h6' component='h3'>Day's Range: {data.regularMarketDayRange.low} - {data.regularMarketDayRange.high}</Typography>
+                <Typography variant='h6' component='h3'>Day's Range: {currencyFormatter(data.regularMarketDayRange.low)} - {currencyFormatter(data.regularMarketDayRange.high)}</Typography>
             </Grid>
             <Grid item xs={4}>
                 <Typography variant='h6' component='h3'>Avg. 3mo. Volume: {data.averageDailyVolume3Month}</Typography>

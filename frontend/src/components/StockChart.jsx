@@ -1,5 +1,6 @@
 import { LineChart } from "@mui/x-charts";
 import Typography from "@mui/material/Typography";
+import { currencyFormatter } from "../utils/formatters";
 
 export default function StockChart({ data, loading, error, range }){
     const timeFormatter = (date) => {
@@ -14,12 +15,7 @@ export default function StockChart({ data, loading, error, range }){
         }
     }
     
-    const currencyFormatter = (value) => {
-        const string = value.toFixed(2).toString();
-        const [ dollars, cents ] = string.split('.');
-        const dollarsString = dollars.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-        return cents ? `$${dollarsString}.${cents}` : `$${dollarsString}:00`;
-    }
+
 
     if (error) {
         return (

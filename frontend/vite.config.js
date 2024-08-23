@@ -5,6 +5,11 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   optimizeDeps: {
-    include: ['@mui/x-charts/ResponsiveChartContainer', '@mui/x-charts/LineChart']
+    include: [
+      '@mui/x-charts/ResponsiveChartContainer', 
+      '@mui/x-charts/LineChart', 
+      '@mui/icons-material/ArrowDropUp',
+      '@mui/icons-material/ArrowDropDown',
+    ]
   }
 })

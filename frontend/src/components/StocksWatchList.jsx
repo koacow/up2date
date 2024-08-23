@@ -1,15 +1,9 @@
 import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { getStockQuoteByTicker } from '../api/stocksAPI';
-
+import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import Table from '@mui/material/Table';
-import TableHead from '@mui/material/TableHead';
-import TableContainer from '@mui/material/TableContainer';
-import TableRow from '@mui/material/TableRow';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
 import StockPreviewCard from '../components/StockPreviewCard';
 
 export default function StocksWatchList() {
@@ -18,7 +12,6 @@ export default function StocksWatchList() {
     const [ watchListData, setWatchListData ] = useState([]);
     const watchListLoading = useSelector((state) => state.stocks.watchList.loading);    
     const watchListError = useSelector((state) => state.stocks.watchList.error);
-    const columns = ['Ticker', 'Last Price', 'Change', 'Change %'];
 
     useEffect(() => {
         const getWatchListData = async () => {
@@ -52,30 +45,20 @@ export default function StocksWatchList() {
         } else if (session && watchList) {
             return (
                 <Box>
-                    <TableContainer>
-                        <Table stickyHeader >
-                            <TableHead>
-                                <TableRow>
-                                    {
-                                        columns.map((column, index) => {
-                                            return (
-                                                <TableCell key={index}>{column}</TableCell>
-                                            )
-                                        })
-                                    }
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {
-                                    watchListData.map((stock, index) => {
-                                        return (
-                                            <StockPreviewCard key={index} ticker={stock.ticker} data={stock.data} action={'remove'} />
-                                        )
-                                    })
-                                }
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
+                    <Typography variant='h4' component='h4'>Watch List</Typography>
+                    {
+                        <Grid container spacing={2}>
+                            {
+                                watchListData.map((stock, index) => {
+                                    return (
+                                        <Grid item sx={3} key={index}>
+                                            <StockPreviewCard ticker={stock.ticker} data={stock.data} action={'remove'} />
+                                        </Grid>
+                                    )
+                                })
+                            }
+                        </Grid>
+                    }
                 </Box>
             )
         } else if (session && !watchList) {
