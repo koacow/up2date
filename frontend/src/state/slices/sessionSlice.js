@@ -155,24 +155,19 @@ const sessionSlice = createSlice({
         });
         builder.addCase(fetchSessionThunk.pending, (state) => {
             state.loading = true;
-            state.error = null;
         });
-        builder.addCase(fetchSessionThunk.rejected, (state, action) => {
-            state.error = action.payload.error;
+        builder.addCase(fetchSessionThunk.rejected, (state) => {
             state.loading = false;
         });
 
         builder.addCase(fetchUserDataThunk.fulfilled, (state, action) => {
             state.data = action.payload;
             state.loading = false;
-            state.error = null;
         });
         builder.addCase(fetchUserDataThunk.pending, (state) => {
             state.loading = true;
-            state.error = null;
         });
         builder.addCase(fetchUserDataThunk.rejected, (state, action) => {
-            state.error = action.payload.error;
             state.loading = false;
         });
     }
