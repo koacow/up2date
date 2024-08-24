@@ -4,3 +4,8 @@ export const currencyFormatter = (value) => {
     const dollarsString = dollars.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     return cents ? `$${dollarsString}.${cents}` : `$${dollarsString}:00`;
 }
+
+export const dateFormatter = (value) => {
+    const date = new Date(Date.parse(value));
+    return date.toDateString();
+}

@@ -47,7 +47,7 @@ export default function TopicCard({ topic }) {
 
     return (
         <Box component='section'>
-            <Typography component='h2' variant='h3'>
+            <Typography component='h1' variant='h1'>
                 {topicName}
             </Typography>
             <Box>
