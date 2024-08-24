@@ -5,8 +5,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { setSearchQuery, fetchArticlesByQuery, setSearchPageNum } from '../state/slices/articlesSlice';
 import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
 import Pagination from '@mui/material/Pagination';
+import ArticleCardLoading from '../components/ArticleCard/ArticleCardLoading';
+import ArticleCardError from '../components/ArticleCard/ArticleCardError';
+import ArticleCardNoResults from '../components/ArticleCard/ArticleCardNoResults';
 
 export default function Search() {
     const dispatch = useDispatch();
@@ -19,8 +21,10 @@ export default function Search() {
 
     const [displayedQuery, setDisplayedQuery] = useState(searchQuery);
     const [displayedSearchPage, setDisplayedSearchPage] = useState(searchPage);
+    const [ searched, setSearched ] = useState(false);
 
     const handleSearchQueryChange = (e) => {
+        setSearched(false);
         const newQuery = e.target.value;
         setDisplayedQuery(newQuery);
         dispatch(setSearchQuery(newQuery));
@@ -33,15 +37,18 @@ export default function Search() {
     }
 
     const handleSubmit = (e) => {
+        setSearched(true);
         e.preventDefault();
         dispatch(fetchArticlesByQuery());
     }
 
     const renderSearchResults = () => {
         if (loading) {
-            return <Typography>Loading...</Typography>
+            return <ArticleCardLoading />
         } else if (error) {
-            return <Typography color='error'>Error loading articles. Please try again.</Typography>
+            return <ArticleCardError />
+        } else if (searched && articles.length === 0) {
+            return <ArticleCardNoResults />
         } else {
             return (
                 <Stack spacing={2}>
