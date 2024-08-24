@@ -7,6 +7,7 @@ import {
     CardMedia,
     Button,
 } from "@mui/material";
+import LaunchIcon from '@mui/icons-material/Launch';
 
 export default function ArticleCard({ article }) {
     return (
@@ -34,7 +35,7 @@ export default function ArticleCard({ article }) {
             </CardContent>
             <CardActions>
                 <Button href={article.url} target='_blank' variant='contained' >
-                    Continue Reading At {article.source.name}
+                {article.source.name} <LaunchIcon />
                 </Button>
             </CardActions>
         </Card>
