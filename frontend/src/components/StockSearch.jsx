@@ -22,8 +22,6 @@ export default function StockSearch(){
 
     const navigate = useNavigate();
     const session = useSelector(state => state.session.session);
-    const watchListLoading = useSelector(state => state.stocks.watchList.loading);
-    const watchListError = useSelector(state => state.stocks.watchList.error);
     const dispatch = useDispatch();
 
     const handleAddToWatchlist = async (ticker) => {
@@ -41,10 +39,10 @@ export default function StockSearch(){
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setSearched(true);
         try {
             const results = await searchStocksByQuery(query);
             setSearchResults(results.quotes);
+            setSearched(true);
         } catch (error) {
             setSearchError(error);
         }
@@ -71,7 +69,7 @@ export default function StockSearch(){
         }
 
         return (
-            <Stack spacing={2}>
+            <Stack spacing={2} > 
                 {searchResults.map(stock => {
                     if (!stock.symbol || !stock.shortname) {
                         return null;

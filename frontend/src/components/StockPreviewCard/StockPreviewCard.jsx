@@ -9,10 +9,12 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import ArrowDropUp from '@mui/icons-material/ArrowDropUp';
 import ArrowDropDown from '@mui/icons-material/ArrowDropDown';
+import StockPreviewCardLoading from './StockPreviewCardLoading';
+import StockPreviewCardError from './StockPreviewCardError';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { addStockToUserWatchListThunk, removeStockFromUserWatchListThunk, fetchUserWatchList } from '../state/slices/stockSlice';
-import { currencyFormatter } from '../utils/formatters';
+import { addStockToUserWatchListThunk, removeStockFromUserWatchListThunk, fetchUserWatchList } from '../../state/slices/stockSlice';
+import { currencyFormatter } from '../../utils/formatters';
 
 export default function StockPreviewCard({ ticker, data, error, action }) {
     const navigate = useNavigate();
@@ -37,21 +39,11 @@ export default function StockPreviewCard({ ticker, data, error, action }) {
 
     if (error) {
         return (
-            <Card>
-                <CardHeader title={ticker} />
-                <CardContent>
-                    <Typography variant='h6' component='h6'>Error: {error}</Typography>
-                </CardContent>
-            </Card>
+            <StockPreviewCardError ticker={ticker} />
         )
     } else if (!data) {
         return (
-            <Card>
-                <CardHeader title={ticker} />
-                <CardContent>
-                    <Typography variant='h6' component='h6'>Loading...</Typography>
-                </CardContent>
-            </Card>
+            <StockPreviewCardLoading />
         )
     } else {
         const { shortName, ask, regularMarketChange, regularMarketChangePercent } = data; 
@@ -71,9 +63,11 @@ export default function StockPreviewCard({ ticker, data, error, action }) {
                 </CardContent>
                 <CardActions>
                     <Tooltip title={tooltipText}>
-                        <IconButton onClick={handleAction} disabled={!session}>
-                            <ActionIcon />
-                        </IconButton>
+                        <span>
+                            <IconButton onClick={handleAction} disabled={!session}>
+                                <ActionIcon />
+                            </IconButton>
+                        </span>
                     </Tooltip>
                 </CardActions>
             </Card>

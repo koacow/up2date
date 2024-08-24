@@ -1,10 +1,14 @@
 import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { getStockQuoteByTicker } from '../api/stocksAPI';
+import { getStockQuoteByTicker } from '../../api/stocksAPI';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import StockPreviewCard from '../components/StockPreviewCard';
+import StockPreviewCard from '../StockPreviewCard/StockPreviewCard';
+import StocksWatchListLoading from './StocksWatchListLoading';
+import StocksWatchListError from './StocksWatchListError';
+import StocksWatchListEmpty from './StocksWatchListEmpty';
+import StocksWatchListNoSession from './StocksWatchListNoSession';
 
 export default function StocksWatchList() {
     const session = useSelector((state) => state.session.session);
@@ -39,10 +43,11 @@ export default function StocksWatchList() {
 
     const render = () => {
         if (watchListLoading) {
-            return <Typography>Loading...</Typography>
+            return <StocksWatchListLoading />;
         } else if (watchListError) {
-            return <Typography>Error: {watchListError}</Typography>
-        } else if (session && watchList) {
+            return <StocksWatchListError />
+        } 
+        else if (session && watchList.length) {
             return (
                 <Box>
                     <Typography variant='h4' component='h4'>Watch List</Typography>
@@ -52,7 +57,7 @@ export default function StocksWatchList() {
                                 watchListData.map((stock, index) => {
                                     return (
                                         <Grid item sx={3} key={index}>
-                                            <StockPreviewCard ticker={stock.ticker} data={stock.data} action={'remove'} />
+                                            <StockPreviewCard ticker={stock.ticker} data={stock.data} action={'remove'} error={watchListError} />
                                         </Grid>
                                     )
                                 })
@@ -61,10 +66,10 @@ export default function StocksWatchList() {
                     }
                 </Box>
             )
-        } else if (session && !watchList) {
-            return <Typography>You haven't saved any stocks, visit the Overview page to save some.</Typography>;
+        } else if (session && !watchList.length) {
+            return <StocksWatchListEmpty />;
         } else {
-            return <Typography>Sign in to view your saved stocks</Typography>;
+            return <StocksWatchListNoSession />;
         }
     }
 

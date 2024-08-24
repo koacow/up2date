@@ -1,16 +1,14 @@
-import StockPreviewCard from './StockPreviewCard';
+import StockPreviewCard from './StockPreviewCard/StockPreviewCard';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { getStockQuoteByTicker } from '../api/stocksAPI';
-import { currencyFormatter } from '../utils/formatters';
 
 export default function StocksOverview() {
     const regions = useSelector((state) => state.stocks.overview.regions);
     const [ overviewData, setOverviewData ] = useState(regions);
-    const columns = ['Ticker', 'Last Price', 'Change', 'Change %'];
 
     useEffect(() => {
         const getOverviewData = async () => {
@@ -57,34 +55,5 @@ export default function StocksOverview() {
                 })
             }
         </Box>
-        // <TableContainer>
-        //     <Table stickyHeader>
-        //         <TableHead>
-        //             <TableRow>
-        //                 <TableCell colSpan={columns.length}>
-        //                     <Typography variant='h4' component='h4'>Americas</Typography>
-        //                 </TableCell>
-        //             </TableRow>
-        //             <TableRow>
-        //                 {
-        //                     columns.map((column, index) => {
-        //                         return (
-        //                             <TableCell key={index}>{column}</TableCell>
-        //                         )
-        //                     })
-        //                 }
-        //             </TableRow>
-        //         </TableHead>
-        //         <TableBody>
-        //             {
-        //                 overviewData["Americas"].map((stock, index) => {
-        //                     return (
-        //                         <StockPreviewCard key={index} ticker={stock.ticker} data={stock.data} action={'add'} />
-        //                     )
-        //                 })
-        //             }
-        //         </TableBody>
-        //     </Table>
-        // </TableContainer>
     )
 }

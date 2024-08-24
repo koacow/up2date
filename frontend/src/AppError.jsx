@@ -16,7 +16,7 @@ export default function AppError() {
                 <WarningAmberIcon />
             </Typography>
             <Typography variant='h3' component='h2'>
-                Oops something went really wrong here. We&aposre going to need to fix this.
+                Oops something went really wrong here. We are going to need to fix this.
             </Typography>
             <Button variant='outlined' onClick={goBack}>Go Back</Button>
         </Box>

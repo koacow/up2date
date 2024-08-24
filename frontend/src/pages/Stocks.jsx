@@ -3,7 +3,7 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import StocksOverview from '../components/StocksOverview';
-import StocksWatchList from '../components/StocksWatchList';
+import StocksWatchList from '../components/StocksWatchList/StocksWatchList';
 import StockSearch from '../components/StockSearch';
 import { useState } from 'react';
 
