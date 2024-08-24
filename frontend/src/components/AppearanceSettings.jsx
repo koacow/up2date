@@ -1,7 +1,6 @@
-import { fetchSettingsAsync } from '../state/slices/settingsSlice';
 import { updateSettingsAsync } from '../state/slices/settingsSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Switch from '@mui/material/Switch';
 import Card from '@mui/material/Card';
 import FormControlLabel from '@mui/material/FormControlLabel';

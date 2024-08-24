@@ -39,6 +39,8 @@ export default function Search() {
     const handleSubmit = (e) => {
         setSearched(true);
         e.preventDefault();
+        setDisplayedSearchPage(1);
+        dispatch(setSearchPageNum(1));
         dispatch(fetchArticlesByQuery());
     }
 
