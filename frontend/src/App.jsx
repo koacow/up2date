@@ -17,6 +17,8 @@ import Settings from './pages/Settings';
 import ErrorBoundary from './ErrorBoundary.jsx'
 import AppError from './AppError.jsx'
 
+const rootElement = document.getElementById('root');
+
 function App() {
   const darkMode = useSelector(state => state.settings.settings.display.darkMode);
   const getDesignTokens = () => ({
@@ -47,7 +49,31 @@ function App() {
     },
   });
 
-  const theme = createTheme(getDesignTokens());
+  const theme = createTheme({
+    ...getDesignTokens(),
+    components: {
+      MuiPopover: {
+        defaultProps: {
+          container: rootElement,
+        }
+      },
+      MuiPopper: {
+        defaultProps: {
+          container: rootElement,
+        },
+      },
+      MuiDialog: {
+        defaultProps: {
+          container: rootElement,
+        },
+      },
+      MuiModal: {
+        defaultProps: {
+          container: rootElement,
+        },
+      },  
+    }
+  });
 
   const AppRouter = createBrowserRouter(createRoutesFromElements([
     <Route path="/about" element={<About />} />,
