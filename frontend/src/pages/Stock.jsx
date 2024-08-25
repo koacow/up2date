@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getStockChartByTicker, getStockQuoteByTicker } from "../api/stocksAPI";
+import { currencyFormatter } from "../utils/formatters";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Tabs from "@mui/material/Tabs";
@@ -95,7 +96,7 @@ export default function Stock(){
                     (
                         <>
                             <Typography variant='h4' component='h1'>{chartData.meta.shortName}</Typography>
-                            <Typography variant='h4' component='h1'>{chartData.meta.regularMarketPrice}</Typography>
+                            <Typography variant='h4' component='h1'>{currencyFormatter(chartData.meta.regularMarketPrice)}</Typography>
                         </>
                     ) : (
                         <>
@@ -114,7 +115,7 @@ export default function Stock(){
         <Box>
             <Typography variant='h6' component='h2'>{ticker}</Typography>
             <Typography variant='h4' component='h1'>{chartData.meta.shortName}</Typography>
-            <Typography variant='h4' component='h1'>{chartData.meta.regularMarketPrice}</Typography>
+            <Typography variant='h4' component='h1'>{currencyFormatter(chartData.meta.regularMarketPrice)}</Typography>
             <Tabs value={chartRange} onChange={handleTabChange} >
                 {
                     Object.keys(possibleRanges).map((range) => {

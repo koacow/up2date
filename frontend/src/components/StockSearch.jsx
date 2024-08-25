@@ -34,6 +34,7 @@ export default function StockSearch(){
 
     const handleQueryChange = (e) => {
         setSearched(false);
+        setSearchResults([]);
         setQuery(e.target.value);
     }
 
