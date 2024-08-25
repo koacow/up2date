@@ -35,6 +35,7 @@ export default function Stock(){
     const handleTabChange = (e, newValue) => {
         setChartRange(newValue);
     }
+    
 
     // Fetch stock chart data
     useEffect(() => {
@@ -89,8 +90,20 @@ export default function Stock(){
         return (
             <Box>
                 <Typography variant='h6' component='h2'>{ticker}</Typography>
-                <Skeleton variant='text' />
-                <Skeleton variant='text' />
+                {
+                    chartData.meta ? 
+                    (
+                        <>
+                            <Typography variant='h4' component='h1'>{chartData.meta.shortName}</Typography>
+                            <Typography variant='h4' component='h1'>{chartData.meta.regularMarketPrice}</Typography>
+                        </>
+                    ) : (
+                        <>
+                            <Skeleton variant='text' />
+                            <Skeleton variant='text' />
+                        </>
+                    )
+                }
                 <Skeleton variant='rect' />
                 <Skeleton variant='rect' />
                 <Skeleton variant='rect' />

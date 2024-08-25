@@ -2,6 +2,8 @@ import { LineChart } from "@mui/x-charts";
 import Typography from "@mui/material/Typography";
 import { currencyFormatter } from "../../utils/formatters";
 
+const dataKeys = ['open', 'high', 'low', 'close'];
+const labels = ['Open', 'High', 'Low', 'Close'];
 export default function StockChart({ data, loading, error, range }){
     const timeFormatter = (date) => {
         if (!date) return 'No data';
@@ -15,8 +17,6 @@ export default function StockChart({ data, loading, error, range }){
             return new Date(date).toLocaleDateString();
         }
     }
-    const dataKeys = ['close', 'open', 'high', 'low'];
-    const dataLabels = ['Close', 'Open', 'High', 'Low'];
     
 
 
@@ -45,10 +45,10 @@ export default function StockChart({ data, loading, error, range }){
                 dataKeys.map((key, index) => {
                     return {
                         dataKey: key,
-                        label: dataLabels[index],
-                        curve: 'linear',
+                        label: labels[index],
                         valueFormatter: currencyFormatter,
                         showMark: false,
+                        curve: 'linear',
                     }
                 })
             }
