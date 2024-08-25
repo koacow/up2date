@@ -1,9 +1,10 @@
 import { LineChart } from "@mui/x-charts";
 import Typography from "@mui/material/Typography";
-import { currencyFormatter } from "../utils/formatters";
+import { currencyFormatter } from "../../utils/formatters";
 
 export default function StockChart({ data, loading, error, range }){
     const timeFormatter = (date) => {
+        if (!date) return 'No data';
         if (range === '1D') {
             const hour = new Date(date).getHours() > 12 ? new Date(date).getHours() - 12 : new Date(date).getHours();
             const minute = new Date(date).getMinutes();
@@ -14,6 +15,8 @@ export default function StockChart({ data, loading, error, range }){
             return new Date(date).toLocaleDateString();
         }
     }
+    const dataKeys = ['close', 'open', 'high', 'low'];
+    const dataLabels = ['Close', 'Open', 'High', 'Low'];
     
 
 
@@ -38,32 +41,17 @@ export default function StockChart({ data, loading, error, range }){
                     tickLabelInterval: (value, index) => index % 2 === 0,
                 }
             ]}
-            series={[
-                {
-                    dataKey: 'close',
-                    showMark: false,
-                    label: 'Close',
-                    valueFormatter: currencyFormatter,
-                },
-                {
-                    dataKey: 'open',
-                    showMark: false,
-                    label: 'Open',
-                    valueFormatter: currencyFormatter,
-                },
-                {
-                    dataKey: 'high',
-                    showMark: false,
-                    label: 'High',
-                    valueFormatter: currencyFormatter,
-                },
-                {
-                    dataKey: 'low',
-                    showMark: false,
-                    label: 'Low',
-                    valueFormatter: currencyFormatter,
-                }
-            ]}
+            series={
+                dataKeys.map((key, index) => {
+                    return {
+                        dataKey: key,
+                        label: dataLabels[index],
+                        curve: 'linear',
+                        valueFormatter: currencyFormatter,
+                        showMark: false,
+                    }
+                })
+            }
             axisHighlight={{
                 x: 'line',
                 y: 'line',

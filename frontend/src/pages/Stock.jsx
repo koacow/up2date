@@ -6,8 +6,9 @@ import Box from "@mui/material/Box";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import WarningAmberOutlined from "@mui/icons-material/WarningAmberOutlined";
-import StockChart from "../components/StockChart";
+import StockChart from "../components/StockChart/StockChart";
 import StockQuote from "../components/StockQuote";
+import Skeleton from "@mui/material/Skeleton";
 
 export default function Stock(){
     const { ticker } = useParams();
@@ -84,11 +85,23 @@ export default function Stock(){
                 <Typography variant='body1'>{chartError}</Typography>
             </Box>
         )
-    } else return (
+    } else if (chartLoading) {
+        return (
+            <Box>
+                <Typography variant='h6' component='h2'>{ticker}</Typography>
+                <Skeleton variant='text' />
+                <Skeleton variant='text' />
+                <Skeleton variant='rect' />
+                <Skeleton variant='rect' />
+                <Skeleton variant='rect' />
+            </Box>
+        )
+    } else {
+        return (
         <Box>
             <Typography variant='h6' component='h2'>{ticker}</Typography>
-            <Typography variant='h4' component='h1'>{chartLoading ? 'Loading...' : chartData.meta.shortName}</Typography>
-            <Typography variant='h4' component='h1'>{chartLoading ? 'Loading...' : chartData.meta.regularMarketPrice}</Typography>
+            <Typography variant='h4' component='h1'>{chartData.meta.shortName}</Typography>
+            <Typography variant='h4' component='h1'>{chartData.meta.regularMarketPrice}</Typography>
             <Tabs value={chartRange} onChange={handleTabChange} >
                 {
                     Object.keys(possibleRanges).map((range) => {
@@ -100,4 +113,5 @@ export default function Stock(){
             <StockQuote data={quoteData} loading={quoteLoading} error={quoteError} />
         </Box>
     )
+}
 }
