@@ -47,11 +47,12 @@ export default function StockPreviewCard({ ticker, data, error, action }) {
         )
     } else {
         const { shortName, ask, regularMarketChange, regularMarketChangePercent } = data; 
-        const changeIcon = (regularMarketChange > 0 ? <ArrowDropUp color='green' /> : <ArrowDropDown color='red' />);
-        const changePercentIcon = (regularMarketChangePercent > 0 ? <ArrowDropUp color='green' /> : <ArrowDropDown color='red' />);
+        const changeIcon = (change) => change > 0 ? <ArrowDropUp /> : <ArrowDropDown />;
+        const changeColor = (change) => change > 0 ? 'text-green-500' : 'text-red-500';
+
         return (
             <Card className='relative'>
-                <CardActions className='absolute right-3'>
+                <CardActions className='absolute right-0 top-0'>
                     <Tooltip title={tooltipText}>
                         <span>
                             <IconButton onClick={handleAction} disabled={!session}>
@@ -72,9 +73,15 @@ export default function StockPreviewCard({ ticker, data, error, action }) {
                     onClick={goToStockPage}
                 />
                 <CardContent>
-                    <Typography variant='h6' component='h6'>{currencyFormatter(ask)}</Typography>
-                    <Typography variant='h6' component='h6'>{changeIcon} {`${currencyFormatter(regularMarketChange)}`}</Typography>
-                    <Typography variant='h6' component='h6'>{changePercentIcon} {`${regularMarketChangePercent}%`}</Typography>
+                    <Typography variant='h6' component='h6'>
+                        {currencyFormatter(ask)}
+                    </Typography>
+                    <Typography variant='h6' component='h6' className={changeColor(regularMarketChange)}>
+                        {changeIcon(regularMarketChange)} {`${currencyFormatter(regularMarketChange)}`}
+                    </Typography>
+                    <Typography variant='h6' component='h6' className={changeColor(regularMarketChangePercent)}>
+                        {changeIcon(regularMarketChangePercent)} {`${regularMarketChangePercent}%`}
+                    </Typography>
                 </CardContent>
                 
             </Card>
