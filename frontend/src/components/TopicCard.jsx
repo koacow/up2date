@@ -30,16 +30,23 @@ export default function TopicCard({ topic }) {
 
     const renderArticles = () => {
         if (loading) {
-            return <ArticleCardLoading />
+            return [...Array(4)].map((_, index) => {
+                return <ArticleCardLoading key={index} />
+            })
         } else if (error) {
             return <ArticleCardError />
         } else {
             return (
-                <Stack spacing={2}>
+                <Stack spacing={4}>
                     {articles.map((article, index) => {
                         return <ArticleCard key={index} article={article} />
                     })}
-                    <Pagination count={totalPages} page={paginationDisplayedNum} onChange={handlePageChange} color='primary' />
+                    <Pagination 
+                        count={totalPages} 
+                        page={paginationDisplayedNum} 
+                        onChange={handlePageChange}
+                        className='mx-auto' 
+                    />
                 </Stack>
             )
         }
@@ -47,7 +54,11 @@ export default function TopicCard({ topic }) {
 
     return (
         <Box component='section'>
-            <Typography component='h1' variant='h1'>
+            <Typography 
+                component='h1' 
+                variant='h1'
+                className='text-center tracking-wider font-semibold m-4'
+            >
                 {topicName}
             </Typography>
             <Box>

@@ -1,16 +1,21 @@
 import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
 import Skeleton from '@mui/material/Skeleton';
-import Stack from '@mui/material/Stack';
 
 export default function ArticleCardLoading() {
     return (
-        <Card>
-            <Stack spacing={2}>
-                <Skeleton variant='text' />
-                <Skeleton variant='text' />
-                <Skeleton variant='rect' />
-                <Skeleton variant='rect' />
-            </Stack>
+        <Card
+            className='space-y-5 flex rounded-md space-x-5 w-auto'
+        >
+            <CardContent>
+                <Skeleton variant='rect' width={200} height={200} />
+                <Skeleton variant='text' width={200} />
+                <Skeleton variant='text' width={100} />
+            </CardContent>
+            <CardContent>
+                <Skeleton variant='text' width={400} />
+                <Skeleton variant='text' width={400} />
+            </CardContent>
         </Card>
     )
 }

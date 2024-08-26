@@ -1,8 +1,6 @@
-import {
-    Container,
-} from '@mui/material';
+import Container from '@mui/material/Container';
 import TopicCard from '../components/TopicCard';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 export default function Home() {
     const savedTopics = useSelector((state) => state.topics.topics);

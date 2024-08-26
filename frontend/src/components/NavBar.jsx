@@ -77,9 +77,10 @@ export default function NavBar() {
                 <Typography
                     variant="h6"
                     noWrap
-                    className="flex-grow font-bold tracking-widest mr-3 text-inherit md:flex sm:hidden"
+                    className="flex-grow font-bold tracking-widest mr-3 md:flex sm:hidden"
+                    color='white'
                 >
-                    <Link href="/about" className='no-underline text-inherit'>Up2Date</Link> 
+                    <Link href="/about" className='no-underline'>Up2Date</Link> 
                 </Typography>
 
                 <Box className='flex-grow sm:flex md:hidden'>
@@ -112,7 +113,7 @@ export default function NavBar() {
                     {Object.keys(pagesToLinks).map((page) => (
                         <MenuItem key={page} onClick={handleCloseNavMenu}>
                         <Typography className='text-center'>
-                            <RouterLink className='no-underline text-inherit' to={`/${pagesToLinks[page]}`}>{page}</RouterLink>
+                            <RouterLink className='no-underline' to={`/${pagesToLinks[page]}`}>{page}</RouterLink>
                         </Typography>
                         </MenuItem>
                     ))}
@@ -121,7 +122,8 @@ export default function NavBar() {
                 <Typography
                     variant="h5"
                     noWrap
-                    className="mr-2 flex flex-grow font-bold tracking-widest text-inherit  md:hidden sm:flex"
+                    className="mr-2 flex flex-grow font-bold tracking-widest md:hidden sm:flex"
+                    color='white'
                 >
                     <Link to="/about">Up2Date</Link>
                 </Typography>
@@ -132,7 +134,7 @@ export default function NavBar() {
                         onClick={handleCloseNavMenu}
                         className='my-2 block'
                     >
-                        <RouterLink className='no-underline text-inherit' to={`/${pagesToLinks[page]}`}>{page}</RouterLink>
+                        <RouterLink className='no-underline' to={`/${pagesToLinks[page]}`}>{page}</RouterLink>
                     </Button>
                     ))}
                 </Box>
@@ -164,7 +166,7 @@ export default function NavBar() {
                     {Object.keys(settingsToLinks).map((setting) => (
                         <MenuItem key={setting} onClick={handleCloseUserMenu}>
                         <Typography className='text-center'>
-                            <RouterLink className='no-underline text-inherit' to={settingsToLinks[setting]} >{setting}</RouterLink>
+                            <RouterLink className='no-underline ' to={settingsToLinks[setting]} >{setting}</RouterLink>
                         </Typography>
                         </MenuItem>
                     ))}

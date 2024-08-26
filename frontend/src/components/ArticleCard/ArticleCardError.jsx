@@ -7,9 +7,11 @@ export default function ArticleCardError() {
     return (
         <Card>
             <CardHeader
-                avatar={<WarningAmberIcon />}
-                title={<Typography variant='h6' component='h3'>
-                    Something went wrong when loading these articles. Try refreshing the page.
+                avatar={<WarningAmberIcon color='error' />}
+                title={<Typography variant='h6' component='h3'
+                color={'error'}
+            >
+                    Something went wrong when loading these articles. Try again later.
                 </Typography>}
             />
         </Card>
