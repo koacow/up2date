@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Router, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
 import Link from '@mui/material/Link';
@@ -15,6 +15,7 @@ import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import Container from '@mui/material/Container';
 import MenuIcon from '@mui/icons-material/Menu';
+import Person from '@mui/icons-material/Person';
 import { logUserOut } from '../state/slices/sessionSlice';
 
 export default function NavBar() {
@@ -71,28 +72,28 @@ export default function NavBar() {
     };
 
     return (
-        <AppBar position="static">
+        <AppBar className='static'>
             <Container maxWidth="xl">
-                <Toolbar disableGutters>
+                <Toolbar>
                 <Typography
                     variant="h6"
                     noWrap
-                    className="flex-grow font-bold tracking-widest mr-3 md:flex sm:hidden"
+                    className="flex-grow font-bold tracking-widest md:flex sm:hidden"
                     color='white'
                 >
-                    <Link href="/about" className='no-underline'>Up2Date</Link> 
+                    <Link href="/about" className='no-underline text-inherit'>Up2Date</Link> 
                 </Typography>
 
                 <Box className='flex-grow sm:flex md:hidden'>
                     <IconButton
                     size="large"
-                    aria-label="account of current user"
+                    aria-label="nav menu"
                     aria-controls="menu-appbar"
                     aria-haspopup="true"
                     onClick={handleOpenNavMenu}
                     color="inherit"
                     >
-                    <MenuIcon />
+                        <MenuIcon />
                     </IconButton>
                     <Menu
                     id="menu-appbar"
@@ -111,9 +112,12 @@ export default function NavBar() {
                     className='sm:block md:hidden'
                     >
                     {Object.keys(pagesToLinks).map((page) => (
-                        <MenuItem key={page} onClick={handleCloseNavMenu}>
+                        <MenuItem 
+                            key={page} 
+                            onClick={handleCloseNavMenu}
+                        >
                         <Typography className='text-center'>
-                            <RouterLink className='no-underline' to={`/${pagesToLinks[page]}`}>{page}</RouterLink>
+                            <RouterLink className='no-underline text-inherit' to={`/${pagesToLinks[page]}`}>{page}</RouterLink>
                         </Typography>
                         </MenuItem>
                     ))}
@@ -123,18 +127,16 @@ export default function NavBar() {
                     variant="h5"
                     noWrap
                     className="mr-2 flex flex-grow font-bold tracking-widest md:hidden sm:flex"
-                    color='white'
                 >
-                    <Link to="/about">Up2Date</Link>
+                    <Link to="/about" className='no-underline text-inherit'>Up2Date</Link>
                 </Typography>
                 <Box className='flex-grow sm:hidden md:flex'>
                     {Object.keys(pagesToLinks).map((page) => (
                     <Button
                         key={page}
                         onClick={handleCloseNavMenu}
-                        className='my-2 block'
                     >
-                        <RouterLink className='no-underline' to={`/${pagesToLinks[page]}`}>{page}</RouterLink>
+                        <RouterLink className='no-underline text-inherit' to={`/${pagesToLinks[page]}`}>{page}</RouterLink>
                     </Button>
                     ))}
                 </Box>
@@ -143,7 +145,7 @@ export default function NavBar() {
                     <Tooltip title="Open settings">
                         <IconButton onClick={handleOpenUserMenu} className='p-0'>
                             <Avatar alt="Settings menu icon" >
-                                <MenuIcon />
+                                <Person />
                             </Avatar>   
                         </IconButton>
                     </Tooltip>
@@ -165,16 +167,16 @@ export default function NavBar() {
                     >
                     {Object.keys(settingsToLinks).map((setting) => (
                         <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                        <Typography className='text-center'>
-                            <RouterLink className='no-underline ' to={settingsToLinks[setting]} >{setting}</RouterLink>
-                        </Typography>
+                            <Typography className='text-center'>
+                                <RouterLink className='no-underline ' to={settingsToLinks[setting]} >{setting}</RouterLink>
+                            </Typography>
                         </MenuItem>
                     ))}
-                    <MenuItem key='AuthAction' onClick={handleAuthActionClick}>
-                        <Typography className='text-center'>
-                            {getAuthActionFromSessionStatus()}
-                        </Typography>
-                    </MenuItem>
+                        <MenuItem key='AuthAction' onClick={handleAuthActionClick}>
+                            <Typography className='text-center'>
+                                {getAuthActionFromSessionStatus()}
+                            </Typography>
+                        </MenuItem>
                     </Menu>
                 </Box>
                 </Toolbar>
