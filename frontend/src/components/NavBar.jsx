@@ -78,13 +78,13 @@ export default function NavBar() {
                 <Typography
                     variant="h6"
                     noWrap
-                    className="flex-grow font-bold tracking-widest md:flex sm:hidden"
+                    className="flex-grow font-bold tracking-widest md:flex hidden"
                     color='white'
                 >
                     <Link href="/about" className='no-underline text-inherit'>Up2Date</Link> 
                 </Typography>
 
-                <Box className='flex-grow sm:flex md:hidden'>
+                <Box className='flex-grow flex md:hidden'>
                     <IconButton
                     size="large"
                     aria-label="nav menu"
@@ -109,7 +109,7 @@ export default function NavBar() {
                     }}
                     open={Boolean(anchorElNav)}
                     onClose={handleCloseNavMenu}
-                    className='sm:block md:hidden'
+                    className='block md:hidden'
                     >
                     {Object.keys(pagesToLinks).map((page) => (
                         <MenuItem 
@@ -126,11 +126,11 @@ export default function NavBar() {
                 <Typography
                     variant="h5"
                     noWrap
-                    className="mr-2 flex flex-grow font-bold tracking-widest md:hidden sm:flex"
+                    className="mr-2 flex flex-grow font-bold tracking-widest md:hidden"
                 >
-                    <Link to="/about" className='no-underline text-inherit'>Up2Date</Link>
+                    <RouterLink to="/about" className='no-underline text-inherit'>Up2Date</RouterLink>
                 </Typography>
-                <Box className='flex-grow sm:hidden md:flex'>
+                <Box className='flex-grow hidden md:flex'>
                     {Object.keys(pagesToLinks).map((page) => (
                     <Button
                         key={page}
