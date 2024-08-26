@@ -1,43 +1,32 @@
 import { React } from 'react';
-import { Link } from 'react-router-dom';
-import { Box, Container, Typography } from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
+import { Box, Typography } from '@mui/material';
+import Button from '@mui/material/Button';
 
 export default function About() {
      
     return (
         <>
-            <Container>
-                <Box
-                    sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        height: '100vh',
-                    }}
+            <Box
+                className='flex flex-col items-center justify-center text-center h-screen m-5 space-y-5'
+            >
+                <Typography 
+                    variant='h1' 
+                    component={'h1'} 
+                    className='tracking-widest font-bold'
                 >
-                    <Typography 
-                        variant='h1' 
-                        component={'h1'} 
-                        sx={{
-                            letterSpacing: '0.1em',
-                            lineHeight: '1.2',
-                        }}>
-                            UP2DATE
-                    </Typography>
-                    <Typography variant='h3' component={'h2'}>An Independent Fully Customizable News App</Typography>
-                    <Typography variant='h5' component={'h2'}>Powered by NewsAPI, Yahoo Finance, and Supabase</Typography>
-                    <Typography variant='h4' component={'h2'}>
-                        <Link reloadDocument to='/'>Explore Up2Date</Link>
-                    </Typography>
-                    <Typography variant='h5' component={'h2'}>
-                        Already have an account with us? <Link to='/login'>Login</Link>
-                    </Typography>
-                    <Typography variant='h5' component={'h2'}>
-                        First time here? <Link reloadDocument to='/register'>Register</Link>
-                    </Typography>
-                </Box>
-            </Container>
+                    UP2DATE
+                </Typography>
+                <Typography variant='h3' component={'h2'}>
+                    An Independent Fully Customizable News App
+                </Typography>
+                <Typography variant='h5' component={'h2'} className='font-light'>
+                    Powered by NewsAPI, Yahoo Finance, and Supabase
+                </Typography>
+                <Button variant='contained' className='text-lg py-3 px-4 rounded-lg'>
+                    <RouterLink to='/' className='no-underline text-inherit'>Get Up2Date</RouterLink>
+                </Button>
+            </Box>
         </>
     );
 }
