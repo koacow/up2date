@@ -1,21 +1,20 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Router, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-    Box,
-    Typography,
-    AppBar,
-    Toolbar,
-    IconButton,
-    Menu,
-    MenuItem,
-    Button,
-    Avatar,
-    Tooltip,
-    Container
-} from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
+import Link from '@mui/material/Link';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import Button from '@mui/material/Button';
+import Avatar from '@mui/material/Avatar';
+import Tooltip from '@mui/material/Tooltip';
+import Container from '@mui/material/Container';
 import MenuIcon from '@mui/icons-material/Menu';
-import { AccountBoxOutlined } from '@mui/icons-material/';
 import { logUserOut } from '../state/slices/sessionSlice';
 
 export default function NavBar() {
@@ -78,19 +77,12 @@ export default function NavBar() {
                 <Typography
                     variant="h6"
                     noWrap
-                    sx={{
-                    mr: 2,
-                    display: { xs: 'none', md: 'flex' },
-                    fontWeight: 700,
-                    letterSpacing: '.3rem',
-                    color: 'inherit',
-                    textDecoration: 'none',
-                    }}
+                    className="flex-grow font-bold tracking-widest mr-3 text-inherit md:flex sm:hidden"
                 >
-                    <Link reloadDocument to="/about">Up2Date</Link> 
+                    <Link href="/about" className='no-underline text-inherit'>Up2Date</Link> 
                 </Typography>
 
-                <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+                <Box className='flex-grow sm:flex md:hidden'>
                     <IconButton
                     size="large"
                     aria-label="account of current user"
@@ -115,14 +107,12 @@ export default function NavBar() {
                     }}
                     open={Boolean(anchorElNav)}
                     onClose={handleCloseNavMenu}
-                    sx={{
-                        display: { xs: 'block', md: 'none' },
-                    }}
+                    className='sm:block md:hidden'
                     >
                     {Object.keys(pagesToLinks).map((page) => (
                         <MenuItem key={page} onClick={handleCloseNavMenu}>
-                        <Typography textAlign="center">
-                            <Link to={`/${pagesToLinks[page]}`}>{page}</Link>
+                        <Typography className='text-center'>
+                            <RouterLink className='no-underline text-inherit' to={`/${pagesToLinks[page]}`}>{page}</RouterLink>
                         </Typography>
                         </MenuItem>
                     ))}
@@ -131,40 +121,32 @@ export default function NavBar() {
                 <Typography
                     variant="h5"
                     noWrap
-                    sx={{
-                    mr: 2,
-                    display: { xs: 'flex', md: 'none' },
-                    flexGrow: 1,
-                    fontWeight: 700,
-                    letterSpacing: '.3rem',
-                    color: 'inherit',
-                    textDecoration: 'none',
-                    }}
+                    className="mr-2 flex flex-grow font-bold tracking-widest text-inherit  md:hidden sm:flex"
                 >
-                    <Link reloadDocument to="/about">Up2Date</Link>
+                    <Link to="/about">Up2Date</Link>
                 </Typography>
-                <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                <Box className='flex-grow sm:hidden md:flex'>
                     {Object.keys(pagesToLinks).map((page) => (
                     <Button
                         key={page}
                         onClick={handleCloseNavMenu}
-                        sx={{ my: 2, color: 'white', display: 'block' }}
+                        className='my-2 block'
                     >
-                        <Link to={`/${pagesToLinks[page]}`}>{page}</Link>
+                        <RouterLink className='no-underline text-inherit' to={`/${pagesToLinks[page]}`}>{page}</RouterLink>
                     </Button>
                     ))}
                 </Box>
 
-                <Box sx={{ flexGrow: 0 }}>
+                <Box className='flex-grow-0'>
                     <Tooltip title="Open settings">
-                        <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                        <IconButton onClick={handleOpenUserMenu} className='p-0'>
                             <Avatar alt="Settings menu icon" >
-                                <AccountBoxOutlined />
+                                <MenuIcon />
                             </Avatar>   
                         </IconButton>
                     </Tooltip>
                     <Menu
-                    sx={{ mt: '45px' }}
+                    className='mt-11'
                     id="menu-appbar"
                     anchorEl={anchorElUser}
                     anchorOrigin={{
@@ -181,16 +163,14 @@ export default function NavBar() {
                     >
                     {Object.keys(settingsToLinks).map((setting) => (
                         <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                        <Typography textAlign="center">
-                            <Link to={settingsToLinks[setting]} >{setting}</Link>
+                        <Typography className='text-center'>
+                            <RouterLink className='no-underline text-inherit' to={settingsToLinks[setting]} >{setting}</RouterLink>
                         </Typography>
                         </MenuItem>
                     ))}
-                    <MenuItem key='AuthAction' onClick={handleCloseUserMenu}>
-                        <Typography textAlign="center">
-                            <Button onClick={handleAuthActionClick} disabled={sessionLoading} >
-                                {getAuthActionFromSessionStatus()}
-                            </Button>
+                    <MenuItem key='AuthAction' onClick={handleAuthActionClick}>
+                        <Typography className='text-center'>
+                            {getAuthActionFromSessionStatus()}
                         </Typography>
                     </MenuItem>
                     </Menu>
