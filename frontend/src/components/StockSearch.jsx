@@ -116,7 +116,7 @@ export default function StockSearch(){
     }
     
     return (
-        <Container className='my-5 w-96'>
+        <Container className='my-5 w-auto md:w-96'>
             <SearchBar displayedQuery={query} handleSearchQueryChange={handleQueryChange} handleSubmit={handleSubmit} />
             {renderSearchResults()}
         </Container>
