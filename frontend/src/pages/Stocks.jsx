@@ -1,7 +1,6 @@
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';    
 import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
 import StocksOverview from '../components/StocksOverview';
 import StocksWatchList from '../components/StocksWatchList/StocksWatchList';
 import StockSearch from '../components/StockSearch';
@@ -27,13 +26,15 @@ export default function Stocks() {
 
     return (
         <>
-            <Container>
-                <StockSearch />
-            </Container>
-            <Box>
-                <Tabs value={currentTab} onChange={handleTabChange}>
-                    <Tab value='overview' label='Overview' />
-                    <Tab value='watchlist' label='Watch List' />
+            <StockSearch />
+            <Box className='w-4 mx-auto flex flex-col items-center sm:w-full'>
+                <Tabs 
+                    value={currentTab} 
+                    onChange={handleTabChange}
+                    className='flex justify-center'
+                >
+                    <Tab value='overview' label='Overview' className='w-96' />
+                    <Tab value='watchlist' label='Watch List' className='w-96'/>
                 </Tabs>
                 {getRenderedTab()}
             </Box>

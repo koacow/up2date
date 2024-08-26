@@ -6,9 +6,12 @@ import Typography from '@mui/material/Typography';
 export default function StockPreviewCardError({ ticker }) {
     return (
         <Card>
-            <CardHeader title={ticker} />
+            <CardHeader 
+                title={ticker} 
+                titleTypographyProps={{ className: 'font-semibold' }}
+            />
             <CardContent>
-                <Typography variant='h6' component='h6'>
+                <Typography variant='body1' component='h6' >
                     Something went wrong while fetching this stock's data.
                 </Typography>
             </CardContent>

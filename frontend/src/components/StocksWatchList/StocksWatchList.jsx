@@ -49,22 +49,17 @@ export default function StocksWatchList() {
         } 
         else if (session && watchList.length) {
             return (
-                <Box>
-                    <Typography variant='h4' component='h4'>Watch List</Typography>
-                    {
-                        <Grid container spacing={2}>
-                            {
-                                watchListData.map((stock, index) => {
-                                    return (
-                                        <Grid item sx={3} key={index}>
-                                            <StockPreviewCard ticker={stock.ticker} data={stock.data} action={'remove'} error={watchListError} />
-                                        </Grid>
-                                    )
-                                })
-                            }
-                        </Grid>
-                    }
-                </Box>
+                    <Grid container spacing={2}>
+                        {
+                            watchListData.map((stock, index) => {
+                                return (
+                                    <Grid item xs={6} md={3} key={index}>
+                                        <StockPreviewCard ticker={stock.ticker} data={stock.data} action={'remove'} error={watchListError} />
+                                    </Grid>
+                                )
+                            })
+                        }
+                    </Grid>
             )
         } else if (session && !watchList.length) {
             return <StocksWatchListEmpty />;
@@ -76,7 +71,17 @@ export default function StocksWatchList() {
 
     return (
         <>
-            {render()}
+            <Box className='m-5 space-y-5'>
+                <Typography 
+                    variant='h4' 
+                    component='h4'
+                    className='font-extrabold'
+                >
+                        Watch List
+                </Typography>
+                <hr />
+                {render()}
+            </Box>
         </>
     )
 }

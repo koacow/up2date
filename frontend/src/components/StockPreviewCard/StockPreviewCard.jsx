@@ -50,18 +50,8 @@ export default function StockPreviewCard({ ticker, data, error, action }) {
         const changeIcon = (regularMarketChange > 0 ? <ArrowDropUp color='green' /> : <ArrowDropDown color='red' />);
         const changePercentIcon = (regularMarketChangePercent > 0 ? <ArrowDropUp color='green' /> : <ArrowDropDown color='red' />);
         return (
-            <Card>
-                <CardHeader 
-                    title={ticker} 
-                    subheader={shortName} 
-                    onClick={goToStockPage}
-                />
-                <CardContent>
-                    <Typography variant='h6' component='h6'>{currencyFormatter(ask)}</Typography>
-                    <Typography variant='h6' component='h6'>{changeIcon} {`${currencyFormatter(regularMarketChange)}`}</Typography>
-                    <Typography variant='h6' component='h6'>{changePercentIcon} {`${regularMarketChangePercent}%`}</Typography>
-                </CardContent>
-                <CardActions>
+            <Card className='relative'>
+                <CardActions className='absolute right-3'>
                     <Tooltip title={tooltipText}>
                         <span>
                             <IconButton onClick={handleAction} disabled={!session}>
@@ -70,6 +60,23 @@ export default function StockPreviewCard({ ticker, data, error, action }) {
                         </span>
                     </Tooltip>
                 </CardActions>
+                <CardHeader 
+                    title={ticker} 
+                    titleTypographyProps={{
+                        className: 'cursor-pointer font-semibold'
+                    }}
+                    subheaderTypographyProps={{
+                        className: 'cursor-pointer'
+                    }}
+                    subheader={shortName} 
+                    onClick={goToStockPage}
+                />
+                <CardContent>
+                    <Typography variant='h6' component='h6'>{currencyFormatter(ask)}</Typography>
+                    <Typography variant='h6' component='h6'>{changeIcon} {`${currencyFormatter(regularMarketChange)}`}</Typography>
+                    <Typography variant='h6' component='h6'>{changePercentIcon} {`${regularMarketChangePercent}%`}</Typography>
+                </CardContent>
+                
             </Card>
         )
     }

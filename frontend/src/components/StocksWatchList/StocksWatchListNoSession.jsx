@@ -5,7 +5,6 @@ import Link from '@mui/material/Link';
 export default function StocksWatchListNoSession() {
     return (
         <Box>
-            <Typography variant='h4' component='h4'>Watch List</Typography>
             <Typography variant='h5' component='h5'>
                 <Link href='/login'>Log in</Link> to view your watch list.
             </Typography>

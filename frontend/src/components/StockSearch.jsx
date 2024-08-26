@@ -5,13 +5,13 @@ import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
-import Stack from '@mui/material/Stack';
+import Box from '@mui/material/Box';
 import AddIcon from '@mui/icons-material/Add';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
+import Container from '@mui/material/Container';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-
 import SearchBar from './SearchBar';
 
 export default function StockSearch(){
@@ -70,7 +70,11 @@ export default function StockSearch(){
         }
 
         return (
-            <Stack spacing={2} > 
+            <Box 
+                component='div'
+                sx={{ bgcolor: 'primary.background '}}
+                className='absolute z-10 flex flex-col space-y-1 w-auto shadow-sm'
+            > 
                 {searchResults.map(stock => {
                     if (!stock.symbol || !stock.shortname) {
                         return null;
@@ -78,14 +82,17 @@ export default function StockSearch(){
                     return (
                         <Card 
                             key={stock.symbol} 
+                            className='relative m-2'
                         >
                             <CardHeader 
                                 title={stock.symbol} 
                                 subheader={stock.shortname} 
                                 onClick={() => navigate(`/stocks/${stock.symbol}`)}
-                                sx={{ cursor: 'pointer' }}
+                                className='cursor-pointer'
                             />
-                            <CardActions>
+                            <CardActions
+                                className='absolute right-0 top-0'
+                            >
                                 <Tooltip 
                                     title={session ? 'Add To Watchlist' : 'Login To Add To Watchlist'}
                                     disableFocusListener={!session}
@@ -104,14 +111,14 @@ export default function StockSearch(){
                         </Card>
                     )
                 })}
-            </Stack>
+            </Box>
         )
     }
     
     return (
-        <>
+        <Container className='my-5 w-96'>
             <SearchBar displayedQuery={query} handleSearchQueryChange={handleQueryChange} handleSubmit={handleSubmit} />
             {renderSearchResults()}
-        </>
+        </Container>
     )
 }

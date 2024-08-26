@@ -33,17 +33,18 @@ export default function StocksOverview() {
     }, [regions]);
 
     return (
-        <Box>
+        <>
             {
                 overviewData && Object.keys(overviewData).map((region, index) => {
                     return (
-                        <Box key={index}>
-                            <Typography variant='h4' component='h4'>{region}</Typography>
+                        <Box key={index} className='m-5 flex flex-col space-y-5'>
+                            <Typography variant='h4' component='h4' className='font-extrabold'>{region}</Typography>
+                            <hr />
                             <Grid container spacing={2}>
                                 {
                                     overviewData[region].map((stock, index) => {
                                         return (
-                                            <Grid item sx={3} key={index}>
+                                            <Grid item xs={6} md={4} lg={3} key={index}>
                                                 <StockPreviewCard ticker={stock.ticker} data={stock.data} error={stock.error} action={'add'} />
                                             </Grid>
                                         )
@@ -54,6 +55,6 @@ export default function StocksOverview() {
                     )
                 })
             }
-        </Box>
+        </>
     )
 }
