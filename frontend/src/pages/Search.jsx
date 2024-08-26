@@ -37,8 +37,11 @@ export default function Search() {
     }
 
     const handleSubmit = (e) => {
-        setSearched(true);
         e.preventDefault();
+        if (displayedQuery === '') {
+            return;
+        }
+        setSearched(true);
         setDisplayedSearchPage(1);
         dispatch(setSearchPageNum(1));
         dispatch(fetchArticlesByQuery());
@@ -53,11 +56,15 @@ export default function Search() {
             return <ArticleCardNoResults />
         } else {
             return (
-                <Stack spacing={2}>
+                <Stack spacing={4}>
                     {
                         articles.map((article, index) => {
                             return <ArticleCard key={index} article={article} />
                         })
+                    }
+                    {
+                        articles.length > 0 && 
+                        <Pagination className='mx-auto' count={totalPages} page={displayedSearchPage} onChange={handlePageChange} color='primary' />
                     }
                 </Stack>
             )
@@ -65,12 +72,9 @@ export default function Search() {
     }
 
     return (
-        <Container>
+        <Container className='my-5' >
             <SearchBar query={searchQuery} displayedQuery={displayedQuery} handleSearchQueryChange={handleSearchQueryChange} handleSubmit={handleSubmit} />
             {renderSearchResults()}
-            {
-                articles.length > 0 && <Pagination count={totalPages} page={displayedSearchPage} onChange={handlePageChange} color='primary' />
-            }
         </Container>
     );
 }
