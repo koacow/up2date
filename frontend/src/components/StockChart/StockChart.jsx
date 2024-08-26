@@ -1,4 +1,5 @@
 import { LineChart } from "@mui/x-charts";
+import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { currencyFormatter } from "../../utils/formatters";
 
@@ -22,13 +23,11 @@ export default function StockChart({ data, loading, error, range }){
 
     if (error) {
         return (
-            <Typography variant='h6' component='h3'>Error: {error}</Typography>
+            <Box className='w-full h-96 flex justify-center items-center text-center'>
+                <Typography variant='h6' component='h3' color='error' >Oops something went wrong when we were fetching the stock chart data. Try again later</Typography>
+            </Box>
         )
-    } else if (!data.quotes) {
-        return (
-            <Typography variant='h6' component='h3'>No data</Typography>
-        )
-    }
+    } 
     return (
         <LineChart
             dataset={data.quotes}
