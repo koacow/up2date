@@ -6,6 +6,7 @@ import { setSearchQuery, fetchArticlesByQuery, setSearchPageNum } from '../state
 import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
 import Pagination from '@mui/material/Pagination';
+import Divider from '@mui/material/Divider';
 import ArticleCardLoading from '../components/ArticleCard/ArticleCardLoading';
 import ArticleCardError from '../components/ArticleCard/ArticleCardError';
 import ArticleCardNoResults from '../components/ArticleCard/ArticleCardNoResults';
@@ -59,7 +60,14 @@ export default function Search() {
                 <Stack spacing={4}>
                     {
                         articles.map((article, index) => {
-                            return <ArticleCard key={index} article={article} />
+                            if (index === articles.length - 1) {
+                                return <ArticleCard key={index} article={article} />
+                            } else return (
+                                <>
+                                    <ArticleCard key={index} article={article} />
+                                    <Divider variant='middle' className="mx-5" />
+                                </>
+                            )
                         })
                     }
                     {
