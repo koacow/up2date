@@ -22,8 +22,8 @@ const rootElement = document.getElementById('root');
 function App() {
   const darkMode = useSelector(state => state.settings.settings.display.darkMode);
   const theme = createTheme({
-      mode: darkMode ? 'dark' : 'light',
-      palette: {
+    palette: {
+          mode: darkMode ? 'dark' : 'light',
           primary: {
               main: "#8e4ccf",
               light: "#a46fd8",

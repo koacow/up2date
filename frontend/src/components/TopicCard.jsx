@@ -45,6 +45,7 @@ export default function TopicCard({ topic }) {
                         count={totalPages} 
                         page={paginationDisplayedNum} 
                         onChange={handlePageChange}
+                        color='secondary'
                         className='mx-auto' 
                     />
                 </Stack>
@@ -53,11 +54,11 @@ export default function TopicCard({ topic }) {
     }
 
     return (
-        <Box component='section'>
+        <Box component='section' className='shadow-lg rounded-md md:h-screen md:overflow-y-scroll my-5 pb-5' >
             <Typography 
                 component='h1' 
                 variant='h1'
-                className='text-center tracking-wider font-semibold m-4'
+                className='tracking-wider font-semibold text-center m-4'
             >
                 {topicName}
             </Typography>
