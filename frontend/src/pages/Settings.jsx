@@ -5,7 +5,7 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Collapse from '@mui/material/Collapse';
 import Box from '@mui/material/Box';
-import ExpandMore from '../components/ExpandMore';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import SavedTopicsSettings from '../components/SavedTopicsSettings';
 import AppearanceSettings from '../components/AppearanceSettings';
 import { useState } from 'react';
@@ -15,15 +15,19 @@ export default function Settings() {
     const [ savedTopicsSettingsCollapsed, setSavedTopicsSettingsCollapsed ]= useState(true);
     const [ appearanceSettingsCollapsed, setAppearanceSettingsCollapsed ]= useState(true);
 
+    const getOrientation = (expanded) => {
+        return expanded ? 'rotate-180' : 'rotate-0';
+    }
+
     const render = () => {
         if (session) {
             return (
-                <Box className='w-full md:w-3/5 md:mx-auto'>
+                <Box className='w-full md:w-3/5 md:mx-auto space-y-5 my-5'>
                     <Card>
                         <CardContent>
-                            <Typography variant='h5' className='font-bold tracking-wider'>
+                            <Typography variant='h5' className='font-bold tracking-wider cursor-pointer flex items-center' onClick={() => setAppearanceSettingsCollapsed(prev => !prev)}>
                                 Appearance
-                                <ExpandMore expanded={!appearanceSettingsCollapsed} onClick={() => setAppearanceSettingsCollapsed(prev => !prev)} />
+                                <ExpandMoreIcon className={`transform duration-500 ${getOrientation(!appearanceSettingsCollapsed)}`} />
                             </Typography>
                             <Collapse in={!appearanceSettingsCollapsed} unmountOnExit>
                                 <AppearanceSettings />
@@ -32,9 +36,9 @@ export default function Settings() {
                     </Card>
                     <Card>
                         <CardContent>
-                            <Typography variant='h5' className='font-bold tracking-wider'>
+                            <Typography variant='h5' className='font-bold tracking-wider cursor-pointer' onClick={() => setSavedTopicsSettingsCollapsed(prev => !prev)}>
                                 Your Saved Topics
-                                <ExpandMore expanded={!savedTopicsSettingsCollapsed} onClick={() => setSavedTopicsSettingsCollapsed(prev => !prev)} />
+                                <ExpandMoreIcon className={`transform duration-500 ${getOrientation(!savedTopicsSettingsCollapsed)}`} />
                             </Typography>
                             <Collapse in={!savedTopicsSettingsCollapsed} unmountOnExit>
                                 <SavedTopicsSettings />
