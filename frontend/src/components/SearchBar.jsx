@@ -4,8 +4,10 @@ import Input from '@mui/material/Input';
 import IconButton from '@mui/material/IconButton';
 import Search from '@mui/icons-material/Search';
 import InputAdornment from '@mui/material/InputAdornment';
+import { useState } from 'react';
 
 export default function SearchBar({ displayedQuery, handleSearchQueryChange, handleSubmit }) {
+    const [ searchIconColor, setSearchIconColor ] = useState('default');
     return (
         <FormControl 
             component='form' 
@@ -20,10 +22,15 @@ export default function SearchBar({ displayedQuery, handleSearchQueryChange, han
                 value={displayedQuery} 
                 onChange={handleSearchQueryChange} 
                 fullWidth
+                autoFocus
+                inputProps={{
+                    onFocus: () => setSearchIconColor('primary'),
+                    onBlur: () => setSearchIconColor('default')
+                }}
                 startAdornment={
-                    <InputAdornment position="start">
+                    <InputAdornment position='start'>
                         <IconButton type='submit'>
-                            <Search />
+                            <Search color={searchIconColor} />
                         </IconButton>
                     </InputAdornment>
                 }
