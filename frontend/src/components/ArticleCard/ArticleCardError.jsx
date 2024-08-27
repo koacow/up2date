@@ -5,12 +5,10 @@ import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 
 export default function ArticleCardError() {
     return (
-        <Card>
+        <Card className='flex flex-col justify-center items-center'>
             <CardHeader
                 avatar={<WarningAmberIcon color='error' />}
-                title={<Typography variant='h6' component='h3'
-                color={'error'}
-            >
+                title={<Typography variant='h6' component='h3' color='error'>
                     Something went wrong when loading these articles. Try again later.
                 </Typography>}
             />

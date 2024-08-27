@@ -2,6 +2,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import Pagination from "@mui/material/Pagination";
+import Divider from "@mui/material/Divider";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setPageNumForTopic } from "../state/slices/topicsSlice";
@@ -39,7 +40,14 @@ export default function TopicCard({ topic }) {
             return (
                 <Stack spacing={4}>
                     {articles.map((article, index) => {
-                        return <ArticleCard key={index} article={article} />
+                        if (index === articles.length - 1) {
+                            return <ArticleCard key={index} article={article} />
+                        } else return (
+                            <>
+                                <ArticleCard key={index} article={article} />
+                                <Divider variant='middle' className="mx-5" />
+                            </>
+                        )
                     })}
                     <Pagination 
                         count={totalPages} 
@@ -58,13 +66,11 @@ export default function TopicCard({ topic }) {
             <Typography 
                 component='h1' 
                 variant='h1'
-                className='tracking-wider font-semibold text-center m-4 sticky'
+                className='tracking-wider font-semibold text-center m-4'
             >
                 {topicName}
             </Typography>
-            <Box>
-                {renderArticles()}
-            </Box>
+            {renderArticles()}
         </Box>
     )
 }

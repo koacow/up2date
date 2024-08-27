@@ -15,7 +15,7 @@ export default function ArticleCard({ article }) {
                     component='img' 
                     className='rounded-lg'
                 />
-                <aside className='flex-col my-2 hidden md:flex'>
+                <aside className='flex-col mt-2 hidden md:flex'>
                     <Typography variant='subtitle1'>
                         {`${article.author ? article.author : 'Unknown'}`}
                     </Typography>
