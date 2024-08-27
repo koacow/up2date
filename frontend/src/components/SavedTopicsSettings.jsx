@@ -10,6 +10,7 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemButton from '@mui/material/ListItemButton';
+import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Delete from '@mui/icons-material/Delete';
@@ -62,57 +63,65 @@ export default function SavedTopicsSettings () {
         }
     }
     return (
-        <Card>
-            <CardContent>
-                <CardHeader title='Your Saved Topics' />
-                <List>
-                    {
-                        savedTopics.length === 0 ? <ListItem>You have no saved topics.</ListItem> :
-                        displayedSavedTopics.map((savedTopic, index) => {
-                            return (
-                                <ListItem key={index}>
-                                    <ListItemButton>
-                                        <ListItemText primary={savedTopic.topic} />
-                                        <IconButton onClick={() => {
-                                            removeSavedTopic(savedTopic.id);
-                                        }}>
-                                            <Delete />
-                                        </IconButton>
-                                    </ListItemButton>
-                                </ListItem>
-                            )
-                        })
-                    }
-                </List>
-                <CardHeader title='Add a Topic' />
-                <List>
-                    {
-                        displayedUnsavedTopics.map((unsavedTopic, index) => {
-                            return (
-                                <ListItem key={index}>
-                                    <ListItemButton>
-                                        <ListItemText primary={unsavedTopic.topic} />
-                                        <IconButton onClick={() => {
-                                            addSavedTopic(unsavedTopic.id);
-                                        }}>
-                                            <Add />
-                                        </IconButton>
-                                    </ListItemButton>
-                                </ListItem>
-                            )
-                        })
-                    }
-                </List>
-                <CardActions>
-                    <Button 
-                        variant='contained' 
-                        onClick={confirmChanges}
-                        disabled={confirmButtonDisabled}
-                    >
-                        {confirmButtonLabel()}
-                    </Button>
-                </CardActions>
-            </CardContent>
-        </Card>
+        <>
+            <Typography variant='body1' className='font-extralight md:text-lg'>
+                Add or remove topics from your saved topics list.
+            </Typography>
+            <List>
+                {
+                    savedTopics.length === 0 ? <ListItem>You have no saved topics.</ListItem> :
+                    displayedSavedTopics.map((savedTopic, index) => {
+                        return (
+                            <ListItem key={index}>
+                                <ListItemButton>
+                                    <ListItemText 
+                                        primary={savedTopic.topic} 
+                                        primaryTypographyProps={{
+                                            className: 'font-semibold'
+                                        }} />
+                                    <IconButton onClick={() => {
+                                        removeSavedTopic(savedTopic.id);
+                                    }}>
+                                        <Delete />
+                                    </IconButton>
+                                </ListItemButton>
+                            </ListItem>
+                        )
+                    })
+                }
+            </List>
+            <Typography variant='h6' className='font-semibold'>Track A Topic</Typography>
+            <List>
+                {
+                    displayedUnsavedTopics.map((unsavedTopic, index) => {
+                        return (
+                            <ListItem key={index}>
+                                <ListItemButton>
+                                    <ListItemText 
+                                        primary={unsavedTopic.topic}
+                                        primaryTypographyProps={{
+                                            className: 'font-semibold'
+                                        }}
+                                    />
+                                    <IconButton onClick={() => {
+                                        addSavedTopic(unsavedTopic.id);
+                                    }}>
+                                        <Add />
+                                    </IconButton>
+                                </ListItemButton>
+                            </ListItem>
+                        )
+                    })
+                }
+            </List>
+            <Button 
+                variant='contained' 
+                onClick={confirmChanges}
+                disabled={confirmButtonDisabled}
+                className='mt-4 w-fit mx-auto rounded-md md:w-full md:rounded-lg'
+            >
+                {confirmButtonLabel()}
+            </Button>
+        </>
     )
 }

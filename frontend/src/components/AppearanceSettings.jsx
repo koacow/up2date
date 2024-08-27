@@ -2,11 +2,10 @@ import { updateSettingsAsync } from '../state/slices/settingsSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
 import Switch from '@mui/material/Switch';
-import Card from '@mui/material/Card';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormGroup from '@mui/material/FormGroup';
+import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
-import CardHeader from '@mui/material/CardHeader';
 
 export default function AppearanceSettings() {
     const settings = useSelector(state => state.settings.settings);
@@ -26,16 +25,12 @@ export default function AppearanceSettings() {
     }
 
     return (
-        <Card>
-            <CardHeader title='Appearance' />
-            <CardActions>
-                <FormGroup>
-                    <FormControlLabel
-                        control={<Switch checked={darkModeChecked} onChange={handleChange} />}
-                        label='Dark Mode'
-                    />
-                </FormGroup>
-            </CardActions>
-        </Card>
+        <FormGroup>
+            <FormControlLabel
+                label='Dark Mode'
+                labelPlacement='end'
+                control={<Switch checked={darkModeChecked} onChange={handleChange} />}
+            />
+        </FormGroup>
     )
 }
