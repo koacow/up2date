@@ -16,6 +16,8 @@ import Tooltip from '@mui/material/Tooltip';
 import Container from '@mui/material/Container';
 import MenuIcon from '@mui/icons-material/Menu';
 import Person from '@mui/icons-material/Person';
+import Login from '@mui/icons-material/Login';
+import Logout from '@mui/icons-material/Logout';
 import { logUserOut } from '../state/slices/sessionSlice';
 
 export default function NavBar() {
@@ -38,7 +40,24 @@ export default function NavBar() {
         if (sessionError) {
             return 'Error logging you out. Please try again.';
         }
-        return session ? 'Logout' : 'Login';
+        return session ? 'Log out' : 'Log in';
+    }
+
+    const getAuthIcon = () => {
+        if (sessionLoading || sessionError) {
+            return null;
+        } else if (session) {
+            return <Logout color='destroy.main' className='ml-1' />;
+        } else {
+            return <Login color='secondary.contrastText' className='ml-1' />;
+        }
+    }
+
+    const getAuthActionColor = () => {
+        if (sessionError) {
+            return 'error';
+        }
+        return session ? 'destroy.main' : 'primary'
     }
 
     const handleAuthActionClick = () => {
@@ -79,7 +98,7 @@ export default function NavBar() {
                     variant="h6"
                     noWrap
                     className="flex-grow font-bold tracking-widest md:flex hidden"
-                    color='white'
+                    color='primary.contrastText'
                 >
                     <Link href="/about" className='no-underline text-inherit'>Up2Date</Link> 
                 </Typography>
@@ -91,7 +110,7 @@ export default function NavBar() {
                     aria-controls="menu-appbar"
                     aria-haspopup="true"
                     onClick={handleOpenNavMenu}
-                    color="inherit"
+                    color="secondary"
                     >
                         <MenuIcon />
                     </IconButton>
@@ -116,7 +135,7 @@ export default function NavBar() {
                             key={page} 
                             onClick={handleCloseNavMenu}
                         >
-                        <Typography className='text-center'>
+                        <Typography className='text-center' color='primary.light'>
                             <RouterLink className='no-underline text-inherit' to={`/${pagesToLinks[page]}`}>{page}</RouterLink>
                         </Typography>
                         </MenuItem>
@@ -128,7 +147,7 @@ export default function NavBar() {
                     noWrap
                     className="mr-2 flex flex-grow font-bold tracking-widest md:hidden"
                 >
-                    <RouterLink to="/about" className='no-underline text-inherit'>Up2Date</RouterLink>
+                    <RouterLink to="/about" className='no-underline'>Up2Date</RouterLink>
                 </Typography>
                 <Box className='flex-grow hidden md:flex'>
                     {Object.keys(pagesToLinks).map((page) => (
@@ -136,7 +155,9 @@ export default function NavBar() {
                         key={page}
                         onClick={handleCloseNavMenu}
                     >
-                        <RouterLink className='no-underline text-inherit' to={`/${pagesToLinks[page]}`}>{page}</RouterLink>
+                        <Typography className='text-center' color='primary.contrastText'>
+                            <RouterLink className='no-underline text-inherit' to={`/${pagesToLinks[page]}`}>{page}</RouterLink>
+                        </Typography>
                     </Button>
                     ))}
                 </Box>
@@ -144,8 +165,8 @@ export default function NavBar() {
                 <Box className='flex-grow-0'>
                     <Tooltip title="Open settings">
                         <IconButton onClick={handleOpenUserMenu} className='p-0'>
-                            <Avatar alt="Settings menu icon" >
-                                <Person />
+                            <Avatar alt="Settings menu icon" sx={{ bgcolor: 'secondary.main' }} >
+                                <Person color='secondary.contrastText' />
                             </Avatar>   
                         </IconButton>
                     </Tooltip>
@@ -168,13 +189,13 @@ export default function NavBar() {
                     {Object.keys(settingsToLinks).map((setting) => (
                         <MenuItem key={setting} onClick={handleCloseUserMenu}>
                             <Typography className='text-center'>
-                                <RouterLink className='no-underline ' to={settingsToLinks[setting]} >{setting}</RouterLink>
+                                <RouterLink className='no-underline text-inherit' to={settingsToLinks[setting]} >{setting}</RouterLink>
                             </Typography>
                         </MenuItem>
                     ))}
-                        <MenuItem key='AuthAction' onClick={handleAuthActionClick}>
-                            <Typography className='text-center'>
-                                {getAuthActionFromSessionStatus()}
+                        <MenuItem key='AuthAction' onClick={handleAuthActionClick} disabled={sessionLoading}>
+                            <Typography className='text-center flex items-center' color={getAuthActionColor()}>
+                                {getAuthActionFromSessionStatus()} {getAuthIcon()}
                             </Typography>
                         </MenuItem>
                     </Menu>

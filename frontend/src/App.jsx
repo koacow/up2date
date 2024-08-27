@@ -47,6 +47,10 @@ function App() {
           },
           info: {
               main: "#246bfd"
+          },
+          destroy: {
+            main: '#ff1507',
+            contrastText: '#f2f9fb'
           }
       },
       typography: {
