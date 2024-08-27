@@ -35,6 +35,7 @@ export default function StockPreviewCard({ ticker, data, error, action }) {
     }
 
     const ActionIcon = action === 'add' ? AddIcon : RemoveIcon;
+    const actionIconColor = action === 'add' ? 'primary' : 'secondary';
     const tooltipText = action === 'add' ? 'Add to Watchlist' : 'Remove from Watchlist';
 
     if (error) {
@@ -48,14 +49,14 @@ export default function StockPreviewCard({ ticker, data, error, action }) {
     } else {
         const { shortName, ask, regularMarketChange, regularMarketChangePercent } = data; 
         const changeIcon = (change) => change > 0 ? <ArrowDropUp /> : <ArrowDropDown />;
-        const changeColor = (change) => change > 0 ? 'text-green-500' : 'text-red-500';
+        const changeColor = (change) => change > 0 ? 'success.main' : 'destroy.main';
 
         return (
-            <Card className='relative'>
+            <Card className='relative shadow-md'>
                 <CardActions className='absolute right-0 top-0'>
                     <Tooltip title={tooltipText}>
                         <span>
-                            <IconButton onClick={handleAction} disabled={!session}>
+                            <IconButton onClick={handleAction} disabled={!session} color={actionIconColor}>
                                 <ActionIcon />
                             </IconButton>
                         </span>
@@ -76,10 +77,10 @@ export default function StockPreviewCard({ ticker, data, error, action }) {
                     <Typography variant='h6' component='h6'>
                         {currencyFormatter(ask)}
                     </Typography>
-                    <Typography variant='h6' component='h6' className={changeColor(regularMarketChange)}>
+                    <Typography variant='h6' component='h6' color={changeColor(regularMarketChange)}>
                         {changeIcon(regularMarketChange)} {`${currencyFormatter(regularMarketChange)}`}
                     </Typography>
-                    <Typography variant='h6' component='h6' className={changeColor(regularMarketChangePercent)}>
+                    <Typography variant='h6' component='h6' color={changeColor(regularMarketChangePercent)}>
                         {changeIcon(regularMarketChangePercent)} {`${regularMarketChangePercent}%`}
                     </Typography>
                 </CardContent>
