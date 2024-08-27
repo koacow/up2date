@@ -21,58 +21,71 @@ const rootElement = document.getElementById('root');
 
 function App() {
   const darkMode = useSelector(state => state.settings.settings.display.darkMode);
-  const getDesignTokens = () => ({
-    palette: {
-      mode: darkMode ? 'dark' : 'light',
-      ...(darkMode === false
-        ? {
-          // palette values for light mode
-          primary: {
-            main: '#1976d2',
-          },
-          secondary: {
-            main: '#dc004e',
-          },
-        }
-        : {
-          // palette values for dark mode
-          primary: {
-            main: '#90caf9',
-          },
-          secondary: {
-            main: '#f48fb1',
-          },
-        }),
-    },
-    typography: {
-      fontFamily: ['Poppins', 'sans-serif'].join(','),
-    },
-  });
-
   const theme = createTheme({
-    ...getDesignTokens(),
-    components: {
-      MuiPopover: {
-        defaultProps: {
-          container: rootElement,
-        }
+      mode: darkMode ? 'dark' : 'light',
+      palette: {
+          primary: {
+              main: "#8e4ccf",
+              light: "#a46fd8",
+              dark: "#633590",
+              contrastText: "#f2f9fb"
+          },
+          secondary: {
+              main: "#cf8e4c",
+              light: "#d8a46f",
+              dark: "#906335",
+              contrastText: "#0d0d0d"
+          },
+          error: {
+              main: "#ff1507"
+          },
+          warning: {
+              main: "#ff8000"
+          },
+          success: {
+              main: "#00ff00"
+          },
+          info: {
+              main: "#246bfd"
+          }
       },
-      MuiPopper: {
-        defaultProps: {
-          container: rootElement,
-        },
+      typography: {
+          fontFamily: "Poppins, sans-serif",
       },
-      MuiDialog: {
-        defaultProps: {
-          container: rootElement,
-        },
-      },
-      MuiModal: {
-        defaultProps: {
-          container: rootElement,
-        },
-      },  
-    }
+      components: {
+          MuiSwitch: {
+              defaultProps: {
+                  color: "info"
+              }
+          },
+          MuiPopover: {
+              defaultProps: {
+                  container: rootElement
+              }
+          },
+          MuiCard: {
+            styleOverrides: {
+              root: {
+                boxShadow: 'none',
+              }
+            }
+          },
+          MuiPopper: {
+              defaultProps: {
+                  container: rootElement
+              }
+          },
+          MuiDialog: {
+              defaultProps: {
+                  container: rootElement
+              }
+          },
+          MuiModal: {
+              defaultProps: {
+                  container: rootElement
+              }
+          }
+      }
   });
 
   const AppRouter = createBrowserRouter(createRoutesFromElements([
