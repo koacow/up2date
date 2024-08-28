@@ -7,6 +7,7 @@ import Link from '@mui/material/Link';
 import { dateFormatter } from '../../utils/formatters';
 
 export default function ArticleCard({ article }) {
+    if (article.title === '[Removed]') return null;
     return (
         <Card className='flex flex-col md:flex-row rounded-md'>
             <CardContent>
