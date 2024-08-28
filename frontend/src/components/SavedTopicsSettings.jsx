@@ -5,25 +5,21 @@ import { useState, useEffect } from 'react';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
-import ListItemButton from '@mui/material/ListItemButton';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import Delete from '@mui/icons-material/Delete';
-import Add from '@mui/icons-material/Add';
 
 export default function SavedTopicsSettings () {
     const savedTopics = useSelector(state => state.topics.topics);
     const updateLoading = useSelector(state => state.topics.updateTopicsLoading);
     const updateError = useSelector(state => state.topics.updateTopicsError);
     const [displayedSavedTopics, setDisplayedSavedTopics] = useState([]);
-    const [displayedUnsavedTopics, setDisplayedUnsavedTopics] = useState([]);
+    const [allTopics, setAllTopics] = useState([]);
     const dispatch = useDispatch();
 
     useEffect(() => {
         setDisplayedSavedTopics(savedTopics);
         getAllTopics().then(topics => {
-            setDisplayedUnsavedTopics(topics.filter(topic => !savedTopics.some(savedTopic => savedTopic.id === topic.id)));
+            setAllTopics(topics);
         });
     }, []);
 
@@ -31,12 +27,10 @@ export default function SavedTopicsSettings () {
     const removeSavedTopic = (id) => {
         const removedTopics = displayedSavedTopics.find(savedTopic => savedTopic.id === id);
         setDisplayedSavedTopics(prev => prev.filter(savedTopic => savedTopic.id !== id));
-        setDisplayedUnsavedTopics(prev => [...prev, removedTopics]);
     }
 
     const addSavedTopic = (id) => {
-        const addedTopic = displayedUnsavedTopics.find(unsavedTopic => unsavedTopic.id === id);
-        setDisplayedUnsavedTopics(prev => prev.filter(unsavedTopic => unsavedTopic.id !== id));
+        const addedTopic = allTopics.find(unsavedTopic => unsavedTopic.id === id);
         setDisplayedSavedTopics(prev => [...prev, addedTopic]);
     }
 
@@ -45,6 +39,14 @@ export default function SavedTopicsSettings () {
         const res = await dispatch(updateUserSavedTopicsThunk(topicIds));
         if (res.meta.requestStatus === 'fulfilled') {
             dispatch(fetchUserSavedTopics());
+        }
+    }
+
+    const getItemStyle = (isSaved) => {
+        return {
+            border: '1px solid',
+            borderColor: isSaved ? '' : 'primary.main',
+            backgroundColor: isSaved ? 'secondary.main' : '',
         }
     }
 
@@ -63,48 +65,18 @@ export default function SavedTopicsSettings () {
             <Typography variant='body1' className='font-extralight md:text-lg'>
                 Add or remove topics from your saved topics list.
             </Typography>
-            <List>
+            <List className='flex flex-wrap items-center justify-center'>
                 {
-                    savedTopics.length === 0 ? <ListItem>You have no saved topics.</ListItem> :
-                    displayedSavedTopics.map((savedTopic, index) => {
+                    allTopics.map(topic => {
+                        const isSaved = displayedSavedTopics.some(savedTopic => savedTopic.id === topic.id);
                         return (
-                            <ListItem key={index}>
-                                <ListItemButton>
-                                    <ListItemText 
-                                        primary={savedTopic.topic} 
-                                        primaryTypographyProps={{
-                                            className: 'font-semibold'
-                                        }} />
-                                    <IconButton onClick={() => {
-                                        removeSavedTopic(savedTopic.id);
-                                    }}>
-                                        <Delete />
-                                    </IconButton>
-                                </ListItemButton>
-                            </ListItem>
-                        )
-                    })
-                }
-            </List>
-            <Typography variant='h6' className='font-semibold'>Track A Topic</Typography>
-            <List>
-                {
-                    displayedUnsavedTopics.map((unsavedTopic, index) => {
-                        return (
-                            <ListItem key={index}>
-                                <ListItemButton>
-                                    <ListItemText 
-                                        primary={unsavedTopic.topic}
-                                        primaryTypographyProps={{
-                                            className: 'font-semibold'
-                                        }}
-                                    />
-                                    <IconButton onClick={() => {
-                                        addSavedTopic(unsavedTopic.id);
-                                    }}>
-                                        <Add />
-                                    </IconButton>
-                                </ListItemButton>
+                            <ListItem 
+                                sx={{...getItemStyle(isSaved)}}
+                                className='rounded-full text-center cursor-pointer m-1 w-min text-nowrap'
+                                key={topic.id}
+                                onClick={() => isSaved ? removeSavedTopic(topic.id) : addSavedTopic(topic.id)}
+                            >
+                                <ListItemText primaryTypographyProps={{ className: 'font-semibold' }} primary={topic.topic} />
                             </ListItem>
                         )
                     })
@@ -114,7 +86,7 @@ export default function SavedTopicsSettings () {
                 variant='contained' 
                 onClick={confirmChanges}
                 disabled={confirmButtonDisabled}
-                className='mt-4 w-fit mx-auto rounded-md md:w-full md:rounded-lg'
+                className='mt-4 w-full mx-auto rounded-md md:rounded-lg'
             >
                 {confirmButtonLabel()}
             </Button>
