@@ -6,20 +6,24 @@ import { currencyFormatter } from "../../utils/formatters";
 const dataKeys = ['open', 'high', 'low', 'close'];
 const labels = ['Open', 'High', 'Low', 'Close'];
 export default function StockChart({ data, loading, error, range }){
-    const timeFormatter = (date) => {
+    const timeFormatter = (date, context) => {
         if (!date) return 'No data';
-        if (range === '1D') {
-            const hour = new Date(date).getHours() > 12 ? new Date(date).getHours() - 12 : new Date(date).getHours();
-            const minute = new Date(date).getMinutes();
-            const minuteString = minute < 10 ? `0${minute}` : minute;
-            const ampm = new Date(date).getHours() >= 12 ? 'PM' : 'AM';
+
+        const hour = new Date(date).getHours() > 12 ? new Date(date).getHours() - 12 : new Date(date).getHours();
+        const minute = new Date(date).getMinutes();
+        const minuteString = minute < 10 ? `0${minute}` : minute;
+        const ampm = new Date(date).getHours() >= 12 ? 'PM' : 'AM';
+
+        if (range === '1D' && context.location === 'tooltip') {
+            return `${new Date(date).toLocaleDateString()} ${hour}:${minuteString} ${ampm}`;
+        } else if (range === '1D') {
             return `${hour}:${minuteString} ${ampm}`;
+        } else if (context.location === 'tooltip') {
+            return `${new Date(date).toLocaleDateString()} ${hour}:${minuteString} ${ampm}`;
         } else {
             return new Date(date).toLocaleDateString();
         }
     }
-    
-
 
     if (error) {
         return (
@@ -48,6 +52,7 @@ export default function StockChart({ data, loading, error, range }){
                         valueFormatter: currencyFormatter,
                         showMark: false,
                         curve: 'linear',
+                        connectNulls: false,
                     }
                 })
             }
@@ -56,7 +61,6 @@ export default function StockChart({ data, loading, error, range }){
                 y: 'line',
             }}
             grid={{ horizontal: true }}
-            height={700}
             loading={loading}
         />
     )

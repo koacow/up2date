@@ -44,7 +44,7 @@ export default function StockQuote ({ data, loading, error }){
             </Grid>
         )
     } else return (
-        <Grid container rowGap={2} columnGap={4}>
+        <Grid container rowGap={2} columnSpacing={2}>
               <StockQuoteFigure 
                 label="Previous Close" 
                 value={currencyFormatter(data.regularMarketPreviousClose)} 
