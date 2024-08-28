@@ -52,7 +52,7 @@ export default function StockPreviewCard({ ticker, data, error, action }) {
         const changeColor = (change) => change > 0 ? 'success.main' : 'destroy.main';
 
         return (
-            <Card className='relative shadow-md w-[200px] h-[200px] md:w-[250px] md:h-[250px] lg:w-[300px] lg:h-[300px] '>
+            <Card className='relative shadow-md aspect-square '>
                 <CardActions className='absolute right-0 top-0'>
                     <Tooltip title={tooltipText}>
                         <span>
@@ -68,7 +68,7 @@ export default function StockPreviewCard({ ticker, data, error, action }) {
                         className: 'cursor-pointer font-semibold text-md md:text-lg lg:text-2xl'
                     }}
                     subheaderTypographyProps={{
-                        className: 'cursor-pointer text-xs md:text-sm lg:text-xl'
+                        className: 'cursor-pointer text-nowrap text-xs md:text-sm lg:text-md'
                     }}
                     subheader={shortName} 
                     onClick={goToStockPage}

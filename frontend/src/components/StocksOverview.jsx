@@ -38,7 +38,7 @@ export default function StocksOverview() {
             {
                 overviewData && Object.keys(overviewData).map((region, index) => {
                     return (
-                        <Box key={index} className='m-5 flex flex-col space-y-5 w-90-svw md:w-80-svw lg:w-70-svw'>
+                        <Box key={index} className='m-5 flex flex-col space-y-5 w-4/5 md:w-3/5'>
                             <Typography variant='h4' component='h4' className='font-extrabold'>{region}</Typography>
                             <Divider variant='middle' />
                             <Grid container rowGap={1} columnSpacing={1}>
