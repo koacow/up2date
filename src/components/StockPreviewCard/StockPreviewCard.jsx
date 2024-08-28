@@ -47,7 +47,7 @@ export default function StockPreviewCard({ ticker, data, error, action }) {
             <StockPreviewCardLoading />
         )
     } else {
-        const { shortName, ask, regularMarketChange, regularMarketChangePercent } = data; 
+        const { shortName, ask, regularMarketPreviousClose, regularMarketChange, regularMarketChangePercent } = data; 
         const changeIcon = (change) => change > 0 ? <ArrowDropUp /> : <ArrowDropDown />;
         const changeColor = (change) => change > 0 ? 'success.main' : 'destroy.main';
 
@@ -75,7 +75,7 @@ export default function StockPreviewCard({ ticker, data, error, action }) {
                 />
                 <CardContent>
                     <Typography variant='h6' component='h6' color='primary' className='text-md md:text-lg lg:text-2xl'>
-                        {currencyFormatter(ask)}
+                        {ask ? currencyFormatter(ask) : currencyFormatter(regularMarketPreviousClose)}
                     </Typography>
                     <Typography variant='h6' component='h6' color={changeColor(regularMarketChange)} className='text-sm md:text-md lg:text-xl'>
                         {changeIcon(regularMarketChange)} {`${currencyFormatter(regularMarketChange)}`}
