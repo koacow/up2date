@@ -50,7 +50,7 @@ export default function StocksWatchList() {
         } 
         else if (session && watchList.length) {
             return (
-                    <Grid container rowGap={1} columnSpacing={1} >
+                    <Grid container rowGap={1} columnSpacing={1}className >
                         {
                             watchListData.map((stock, index) => {
                                 return (
