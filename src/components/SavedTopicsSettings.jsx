@@ -10,6 +10,8 @@ import Button from '@mui/material/Button';
 
 export default function SavedTopicsSettings () {
     const savedTopics = useSelector(state => state.topics.topics);
+    const savedTopicsLoading = useSelector(state => state.topics.savedTopicsLoading);
+    const savedTopicsError = useSelector(state => state.topics.savedTopicsError);
     const updateLoading = useSelector(state => state.topics.updateTopicsLoading);
     const updateError = useSelector(state => state.topics.updateTopicsError);
     const [displayedSavedTopics, setDisplayedSavedTopics] = useState([]);
@@ -25,7 +27,6 @@ export default function SavedTopicsSettings () {
 
 
     const removeSavedTopic = (id) => {
-        const removedTopics = displayedSavedTopics.find(savedTopic => savedTopic.id === id);
         setDisplayedSavedTopics(prev => prev.filter(savedTopic => savedTopic.id !== id));
     }
 
@@ -50,7 +51,7 @@ export default function SavedTopicsSettings () {
         }
     }
 
-    const confirmButtonDisabled = updateLoading || updateError;
+    const confirmButtonDisabled = savedTopicsLoading || savedTopicsError || updateLoading || updateError;
     const confirmButtonLabel = () => {
         if (updateLoading) {
             return 'Updating your topics...';

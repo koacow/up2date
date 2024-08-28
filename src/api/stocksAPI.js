@@ -1,4 +1,5 @@
-const ENDPOINT = 'http://localhost:4000/api/stocks';
+const BACKEND_ENDPOINT = import.meta.env.VITE_BACKEND_ENDPOINT;
+const ENDPOINT = `${BACKEND_ENDPOINT}/stocks`;
 
 export const searchStocksByQuery = async (query) => {
     const response = await fetch(`${ENDPOINT}/search/?query=${encodeURIComponent(query)}`);

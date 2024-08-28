@@ -1,4 +1,5 @@
-const ENDPOINT = 'http://localhost:4000/api/account';
+const BACKEND_ENDPOINT = import.meta.env.VITE_BACKEND_ENDPOINT;
+const ENDPOINT = `${BACKEND_ENDPOINT}/account`;
 
 export const getUserSettings = async (user_id) => {
     const response = await fetch(`${ENDPOINT}/settings?user_id=${encodeURIComponent(user_id)}`);
