@@ -52,7 +52,7 @@ export default function StockPreviewCard({ ticker, data, error, action }) {
         const changeColor = (change) => change > 0 ? 'success.main' : 'destroy.main';
 
         return (
-            <Card className='relative shadow-md aspect-square '>
+            <Card className='relative shadow-md aspect-auto '>
                 <CardActions className='absolute right-0 top-0'>
                     <Tooltip title={tooltipText}>
                         <span>

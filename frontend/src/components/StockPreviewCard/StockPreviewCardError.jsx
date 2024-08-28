@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography';
 
 export default function StockPreviewCardError({ ticker }) {
     return (
-        <Card>
+        <Card className='flex flex-col aspect-auto'>
             <CardHeader 
                 title={ticker} 
                 titleTypographyProps={{ className: 'font-semibold' }}
