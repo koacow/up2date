@@ -4,6 +4,7 @@ import { getStockQuoteByTicker } from '../../api/stocksAPI';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import Divider from '@mui/material/Divider';
 import StockPreviewCard from '../StockPreviewCard/StockPreviewCard';
 import StocksWatchListLoading from './StocksWatchListLoading';
 import StocksWatchListError from './StocksWatchListError';
@@ -49,11 +50,11 @@ export default function StocksWatchList() {
         } 
         else if (session && watchList.length) {
             return (
-                    <Grid container spacing={2}>
+                    <Grid container rowGap={1} columnSpacing={1}>
                         {
                             watchListData.map((stock, index) => {
                                 return (
-                                    <Grid item xs={6} md={3} key={index}>
+                                    <Grid item xs={6} md={4} lg={3} key={index}>
                                         <StockPreviewCard ticker={stock.ticker} data={stock.data} action={'remove'} error={watchListError} />
                                     </Grid>
                                 )
@@ -70,18 +71,16 @@ export default function StocksWatchList() {
 
 
     return (
-        <>
-            <Box className='m-5 space-y-5'>
-                <Typography 
-                    variant='h4' 
-                    component='h4'
-                    className='font-extrabold'
-                >
-                        Watch List
-                </Typography>
-                <hr />
-                {render()}
-            </Box>
-        </>
+        <Box className='m-5 flex flex-col space-y-5 w-90-svw md:w-80-svw lg:w-70-svw'>
+            <Typography 
+                variant='h4' 
+                component='h4'
+                className='font-extrabold'
+            >
+                    Watch List
+            </Typography>
+            <Divider variant='middle' />
+            {render()}
+        </Box>
     )
 }

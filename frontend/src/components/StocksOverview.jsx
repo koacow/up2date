@@ -41,11 +41,11 @@ export default function StocksOverview() {
                         <Box key={index} className='m-5 flex flex-col space-y-5 w-90-svw md:w-80-svw lg:w-70-svw'>
                             <Typography variant='h4' component='h4' className='font-extrabold'>{region}</Typography>
                             <Divider variant='middle' />
-                            <Grid container rowGap={1} columnGap={1}>
+                            <Grid container rowGap={1} columnSpacing={1}>
                                 {
                                     overviewData[region].map((stock, index) => {
                                         return (
-                                            <Grid item xs={5} md={4} lg={3} key={index}>
+                                            <Grid item xs={6} md={4} lg={3} key={index}>
                                                 <StockPreviewCard ticker={stock.ticker} data={stock.data} error={stock.error} action={'add'} />
                                             </Grid>
                                         )

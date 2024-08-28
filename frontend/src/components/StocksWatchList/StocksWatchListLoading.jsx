@@ -3,12 +3,12 @@ import StockPreviewCard from '../StockPreviewCard/StockPreviewCard';
 
 export default function StocksWatchListLoading() {
     return (
-        <Grid container spacing={2}>
+        <Grid container rowGap={1} columnSpacing={1}>
             {
-                Array(4).fill(null).map((_, index) => {
+                [1,2,3,4].map((_, index) => {
                     return (
-                        <Grid item sx={3} key={index}>
-                            <StockPreviewCard />
+                        <Grid item sx={6} md={4} lg={3} key={index}>
+                            <StockPreviewCard data={null} />
                         </Grid>
                     )
                 })
