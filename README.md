@@ -8,7 +8,7 @@ Frontend built with **React** ⚛️, **Material UI** 🔬, **Tailwind**💨. Ba
 
 News collected from the [News API](https://newsapi.org/)
 
-Stocks featuree powered by [AlphaVantage](https://www.alphavantage.co/)
+Stocks featuree powered by [Yahoo Finance](https://finance.yahoo.com/)
 
 ## Features
 
@@ -22,6 +22,7 @@ Stocks featuree powered by [AlphaVantage](https://www.alphavantage.co/)
 
 ## Future updates
 
+- Collect articles relating to a certain topics via specific keywords.
 - Allow users to save articles for later reading.
 - Comments/discussion features on each article.
 - Integration with additional news sources for a wider range of articles.
