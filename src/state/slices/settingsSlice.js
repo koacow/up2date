@@ -69,6 +69,9 @@ const settingsSlice = createSlice({
     reducers: {
         resetToDefaultSettings(state) {
             state.settings = initialState.settings;
+        },
+        setDarkMode(state, action) {
+            state.settings.display.darkMode = action.payload;
         }
     },
     // Async reducers assume that the user is already logged in
@@ -127,5 +130,5 @@ const settingsSlice = createSlice({
 });
 
 const { actions, reducer } = settingsSlice;
-export const { resetToDefaultSettings } = actions;
+export const { resetToDefaultSettings, setDarkMode } = actions;
 export default reducer;

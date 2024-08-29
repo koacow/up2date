@@ -10,6 +10,8 @@ export default defineConfig({
       '@mui/x-charts/LineChart', 
       '@mui/icons-material/ArrowDropUp',
       '@mui/icons-material/ArrowDropDown',
+      '@mui/icons-material/LightMode',
+      '@mui/icons-material/DarkModeOutlined',
     ]
   }
 })

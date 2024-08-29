@@ -7,7 +7,6 @@ import Collapse from '@mui/material/Collapse';
 import Box from '@mui/material/Box';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import SavedTopicsSettings from '../components/SavedTopicsSettings';
-import AppearanceSettings from '../components/AppearanceSettings';
 import { useState } from 'react';
 
 export default function Settings() {
@@ -23,17 +22,6 @@ export default function Settings() {
         if (session) {
             return (
                 <Box className='w-full md:w-3/5 md:mx-auto space-y-5 my-5'>
-                    <Card>
-                        <CardContent>
-                            <Typography variant='h4' component='h1' className='font-bold tracking-wider cursor-pointer flex items-center' onClick={() => setAppearanceSettingsCollapsed(prev => !prev)}>
-                                Appearance
-                                <ExpandMoreIcon className={`transform duration-500 ${getOrientation(!appearanceSettingsCollapsed)}`} />
-                            </Typography>
-                            <Collapse in={!appearanceSettingsCollapsed} unmountOnExit>
-                                <AppearanceSettings />
-                            </Collapse>
-                        </CardContent>
-                    </Card>
                     <Card>
                         <CardContent>
                             <Typography variant='h4' component='h1' className='font-bold tracking-wider cursor-pointer' onClick={() => setSavedTopicsSettingsCollapsed(prev => !prev)}>

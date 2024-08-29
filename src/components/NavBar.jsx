@@ -18,6 +18,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Person from '@mui/icons-material/Person';
 import Login from '@mui/icons-material/Login';
 import Logout from '@mui/icons-material/Logout';
+import DarkModeToggle from './DarkModeToggle';
 import { logUserOut } from '../state/slices/sessionSlice';
 
 export default function NavBar() {
@@ -135,9 +136,11 @@ export default function NavBar() {
                             key={page} 
                             onClick={handleCloseNavMenu}
                         >
-                        <Typography className='text-center' color='primary.light'>
-                            <RouterLink className='no-underline text-inherit' to={`/${pagesToLinks[page]}`}>{page}</RouterLink>
-                        </Typography>
+                            <RouterLink className='no-underline' to={`/${pagesToLinks[page]}`}>
+                                <Typography className='text-center' color='primary.contrastText'>
+                                    {page}
+                                </Typography>
+                            </RouterLink>
                         </MenuItem>
                     ))}
                     </Menu>
@@ -156,14 +159,17 @@ export default function NavBar() {
                         key={page}
                         onClick={handleCloseNavMenu}
                     >
-                        <Typography className='text-center' color='primary.contrastText'>
-                            <RouterLink className='no-underline text-inherit' to={`/${pagesToLinks[page]}`}>{page}</RouterLink>
-                        </Typography>
+                        <RouterLink className='no-underline' to={`/${pagesToLinks[page]}`}>
+                            <Typography className='text-center' color='primary.contrastText'>
+                                {page}
+                            </Typography>
+                        </RouterLink>
                     </Button>
                     ))}
                 </Box>
 
-                <Box className='flex-grow-0'>
+                <Box className='flex-grow-0 space-x-4'>
+                    <DarkModeToggle />
                     <Tooltip title="Open settings">
                         <IconButton onClick={handleOpenUserMenu} className='p-0'>
                             <Avatar alt="Settings menu icon" sx={{ bgcolor: 'secondary.main' }} >
