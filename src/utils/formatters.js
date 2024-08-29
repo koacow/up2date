@@ -1,13 +1,14 @@
-export const currencyFormatter = (value) => {
+export const currencyFormatter = (value, currency='USD') => {
     if (value === null) return '$0.00';
-    const string = value.toFixed(2).toString();
-    const [ dollars, cents ] = string.split('.');
-    const dollarsString = dollars.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    return cents ? `$${dollarsString}.${cents}` : `$${dollarsString}:00`;
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency }).format(value);
 }
 
 export const dateFormatter = (value) => {
     if (value === null) return;
     const date = new Date(Date.parse(value));
     return date.toDateString();
+}
+
+export const currencyToSymbol = (currency) => {
+    
 }

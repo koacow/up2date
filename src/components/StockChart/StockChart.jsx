@@ -49,7 +49,7 @@ export default function StockChart({ data, loading, error, range }){
                     return {
                         dataKey: key,
                         label: labels[index],
-                        valueFormatter: currencyFormatter,
+                        valueFormatter: (value) => currencyFormatter(value, data.currency),
                         showMark: false,
                         curve: 'linear',
                         connectNulls: false,

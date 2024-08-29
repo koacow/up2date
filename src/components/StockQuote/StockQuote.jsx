@@ -47,7 +47,7 @@ export default function StockQuote ({ data, loading, error }){
         <Grid container rowGap={2} columnSpacing={2}>
               <StockQuoteFigure 
                 label="Previous Close" 
-                value={currencyFormatter(data.regularMarketPreviousClose)} 
+                value={currencyFormatter(data.regularMarketPreviousClose, data.currency)} 
               />
               <StockQuoteFigure 
                 label="Regular Market Volume" 
@@ -55,15 +55,15 @@ export default function StockQuote ({ data, loading, error }){
               />
               <StockQuoteFigure 
                 label="52 Week Range" 
-                value={`${currencyFormatter(data.fiftyTwoWeekRange.low)} - ${currencyFormatter(data.fiftyTwoWeekRange.high)}`} 
+                value={`${currencyFormatter(data.fiftyTwoWeekRange.low, data.currency)} - ${currencyFormatter(data.fiftyTwoWeekRange.high, data.currency)}`} 
               />
               <StockQuoteFigure 
                 label="Open" 
-                value={currencyFormatter(data.regularMarketOpen)} 
+                value={currencyFormatter(data.regularMarketOpen, data.currency)} 
               />
               <StockQuoteFigure 
                 label="Day's Range" 
-                value={`${currencyFormatter(data.regularMarketDayRange.low)} - ${currencyFormatter(data.regularMarketDayRange.high)}`} 
+                value={`${currencyFormatter(data.regularMarketDayRange.low, data.currency)} - ${currencyFormatter(data.regularMarketDayRange.high, data.currency)}`} 
               />
               <StockQuoteFigure 
                 label="Avg. 3mo. Volume" 

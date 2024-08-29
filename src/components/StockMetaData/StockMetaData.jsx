@@ -8,7 +8,7 @@ export default function StockMetaData ({ metaData }) {
                 {metaData.shortName}
             </Typography>
             <Typography variant='h4' component='h1' className='font-light tracking-wider' color='primary'>
-                {currencyFormatter(metaData.regularMarketPrice)}
+                {currencyFormatter(metaData.regularMarketPrice, metaData.currency)}
             </Typography>
         </>
     )
