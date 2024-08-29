@@ -43,7 +43,7 @@ export default function DarkModeToggle() {
     }
 
     return (
-        <Tooltip title='Toggle dark mode'>
+        <Tooltip title='Toggle dark mode'>  
             <IconButton disabled={disabled} onClick={toggleDarkMode}>
                 <Typography className='hidden'>
                     Toggle dark mode
