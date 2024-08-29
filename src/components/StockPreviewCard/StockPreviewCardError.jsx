@@ -8,10 +8,14 @@ export default function StockPreviewCardError({ ticker }) {
         <Card className='flex flex-col aspect-auto'>
             <CardHeader 
                 title={ticker} 
-                titleTypographyProps={{ className: 'font-semibold' }}
+                titleTypographyProps={{ 
+                    className: 'font-semibold',
+                    variant: 'h5',
+                    component: 'h2'
+                }}
             />
             <CardContent>
-                <Typography variant='body1' component='h6' >
+                <Typography variant='h6' component='h3' >
                     Something went wrong while fetching this stock's data.
                 </Typography>
             </CardContent>

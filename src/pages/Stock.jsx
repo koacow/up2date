@@ -82,7 +82,7 @@ export default function Stock(){
     if (chartError) {
         return (
             <Box className='mx-auto lg:w-4/5 w-full p-5' >
-                <Typography variant='h6' component='h2' className='font-light tracking-wider'>
+                <Typography variant='h5' component='h2' className='font-light tracking-wider'>
                     {ticker}
                 </Typography>
                 <Typography variant='h4' component='h1' color='error' className='flex flex-col justify-center items-center text-center md:block' >
@@ -94,7 +94,7 @@ export default function Stock(){
     } else {
         return (
         <Box className='md:mx-auto lg:w-4/5 w-screen h-[400px] md:h-[700px] lg:h-[1000px] p-5' >
-            <Typography variant='h6' component='h2' className='font-light tracking-wider'>
+            <Typography variant='h5' component='h2' className='font-light tracking-wider'>
                 {ticker}
             </Typography>
             {

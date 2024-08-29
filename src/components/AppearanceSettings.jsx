@@ -4,8 +4,6 @@ import { useState } from 'react';
 import Switch from '@mui/material/Switch';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormGroup from '@mui/material/FormGroup';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
 
 export default function AppearanceSettings() {
     const settings = useSelector(state => state.settings.settings);
@@ -29,6 +27,12 @@ export default function AppearanceSettings() {
             <FormControlLabel
                 label='Dark Mode'
                 labelPlacement='end'
+                slotProps={{
+                    typography: {
+                        variant: 'body1',
+                        component: 'h2',
+                    }
+                }}
                 control={<Switch checked={darkModeChecked} onChange={handleChange} />}
             />
         </FormGroup>

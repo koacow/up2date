@@ -20,7 +20,7 @@ export default function ArticleCard({ article }) {
                     <Typography variant='subtitle1' fontFamily='Merriweather' >
                         {`${article.author ? article.author : 'Unknown'}`}
                     </Typography>
-                    <Typography variant='subtitle2' fontFamily='Merriweather'>
+                    <Typography variant='caption' fontFamily='Merriweather'>
                         {dateFormatter(article.publishedAt)}
                     </Typography>
                 </aside>
@@ -36,7 +36,7 @@ export default function ArticleCard({ article }) {
                 }}
                 subheaderTypographyProps={{ 
                     variant: 'body1', 
-                    component: 'p',
+                    component: 'h3',
                     fontFamily: 'Merriweather'
                 }}
                 className='mb-auto'

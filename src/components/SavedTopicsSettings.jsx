@@ -63,7 +63,7 @@ export default function SavedTopicsSettings () {
     }
     return (
         <>
-            <Typography variant='body1' className='font-extralight md:text-lg'>
+            <Typography variant='subtitle1' component='h2' className='font-extralight'>
                 Add or remove topics from your saved topics list.
             </Typography>
             <List className='flex flex-wrap items-center justify-center'>
@@ -73,11 +73,18 @@ export default function SavedTopicsSettings () {
                         return (
                             <ListItem 
                                 sx={{...getItemStyle(isSaved)}}
-                                className='rounded-full text-center cursor-pointer m-1 w-min text-nowrap'
+                                className='rounded-full text-center cursor-pointer m-1 w-min text-nowrap transition-all duration-300'
                                 key={topic.id}
                                 onClick={() => isSaved ? removeSavedTopic(topic.id) : addSavedTopic(topic.id)}
                             >
-                                <ListItemText primaryTypographyProps={{ className: 'font-semibold' }} primary={topic.topic} />
+                                <ListItemText 
+                                    primary={topic.topic} 
+                                    primaryTypographyProps={{ 
+                                        className: 'font-semibold',
+                                        variant: 'subtitle1',
+                                        component: 'p'
+                                    }} 
+                                />
                             </ListItem>
                         )
                     })

@@ -52,7 +52,7 @@ export default function StockPreviewCard({ ticker, data, error, action }) {
         const changeColor = (change) => change > 0 ? 'success.main' : 'destroy.main';
 
         return (
-            <Card className='relative shadow-md aspect-auto '>
+            <Card className='relative shadow-md aspect-auto'>
                 <CardActions className='absolute right-0 top-0'>
                     <Tooltip title={tooltipText}>
                         <span>
@@ -65,22 +65,26 @@ export default function StockPreviewCard({ ticker, data, error, action }) {
                 <CardHeader 
                     title={ticker} 
                     titleTypographyProps={{
-                        className: 'cursor-pointer font-semibold text-md md:text-lg lg:text-2xl'
+                        className: 'cursor-pointer font-semibold',
+                        variant: 'h5',
+                        component: 'h2'
                     }}
                     subheaderTypographyProps={{
-                        className: 'cursor-pointer text-nowrap text-xs md:text-sm lg:text-md'
+                        className: 'cursor-pointer text-nowrap',
+                        variant: 'subtitle2',
+                        component: 'h3'
                     }}
                     subheader={shortName} 
                     onClick={goToStockPage}
                 />
                 <CardContent>
-                    <Typography variant='h6' component='h6' color='primary' className='text-md md:text-lg lg:text-2xl'>
+                    <Typography variant='h6' component='h3' color='primary'>
                         {ask ? currencyFormatter(ask, currency) : currencyFormatter(regularMarketPreviousClose, currency)}
                     </Typography>
-                    <Typography variant='h6' component='h6' color={changeColor(regularMarketChange)} className='text-sm md:text-md lg:text-xl'>
+                    <Typography variant='subtitle1' component='h4' color={changeColor(regularMarketChange)}>
                         {changeIcon(regularMarketChange)} {`${currencyFormatter(regularMarketChange, currency)}`}
                     </Typography>
-                    <Typography variant='h6' component='h6' color={changeColor(regularMarketChangePercent)} className='text-sm md:text-md lg:text-xl'>
+                    <Typography variant='subtitle1' component='h4' color={changeColor(regularMarketChangePercent)}>
                         {changeIcon(regularMarketChangePercent)} {`${regularMarketChangePercent.toFixed(2)}%`}
                     </Typography>
                 </CardContent>

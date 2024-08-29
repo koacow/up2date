@@ -25,7 +25,7 @@ export default function Settings() {
                 <Box className='w-full md:w-3/5 md:mx-auto space-y-5 my-5'>
                     <Card>
                         <CardContent>
-                            <Typography variant='h5' className='font-bold tracking-wider cursor-pointer flex items-center' onClick={() => setAppearanceSettingsCollapsed(prev => !prev)}>
+                            <Typography variant='h4' component='h1' className='font-bold tracking-wider cursor-pointer flex items-center' onClick={() => setAppearanceSettingsCollapsed(prev => !prev)}>
                                 Appearance
                                 <ExpandMoreIcon className={`transform duration-500 ${getOrientation(!appearanceSettingsCollapsed)}`} />
                             </Typography>
@@ -36,7 +36,7 @@ export default function Settings() {
                     </Card>
                     <Card>
                         <CardContent>
-                            <Typography variant='h5' className='font-bold tracking-wider cursor-pointer' onClick={() => setSavedTopicsSettingsCollapsed(prev => !prev)}>
+                            <Typography variant='h4' component='h1' className='font-bold tracking-wider cursor-pointer' onClick={() => setSavedTopicsSettingsCollapsed(prev => !prev)}>
                                 Your Saved Topics
                                 <ExpandMoreIcon className={`transform duration-500 ${getOrientation(!savedTopicsSettingsCollapsed)}`} />
                             </Typography>
@@ -52,7 +52,7 @@ export default function Settings() {
                 <Box className='w-full md:w-3/5 md:mx-auto'>
                     <Card>
                         <CardContent>
-                            <Typography variant='h5'>
+                            <Typography variant='h5' component='h1'>
                                 Please log in to customize your experience.
                             </Typography>
                         </CardContent>

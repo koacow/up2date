@@ -1,6 +1,6 @@
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { createTheme, ThemeProvider, CssBaseline } from '@mui/material';
+import { createTheme, ThemeProvider, CssBaseline, responsiveFontSizes } from '@mui/material';
 import './App.css';
 import About from './pages/About';
 import NotFound from './pages/NotFound';
@@ -21,7 +21,7 @@ const rootElement = document.getElementById('root');
 
 function App() {
   const darkMode = useSelector(state => state.settings.settings.display.darkMode);
-  const theme = createTheme({
+  const theme = responsiveFontSizes(createTheme({
     palette: {
           mode: darkMode ? 'dark' : 'light',
           primary: {
@@ -90,7 +90,7 @@ function App() {
               }
           }
       }
-  });
+  }));
 
   const AppRouter = createBrowserRouter(createRoutesFromElements([
     <Route path="/about" element={<About />} />,
