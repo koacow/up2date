@@ -146,8 +146,9 @@ export default function NavBar() {
                     variant="h5"
                     noWrap
                     className="mr-2 flex flex-grow font-bold tracking-widest md:hidden"
+                    color='primary.contrastText'
                 >
-                    <RouterLink to="/about" className='no-underline'>Up2Date</RouterLink>
+                    <RouterLink to="/about" className='no-underline text-inherit'>Up2Date</RouterLink>
                 </Typography>
                 <Box className='flex-grow hidden md:flex'>
                     {Object.keys(pagesToLinks).map((page) => (
