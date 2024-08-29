@@ -95,7 +95,7 @@ export default function Stock(){
         )
     } else {
         return (
-        <Box className='md:mx-auto lg:w-4/5 w-full h-[500px] md:h-[700px] lg:h-[1000px] p-5' >
+        <Box className='md:mx-auto lg:w-4/5 w-screen h-[400px] md:h-[700px] lg:h-[1000px] p-5' >
             <Typography variant='h6' component='h2' className='font-light tracking-wider'>
                 {ticker}
             </Typography>
@@ -104,7 +104,16 @@ export default function Stock(){
                 <StockMetaData metaData={chartData.meta} /> :
                 <StockMetaDataLoading />
             }
-            <Tabs value={chartRange} onChange={handleTabChange} indicatorColor='secondary' textColor="secondary" >
+            <Tabs 
+                variant="scrollable"
+                selectionFollowsFocus 
+                allowScrollButtonsMobile 
+                scrollButtons 
+                value={chartRange} 
+                onChange={handleTabChange} 
+                indicatorColor='secondary' 
+                textColor="secondary" 
+            >
                 {
                     Object.keys(possibleRanges).map((range) => {
                         return <Tab key={range} label={range} value={range} />
