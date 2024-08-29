@@ -136,8 +136,8 @@ export default function NavBar() {
                             key={page} 
                             onClick={handleCloseNavMenu}
                         >
-                            <RouterLink className='no-underline' to={`/${pagesToLinks[page]}`}>
-                                <Typography className='text-center' color='primary.contrastText'>
+                            <RouterLink className='no-underline text-inherit' to={`/${pagesToLinks[page]}`}>
+                                <Typography className='text-center' >
                                     {page}
                                 </Typography>
                             </RouterLink>
