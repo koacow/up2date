@@ -67,6 +67,7 @@ export default function TopicCard({ topic }) {
                 component='h1' 
                 variant='h1'
                 className='tracking-wider font-semibold text-center m-4'
+                fontFamily={ 'Merriweather, serif' }
             >
                 {topicName}
             </Typography>

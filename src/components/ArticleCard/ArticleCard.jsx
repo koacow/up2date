@@ -32,12 +32,12 @@ export default function ArticleCard({ article }) {
                     variant: 'h4', 
                     component: 'h2',
                     className: 'mb-5',
-                    fontFamily: 'Merriweather'
+                    fontFamily: 'Merriweather, serif'
                 }}
                 subheaderTypographyProps={{ 
                     variant: 'body1', 
                     component: 'h3',
-                    fontFamily: 'Merriweather'
+                    fontFamily: 'Merriweather, serif'
                 }}
                 className='mb-auto'
                 aria-label='Link to article'
