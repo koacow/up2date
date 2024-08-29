@@ -17,10 +17,10 @@ export default function ArticleCard({ article }) {
                     className='rounded-lg'
                 />
                 <aside className='flex-col mt-2 hidden md:flex'>
-                    <Typography variant='subtitle1'>
+                    <Typography variant='subtitle1' fontFamily='Merriweather' >
                         {`${article.author ? article.author : 'Unknown'}`}
                     </Typography>
-                    <Typography variant='subtitle2'>
+                    <Typography variant='subtitle2' fontFamily='Merriweather'>
                         {dateFormatter(article.publishedAt)}
                     </Typography>
                 </aside>
@@ -32,8 +32,13 @@ export default function ArticleCard({ article }) {
                     variant: 'h4', 
                     component: 'h2',
                     className: 'mb-5',
+                    fontFamily: 'Merriweather'
                 }}
-                subheaderTypographyProps={{ variant: 'body1', component: 'p' }}
+                subheaderTypographyProps={{ 
+                    variant: 'body1', 
+                    component: 'p',
+                    fontFamily: 'Merriweather'
+                }}
                 className='mb-auto'
                 aria-label='Link to article'
             />

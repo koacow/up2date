@@ -54,7 +54,7 @@ function App() {
           }
       },
       typography: {
-          fontFamily: "Poppins, sans-serif",
+          fontFamily: "Montserrat, sans-serif",
       },
       components: {
           MuiSwitch: {

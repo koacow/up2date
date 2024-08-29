@@ -1,7 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getStockChartByTicker, getStockQuoteByTicker } from "../api/stocksAPI";
-import { currencyFormatter } from "../utils/formatters";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Tabs from "@mui/material/Tabs";
@@ -12,7 +11,6 @@ import StockMetaDataLoading from "../components/StockMetaData/StockMetaDataLoadi
 import StockChart from "../components/StockChart/StockChart";
 import StockChartLoading from "../components/StockChart/StockChartLoading";
 import StockQuote from "../components/StockQuote/StockQuote";
-import Skeleton from "@mui/material/Skeleton";
 
 export default function Stock(){
     const { ticker } = useParams();
