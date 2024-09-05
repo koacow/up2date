@@ -94,10 +94,10 @@ function App() {
 
   const AppRouter = createBrowserRouter(createRoutesFromElements([
     <Route path="/about" element={<About />} />,
-    <Route path="/login" element={<LogIn />} errorElement={<AppError />} />,
-    <Route path="/register" element={<Register />} errorElement={<AppError />} />,
-    <Route path="/register/configure-preferences" element={<ConfigurePreferences />} errorElement={<AppError />} />,
-    <Route path='/reset-password' element={<ResetPassword />} errorElement={<AppError />} />,
+    // <Route path="/login" element={<LogIn />} errorElement={<AppError />} />,
+    // <Route path="/register" element={<Register />} errorElement={<AppError />} />,
+    // <Route path="/register/configure-preferences" element={<ConfigurePreferences />} errorElement={<AppError />} />,
+    // <Route path='/reset-password' element={<ResetPassword />} errorElement={<AppError />} />,
     <Route path='/' element={<MainTemplate />} errorElement={<AppError />} >
       <Route index element={<Home />} errorElement={<AppError />} />,
       <Route path='/search' element={<Search />} errorElement={<AppError />} />,
