@@ -18,7 +18,7 @@ export default function DarkModeToggle() {
 
     useEffect(() => {
         setDarkModeChecked(darkMode);
-    }, [session]);
+    }, [session, darkMode]);
 
     const toggleDarkMode = (e) => {
         e.preventDefault();

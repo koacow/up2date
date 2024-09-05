@@ -200,9 +200,10 @@ export default function NavBar() {
                             </Typography>
                         </MenuItem>
                     ))}
-                        <MenuItem key='AuthAction' onClick={handleAuthActionClick} disabled={sessionLoading}>
-                            <Typography className='text-center flex items-center' color={getAuthActionColor()}>
-                                {getAuthActionFromSessionStatus()} {getAuthIcon()}
+                        <MenuItem key='AuthAction' onClick={handleAuthActionClick} disabled>
+                            <Typography className='text-center flex items-center'>
+                                {/* {getAuthActionFromSessionStatus()} {getAuthIcon()} */}
+                                Coming soon...
                             </Typography>
                         </MenuItem>
                     </Menu>

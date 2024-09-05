@@ -62,11 +62,11 @@ export default function TopicCard({ topic }) {
     }
 
     return (
-        <Box component='section' className='shadow-lg rounded-md md:h-screen md:overflow-y-scroll my-5 pb-5 relative' >
+        <Box component='section' className='shadow-lg rounded-md md:h-screen md:overflow-y-scroll  my-5 pb-5 relative' >
             <Typography 
                 component='h1' 
                 variant='h1'
-                className='tracking-wider font-semibold text-center m-4'
+                className='tracking-wider font-semibold md:text-center m-4'
                 fontFamily={ 'Merriweather, serif' }
             >
                 {topicName}

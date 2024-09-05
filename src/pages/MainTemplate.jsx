@@ -12,10 +12,11 @@ export default function MainTemplate() {
     const dispatch = useDispatch();
     const session = useSelector(state => state.session.session);
 
-    useEffect(() => {
-      dispatch(fetchSessionThunk());
-      dispatch(fetchUserDataThunk());
-    }, []);
+    // TO DO: Uncomment the following code when you have finished implementing authentication functionality
+    // useEffect(() => {
+    //   dispatch(fetchSessionThunk());
+    //   dispatch(fetchUserDataThunk());
+    // }, []);
 
     useEffect(() => {
       if (session) {

@@ -10,7 +10,7 @@ export default function ArticleCard({ article }) {
     if (article.title === '[Removed]') return null;
     return (
         <Card className='flex flex-col md:flex-row rounded-md'>
-            <CardContent>
+            <CardContent className='p-0 md:p-4'>
                 <CardMedia 
                     src={article.urlToImage}
                     component='img' 

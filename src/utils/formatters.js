@@ -8,7 +8,3 @@ export const dateFormatter = (value) => {
     const date = new Date(Date.parse(value));
     return date.toDateString();
 }
-
-export const currencyToSymbol = (currency) => {
-    
-}
