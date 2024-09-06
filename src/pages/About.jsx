@@ -2,6 +2,10 @@ import { React } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import supabaseIcon from '../assets/supabase-icon.svg';
+import yahoofinanceIcon from '../assets/yahoofinance-icon.svg';
+import newsapiIcon from '../assets/newsapi-icon.png';
 
 export default function About() {
      
@@ -13,6 +17,7 @@ export default function About() {
                 variant='h1' 
                 component={'h1'} 
                 className='tracking-widest font-bold'
+                color='primary'
             >
                 UP2DATE
             </Typography>
@@ -21,8 +26,18 @@ export default function About() {
             </Typography>
             <Typography variant='h5' component={'h2'} className='font-light italic'>
                 Powered by
-                <img src='../assets/newsapi-icon.png' alt="" />
             </Typography>
+            <Box>
+                <a href='https://supabase.com' target='_blank' rel='noreferrer'>
+                    <img src={supabaseIcon} alt='Supabase' className='h-16 w-16' />
+                </a>
+                <a href='https://finance.yahoo.com' target='_blank' rel='noreferrer'>
+                    <img src={yahoofinanceIcon} alt='Yahoo Finance' className='h-16 w-16' />
+                </a>
+                <a href='https://newsapi.org' alt='News API' target='_blank' rel='noreferrer'>
+                    <img src={newsapiIcon} alt='News API' className='h-16' />
+                </a>
+            </Box>
             <Button variant='contained' className='text-lg py-3 px-4 rounded-lg'>
                 <RouterLink to='/' className='no-underline text-inherit'>Get Up2Date</RouterLink>
             </Button>
