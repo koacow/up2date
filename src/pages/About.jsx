@@ -1,6 +1,5 @@
 import { React } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import Box from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 
@@ -21,7 +20,8 @@ export default function About() {
                 An Independent Fully Customizable News App
             </Typography>
             <Typography variant='h5' component={'h2'} className='font-light italic'>
-                Powered by NewsAPI, Yahoo Finance, and Supabase
+                Powered by
+                <img src='../assets/newsapi-icon.png' alt="" />
             </Typography>
             <Button variant='contained' className='text-lg py-3 px-4 rounded-lg'>
                 <RouterLink to='/' className='no-underline text-inherit'>Get Up2Date</RouterLink>
