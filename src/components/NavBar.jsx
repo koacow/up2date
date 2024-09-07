@@ -99,7 +99,7 @@ export default function NavBar() {
                     variant="h6"
                     noWrap
                     className="flex-grow font-bold tracking-widest md:flex hidden"
-                    color='primary.contrastText'
+                    color='secondary'
                 >
                     <Link href="/about" className='no-underline text-inherit'>Up2Date</Link> 
                 </Typography>
@@ -149,7 +149,7 @@ export default function NavBar() {
                     variant="h5"
                     noWrap
                     className="mr-2 flex flex-grow font-bold tracking-widest md:hidden"
-                    color='primary.contrastText'
+                    color='secondary'
                 >
                     <RouterLink to="/about" className='no-underline text-inherit'>Up2Date</RouterLink>
                 </Typography>
