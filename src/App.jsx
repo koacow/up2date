@@ -4,18 +4,15 @@ import { createTheme, ThemeProvider, CssBaseline, responsiveFontSizes } from '@m
 import './App.css';
 import About from './pages/About';
 import NotFound from './pages/NotFound';
-import LogIn from './pages/LogIn';
-import Register from './pages/Register';
-import ConfigurePreferences from './pages/ConfigurePreferences';
 import Home from './pages/Home';
 import MainTemplate from './pages/MainTemplate';
 import Search from './pages/Search';
-import ResetPassword from './pages/ResetPassword';
 import Stocks from './pages/Stocks';
 import Stock from './pages/Stock';
 import Settings from './pages/Settings';
 import ErrorBoundary from './ErrorBoundary.jsx'
 import AppError from './AppError.jsx'
+import ComingSoon from './pages/ComingSoon.jsx';
 
 const rootElement = document.getElementById('root');
 
@@ -104,8 +101,10 @@ function App() {
       <Route path='/stocks' element={<Stocks />} errorElement={<AppError />} />,
       <Route path='/stocks/:ticker' element={<Stock />} errorElement={<AppError />} />, 
       <Route path='/settings' element={<Settings />} errorElement={<AppError />} />,
+      <Route path='/login' element={<ComingSoon />} errorElement={<AppError />} />,
+      <Route path='/register' element={<ComingSoon />} errorElement={<AppError />} />,
+      <Route path="*" element={<NotFound />} />
     </Route>,
-    <Route path="*" element={<NotFound />} />
   ]));
 
   return (
