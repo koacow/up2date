@@ -101,10 +101,10 @@ function App() {
       <Route path='/stocks' element={<Stocks />} errorElement={<AppError />} />,
       <Route path='/stocks/:ticker' element={<Stock />} errorElement={<AppError />} />, 
       <Route path='/settings' element={<Settings />} errorElement={<AppError />} />,
-      <Route path='/login' element={<ComingSoon />} errorElement={<AppError />} />,
-      <Route path='/register' element={<ComingSoon />} errorElement={<AppError />} />,
-      <Route path="*" element={<NotFound />} />
     </Route>,
+    <Route path='/login' element={<ComingSoon />} errorElement={<AppError />} />,
+    <Route path='/register' element={<ComingSoon />} errorElement={<AppError />} />,
+    <Route path="*" element={<NotFound />} />
   ]));
 
   return (
