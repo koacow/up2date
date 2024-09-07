@@ -14,7 +14,7 @@ export default function ArticleCard({ article }) {
                 <CardMedia 
                     src={article.urlToImage}
                     component='img' 
-                    className='rounded-lg'
+                    className='rounded-t-lg md:rounded-lg'
                 />
                 <aside className='flex-col mt-2 hidden md:flex'>
                     <Typography variant='subtitle1' fontFamily='Merriweather' >
@@ -37,7 +37,8 @@ export default function ArticleCard({ article }) {
                 subheaderTypographyProps={{ 
                     variant: 'body1', 
                     component: 'h3',
-                    fontFamily: 'Merriweather, serif'
+                    fontFamily: 'Merriweather, serif',
+                    className: 'hidden md:block'
                 }}
                 className='mb-auto'
                 aria-label='Link to article'
