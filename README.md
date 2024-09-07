@@ -1,5 +1,5 @@
-# Up2Date News App
-## v0.1.0
+# [Up2Date News App](https://up2date-xi.vercel.app/)
+## v1.0.0
 
 ## Overview
 An independent news application that allows users full customizability.
