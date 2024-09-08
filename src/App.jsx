@@ -13,6 +13,7 @@ import Settings from './pages/Settings';
 import ErrorBoundary from './ErrorBoundary.jsx'
 import AppError from './AppError.jsx'
 import ComingSoon from './pages/ComingSoon.jsx';
+import { Analytics } from '@vercel/analytics/react';
 
 const rootElement = document.getElementById('root');
 
@@ -113,6 +114,7 @@ function App() {
         <CssBaseline/>
         <ErrorBoundary fallback={<AppError />}>
           <RouterProvider router={AppRouter} />
+          <Analytics />
         </ErrorBoundary>
       </ThemeProvider>
     </>
