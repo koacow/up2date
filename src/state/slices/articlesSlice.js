@@ -93,8 +93,7 @@ const articlesSlice = createSlice({
         builder.addCase(fetchArticlesForSavedTopic.pending, (state, action) => {
             const topicId = action.meta.arg.id;
             state.articlesBySavedTopics[topicId] = {
-                articles: [],
-                totalPages: 0,
+                ...state.articlesBySavedTopics[topicId],
                 loading: true,
                 error: null
             };
