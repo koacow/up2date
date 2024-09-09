@@ -19,9 +19,13 @@ const rootElement = document.getElementById('root');
 
 function App() {
   const darkMode = useSelector(state => state.settings.settings.display.darkMode);
+  const getDarkMode = () => {
+    if (document.location.pathname === '/about') return 'dark';
+    return darkMode ? 'dark' : 'light';
+  }
   const theme = responsiveFontSizes(createTheme({
     palette: {
-          mode: darkMode ? 'dark' : 'light',
+          mode: getDarkMode(),
           primary: {
               main: "#8e4ccf",
               light: "#a46fd8",
