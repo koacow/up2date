@@ -4,6 +4,7 @@ import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
 import fullLogo from '../assets/full-logo.png';
 import supabaseIcon from '../assets/supabase-icon.png';
 import yahoofinanceIcon from '../assets/yahoofinance-icon.png';
@@ -14,12 +15,12 @@ import GitHub from '@mui/icons-material/GitHub';
 export default function About() {
      
     return (
-        <main
-            className='h-screen w-3/4 md:w-1/2 flex flex-col items-center justify-center text-center space-y-5 mx-auto text-wrap'
+        <Container
+            className='h-screen px-2 md:w-1/2 md:mx-auto flex flex-col items-center justify-center text-center space-y-5'
         >
             <Box className='h-[1000px] flex flex-col text-center'>
                 <a href='/'>
-                    <img src={fullLogo} alt='Up2Date' className='h-44 md:h-72 overflow-hidden' />
+                    <img src={fullLogo} alt='Up2Date' className='w-full md:w-[700px]' />
                 </a>
                 <Typography variant='h3' component={'h2'}>
                     Breaking news. Real-time stocks.
@@ -68,6 +69,6 @@ export default function About() {
                     </CardMedia>
                 </Card>
             </Box> */}
-        </main>
+        </Container>
     );
 }
