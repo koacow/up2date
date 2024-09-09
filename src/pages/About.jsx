@@ -1,5 +1,6 @@
-import { React } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { React, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { setDarkMode } from '../state/slices/settingsSlice';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
@@ -13,6 +14,10 @@ import BoltIcon from '@mui/icons-material/Bolt';
 import GitHub from '@mui/icons-material/GitHub';
 
 export default function About() {
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(setDarkMode(true));
+    }, []);
      
     return (
         <Container
@@ -35,12 +40,12 @@ export default function About() {
                 </Typography>
             </Box>
             <Box className='h-[500px] flex items-center justify-center space-x-5'>
-                <RouterLink to='/' className='no-underline text-inherit'>
+                <Link href='/' className='no-underline text-inherit'>
                     <Button variant='contained' className='tracking-wider py-2 rounded-lg'>
                         <BoltIcon color='secondary' />
                         Get Up2Date
                     </Button>
-                </RouterLink>
+                </Link>
                 <Link href='https://www.github.com/koacow/up2date' target='_blank' rel='noreferrer' className='no-underline text-inherit'>
                     <Button variant='outlined' className='tracking-wider py-2 rounded-lg'>
                         <GitHub className='mr-2' />
