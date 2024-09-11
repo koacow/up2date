@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux';
 
 export default function Home() {
     const savedTopics = useSelector((state) => state.topics.topics);
-      
 
     return (
         <>
