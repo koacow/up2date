@@ -30,3 +30,13 @@ export const getArticlesByTopic = async (topic_id, pageNum = 1) => {
             throw new Error('Failed to fetch articles');
     }
 };
+
+export const getTopHeadlines = async (pageNum = 1) => {
+    const response = await fetch(`${ENDPOINT}/top-headlines?pageNum=${pageNum}`);
+    switch (response.status) {
+        case 200:
+            return response.json();
+        default:
+            throw new Error('Failed to fetch top headlines');
+    }
+}
