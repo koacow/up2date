@@ -17,8 +17,16 @@ export default function Home() {
 
     return (
         <>
-            <Tabs textColor='secondary' indicatorColor='secondary' centered scrollButtons allowScrollButtonsMobile value={currentTab}
-            onChange={handleTabChange} >
+            <Tabs 
+                textColor='secondary' 
+                indicatorColor='secondary' 
+                variant='scrollable' 
+                scrollButtons='auto' 
+                allowScrollButtonsMobile 
+                value={currentTab}
+                onChange={handleTabChange} 
+                className='max-w-fit mx-auto'
+            >
                 {
                     savedTopics.map((topic, index) => {
                         return <Tab 
