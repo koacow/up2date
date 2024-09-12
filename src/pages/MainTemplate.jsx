@@ -32,7 +32,7 @@ export default function MainTemplate() {
         <>
             <NavBar />
             <Outlet />
-            <Footer />
+            {/* <Footer /> */}
         </>
     )
 }
