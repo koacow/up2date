@@ -1,4 +1,4 @@
-# [Up2Date News App](https://up2date-xi.vercel.app/)
+# [Up2Date News App](https://up2date-xi.vercel.app/about)
 ## v1.0.0
 
 ## Overview
