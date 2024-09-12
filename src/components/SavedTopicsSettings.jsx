@@ -39,6 +39,7 @@ export default function SavedTopicsSettings () {
     const confirmChanges = async () => {
         if (!session){
             dispatch(setTopics(displayedSavedTopics));
+            localStorage.setItem('savedTopics', JSON.stringify(displayedSavedTopics));
             return;
         }
         const topicIds = displayedSavedTopics.map(savedTopic => savedTopic.id);

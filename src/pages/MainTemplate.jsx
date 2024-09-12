@@ -3,7 +3,7 @@ import Footer from "../components/Footer";
 import { Outlet } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUserSavedTopics, initiateInitialTopics } from "../state/slices/topicsSlice";
+import { fetchUserSavedTopics, initiateInitialTopics, setTopics } from "../state/slices/topicsSlice";
 import { fetchUserWatchList } from "../state/slices/stockSlice";
 import { fetchSettingsAsync } from "../state/slices/settingsSlice";
 import { fetchSessionThunk, fetchUserDataThunk } from "../state/slices/sessionSlice";
@@ -23,6 +23,11 @@ export default function MainTemplate() {
         dispatch(fetchUserSavedTopics());
         dispatch(fetchUserWatchList());
         dispatch(fetchSettingsAsync());
+        return;
+      } 
+      const localSavedTopics = JSON.parse(localStorage.getItem('savedTopics'));
+      if (localSavedTopics) {
+        dispatch(setTopics(localSavedTopics));
       } else {
         dispatch(initiateInitialTopics());
       }
