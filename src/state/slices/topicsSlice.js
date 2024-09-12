@@ -2,13 +2,19 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getUserSavedTopics, updateUserSavedTopics, deleteUserSavedTopics } from '../../api/accountAPI';
 import { getAllTopics } from '../../api/articlesAPI';
 
+const topHeadlines = {
+    topic: 'Top Headlines',
+    id: 0,
+    pageNum: 1
+}
 const initialState = {
-    topics: [],
+    topics: [topHeadlines],
     savedTopicsLoading: false,
     savedTopicsError: null,
     updateTopicsError: null,
     updateTopicsLoading: false,
 };
+
 
 // Async thunks
 export const initiateInitialTopics = createAsyncThunk(
@@ -78,13 +84,16 @@ const topicsSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(initiateInitialTopics.fulfilled, (state, action) => {
-            state.topics = action.payload.map(topic => {
-                return {
-                    topic: topic.topic,
-                    id: topic.id,
-                    pageNum: 1
-                };
-            });
+            state.topics = [
+                topHeadlines,
+                ...action.payload.map(topic => {
+                    return {
+                        topic: topic.topic,
+                        id: topic.id,
+                        pageNum: 1
+                    };
+                })
+            ];
             state.savedTopicsLoading = false;
             state.savedTopicsError = null;
         });
@@ -100,13 +109,16 @@ const topicsSlice = createSlice({
         });
 
         builder.addCase(fetchUserSavedTopics.fulfilled, (state, action) => {
-            state.topics = action.payload.map(topic => { 
-                return {
-                    topic: topic.topic,
-                    id: topic.id,
-                    pageNum: 1
-                }
-            });
+            state.topics = [
+                topHeadlines,
+                ...action.payload.map(topic => { 
+                    return {
+                        topic: topic.topic,
+                        id: topic.id,
+                        pageNum: 1
+                    }
+                })
+            ];
             state.savedTopicsLoading = false;
             state.savedTopicsError = null;
         });

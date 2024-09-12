@@ -3,9 +3,6 @@ import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import Pagination from "@mui/material/Pagination";
 import Divider from "@mui/material/Divider";
-import Collapse from "@mui/material/Collapse";
-import IconButton from "@mui/material/IconButton";
-import ExpandMore from "@mui/icons-material/ExpandMore";
 import ArticleCard from "./ArticleCard/ArticleCard";
 import ArticleCardLoading from "./ArticleCard/ArticleCardLoading";
 import ArticleCardError from "./ArticleCard/ArticleCardError";
@@ -19,12 +16,10 @@ export default function TopicCard({ topic }) {
     const dispatch = useDispatch();
     const { id, topic: topicName, pageNum } = topic;
     const [paginationDisplayedNum, setPaginationDisplayedNum] = useState(pageNum);
-    const [ topicCardExpanded, setTopicCardExpanded ] = useState(false);
-    const [ expandMoreRotation, setExpandMoreRotation ] = useState(0);
 
     useEffect(() => {
         dispatch(fetchArticlesForSavedTopic(topic));
-    }, [session, paginationDisplayedNum]);
+    }, [session, paginationDisplayedNum, topic]);
     
     const articlesByTopic = useSelector((state) => state.articles.articlesBySavedTopics[topic.id]);
     const { articles, totalPages, loading, error } = articlesByTopic ? articlesByTopic : { articles: [], totalPages: 0, loading: true, error: null };
@@ -32,11 +27,6 @@ export default function TopicCard({ topic }) {
     const handlePageChange = (e, value) => {
         dispatch(setPageNumForTopic({ topicId: id, pageNum: value }));
         setPaginationDisplayedNum(value);
-    }
-
-    const handleToggleTopicCardExpanded = () => {
-        setTopicCardExpanded(prev => !prev);
-        setExpandMoreRotation(topicCardExpanded ? 0 : 180);
     }
 
     const renderArticles = () => {
@@ -76,16 +66,12 @@ export default function TopicCard({ topic }) {
             <Typography 
                 component='h1' 
                 variant='h1'
-                className='tracking-wider font-semibold md:text-center m-4 cursor-pointer'
+                className='tracking-wider font-semibold md:text-center m-4'
                 fontFamily={ 'Merriweather, serif' }
-                onClick={handleToggleTopicCardExpanded} 
             >
                 {topicName} 
-                <ExpandMore className={`absolute right-5 top-5 transform rotate-${expandMoreRotation} transition-transform duration-300`} />
             </Typography>
-            <Collapse in={topicCardExpanded} unmountOnExit>
-                {renderArticles()}
-            </Collapse>
+            {renderArticles()}
         </Box>
     )
 }

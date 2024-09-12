@@ -101,7 +101,7 @@ function App() {
     // <Route path="/register/configure-preferences" element={<ConfigurePreferences />} errorElement={<AppError />} />,
     // <Route path='/reset-password' element={<ResetPassword />} errorElement={<AppError />} />,
     <Route path='/' element={<MainTemplate />} errorElement={<AppError />} >
-      <Route index element={<Home />} errorElement={<AppError />} />,
+      <Route index element={<Home />} errorElement={<AppError />} />
       <Route path='/search' element={<Search />} errorElement={<AppError />} />,
       <Route path='/stocks' element={<Stocks />} errorElement={<AppError />} />,
       <Route path='/stocks/:ticker' element={<Stock />} errorElement={<AppError />} />, 

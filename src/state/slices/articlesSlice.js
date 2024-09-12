@@ -20,13 +20,6 @@ const initialState = {
      *      loading: false,
      *    error: null
      */
-    topHeadlines: {
-        articles: [],
-        pageNum: 1,
-        totalPages: 0,
-        loading: false,
-        error: null
-    },
 };
 
 // Async thunk
@@ -48,6 +41,14 @@ export const fetchArticlesForSavedTopic = createAsyncThunk(
     async (topicObject, thunkAPI) => {
         const pageNum = topicObject.pageNum;
         const topicId = topicObject.id;
+        if (topicId === 0) {
+            try {
+                const response = await getTopHeadlines(pageNum);
+                return { topicId, ...response };
+            } catch (error) {
+                return thunkAPI.rejectWithValue({ topicId, error: error.message });
+            }
+        }
         try {
             const response = await getArticlesByTopic(topicId, pageNum);
             return { topicId, ...response };
@@ -56,18 +57,6 @@ export const fetchArticlesForSavedTopic = createAsyncThunk(
         }
     });
 
-export const fetchTopHeadlines = createAsyncThunk(
-    'articles/fetchTopHeadlines',
-    async(_, thunkAPI) => {
-        const pageNum = thunkAPI.getState().articles.topHeadlines.pageNum;
-        try {
-            const response = await getTopHeadlines(pageNum);
-            return response;
-        } catch (error) {
-            return thunkAPI.rejectWithValue({ error: error.message });
-        }
-    }
-);
 // Slice
 const articlesSlice = createSlice({
     name: 'articles',
@@ -126,24 +115,6 @@ const articlesSlice = createSlice({
                 loading: false,
                 error: action.payload.error
             };
-        });
-
-        builder.addCase(fetchTopHeadlines.pending, (state) => {
-            state.topHeadlines.loading = true;
-            state.topHeadlines.totalPages = 0;
-            state.topHeadlines.error = null;
-        });
-        builder.addCase(fetchTopHeadlines.fulfilled, (state, action) => {
-            state.topHeadlines.articles = action.payload.articles;
-            state.topHeadlines.totalPages = action.payload.totalPages;
-            state.topHeadlines.loading = false;
-            state.topHeadlines.error = null;
-        });
-        builder.addCase(fetchTopHeadlines.rejected, (state, action) => {
-            state.topHeadlines.articles = [];
-            state.topHeadlines.totalPages = 0;
-            state.topHeadlines.loading = false;
-            state.topHeadlines.error = true;
         });
     }
 });
