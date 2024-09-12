@@ -13,16 +13,16 @@ Stocks featuree powered by [Yahoo Finance](https://finance.yahoo.com/)
 ## Features
 
 1. Customizable news feed based on user preferences.
-2. Real-time news updates.
-3. User authentication and profile management.
-4. Search functionality for finding specific news articles.
-5. Responsive design for desktop and mobile devices.
-6. Dark and light mode for user interface.
-7. User feedback and support system.
+2. Saved preferences for anonymous users.
+3. Real-time news updates.
+4. User authentication and profile management.
+5. Search functionality for finding specific news articles.
+6. Responsive design for desktop and mobile devices.
+7. Dark and light mode for user interface.
+8. Collect articles relating to a certain topics using a keyword search algorithm.
 
 ## Future updates
 
-- Collect articles relating to a certain topics via specific keywords.
 - Allow users to save articles for later reading.
 - Comments/discussion features on each article.
 - Integration with additional news sources for a wider range of articles.
