@@ -1,4 +1,4 @@
-import { updateUserSavedTopicsThunk, fetchUserSavedTopics } from '../state/slices/topicsSlice';
+import { updateUserSavedTopicsThunk, fetchUserSavedTopics, setTopics } from '../state/slices/topicsSlice';
 import { getAllTopics } from '../api/articlesAPI';
 import { useSelector, useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
@@ -9,6 +9,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 
 export default function SavedTopicsSettings () {
+    const session = useSelector(state => state.session.session);
     const savedTopics = useSelector(state => state.topics.topics);
     const savedTopicsLoading = useSelector(state => state.topics.savedTopicsLoading);
     const savedTopicsError = useSelector(state => state.topics.savedTopicsError);
@@ -36,6 +37,10 @@ export default function SavedTopicsSettings () {
     }
 
     const confirmChanges = async () => {
+        if (!session){
+            dispatch(setTopics(displayedSavedTopics));
+            return;
+        }
         const topicIds = displayedSavedTopics.map(savedTopic => savedTopic.id);
         const res = await dispatch(updateUserSavedTopicsThunk(topicIds));
         if (res.meta.requestStatus === 'fulfilled') {

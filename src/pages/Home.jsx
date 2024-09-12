@@ -37,7 +37,7 @@ export default function Home() {
                 }
             </Tabs>
             <Container component='main'>
-                <TopicCard topic={currentTopic} />
+                <TopicCard topic={currentTopic} key={currentTab} />
             </Container>
         </>
     )

@@ -1,5 +1,4 @@
 // Model after monkeytype settings page
-import { useSelector } from 'react-redux';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';   
 import Typography from '@mui/material/Typography';
@@ -10,45 +9,25 @@ import SavedTopicsSettings from '../components/SavedTopicsSettings';
 import { useState } from 'react';
 
 export default function Settings() {
-    const session = useSelector(state => state.session.session);
     const [ savedTopicsSettingsCollapsed, setSavedTopicsSettingsCollapsed ]= useState(true);
-    const [ appearanceSettingsCollapsed, setAppearanceSettingsCollapsed ]= useState(true);
 
     const getOrientation = (expanded) => {
         return expanded ? 'rotate-180' : 'rotate-0';
     }
 
-    const render = () => {
-        if (session) {
-            return (
-                <Box className='w-full md:w-3/5 md:mx-auto space-y-5 my-5'>
-                    <Card>
-                        <CardContent>
-                            <Typography variant='h4' component='h1' className='font-bold tracking-wider cursor-pointer' onClick={() => setSavedTopicsSettingsCollapsed(prev => !prev)}>
-                                Your Saved Topics
-                                <ExpandMoreIcon className={`transform duration-500 ${getOrientation(!savedTopicsSettingsCollapsed)}`} />
-                            </Typography>
-                            <Collapse in={!savedTopicsSettingsCollapsed} unmountOnExit>
-                                <SavedTopicsSettings />
-                            </Collapse>
-                        </CardContent>
-                    </Card>
-                </Box>
-            )
-        } else {
-            return (
-                <Box className='w-full md:w-3/5 md:mx-auto'>
-                    <Card>
-                        <CardContent>
-                            <Typography variant='h5' component='h1'>
-                                Please log in to customize your experience.
-                            </Typography>
-                        </CardContent>
-                    </Card>
-                </Box>
-            )
-        }
-    }
-
-    return (render());
+    return (
+        <Box className='w-full md:w-3/5 md:mx-auto space-y-5 my-5'>
+            <Card>
+                <CardContent>
+                    <Typography variant='h4' component='h1' className='font-bold tracking-wider cursor-pointer' onClick={() => setSavedTopicsSettingsCollapsed(prev => !prev)}>
+                        What would you like to be Up2Date on?
+                        <ExpandMoreIcon className={`transform duration-500 ${getOrientation(!savedTopicsSettingsCollapsed)}`} />
+                    </Typography>
+                    <Collapse in={!savedTopicsSettingsCollapsed} unmountOnExit>
+                        <SavedTopicsSettings />
+                    </Collapse>
+                </CardContent>
+            </Card>
+        </Box>
+    )
 }

@@ -19,7 +19,7 @@ export default function TopicCard({ topic }) {
 
     useEffect(() => {
         dispatch(fetchArticlesForSavedTopic(topic));
-    }, [session, paginationDisplayedNum, topic]);
+    }, [session, paginationDisplayedNum, id]);
     
     const articlesByTopic = useSelector((state) => state.articles.articlesBySavedTopics[topic.id]);
     const { articles, totalPages, loading, error } = articlesByTopic ? articlesByTopic : { articles: [], totalPages: 0, loading: true, error: null };
