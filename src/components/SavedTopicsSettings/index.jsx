@@ -1,5 +1,5 @@
-import { updateUserSavedTopicsThunk, fetchUserSavedTopics, setTopics } from '../state/slices/topicsSlice';
-import { getAllTopics } from '../api/articlesAPI';
+import { updateUserSavedTopicsThunk, fetchUserSavedTopics, setTopics } from '../../state/slices/topicsSlice';
+import { getAllTopics } from '../../api/articlesAPI';
 import { useSelector, useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
 import List from '@mui/material/List';
@@ -7,6 +7,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import CustomSnackbar from '../CustomSnackbar';
 
 export default function SavedTopicsSettings () {
     const session = useSelector(state => state.session.session);
@@ -17,6 +18,8 @@ export default function SavedTopicsSettings () {
     const updateError = useSelector(state => state.topics.updateTopicsError);
     const [displayedSavedTopics, setDisplayedSavedTopics] = useState([]);
     const [allTopics, setAllTopics] = useState([]);
+    const [ snackbarOpen, setSnackbarOpen ] = useState(false);
+
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -40,12 +43,14 @@ export default function SavedTopicsSettings () {
         if (!session){
             dispatch(setTopics(displayedSavedTopics));
             localStorage.setItem('savedTopics', JSON.stringify(displayedSavedTopics));
+            setSnackbarOpen(true);
             return;
         }
         const topicIds = displayedSavedTopics.map(savedTopic => savedTopic.id);
         const res = await dispatch(updateUserSavedTopicsThunk(topicIds));
         if (res.meta.requestStatus === 'fulfilled') {
             dispatch(fetchUserSavedTopics());
+            setSnackbarOpen(true);
         }
     }
 
@@ -104,6 +109,11 @@ export default function SavedTopicsSettings () {
             >
                 {confirmButtonLabel()}
             </Button>
+            <CustomSnackbar 
+                open={snackbarOpen}
+                setOpen={setSnackbarOpen}
+                message='Your saved topics have been updated.'
+            />
         </>
     )
 }

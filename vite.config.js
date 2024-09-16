@@ -13,6 +13,7 @@ export default defineConfig({
       '@mui/icons-material/LightMode',
       '@mui/icons-material/DarkModeOutlined',
       '@mui/icons-material/GitHub',
+      '@mui/icons-material/Close'
     ]
   }
 })
