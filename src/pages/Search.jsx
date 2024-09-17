@@ -1,5 +1,5 @@
 import SearchBar from '../components/SearchBar';
-import ArticleCard from "../components/ArticleCard/ArticleCard";
+import ArticleCard from "../components/ArticleCard";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setSearchQuery, fetchArticlesByQuery, setSearchPageNum } from '../state/slices/articlesSlice';

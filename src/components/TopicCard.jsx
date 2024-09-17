@@ -3,7 +3,7 @@ import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import Pagination from "@mui/material/Pagination";
 import Divider from "@mui/material/Divider";
-import ArticleCard from "./ArticleCard/ArticleCard";
+import ArticleCard from "./ArticleCard";
 import ArticleCardLoading from "./ArticleCard/ArticleCardLoading";
 import ArticleCardError from "./ArticleCard/ArticleCardError";
 import { useState, useEffect } from "react";
@@ -15,18 +15,18 @@ export default function TopicCard({ topic }) {
     const session = useSelector((state) => state.session.session);
     const dispatch = useDispatch();
     const { id, topic: topicName, pageNum } = topic;
-    const [paginationDisplayedNum, setPaginationDisplayedNum] = useState(pageNum);
+    const [ page, setPage ] = useState(pageNum);
 
     useEffect(() => {
         dispatch(fetchArticlesForSavedTopic(topic));
-    }, [session, paginationDisplayedNum, id]);
+    }, [session, page, id]);
     
     const articlesByTopic = useSelector((state) => state.articles.articlesBySavedTopics[topic.id]);
     const { articles, totalPages, loading, error } = articlesByTopic ? articlesByTopic : { articles: [], totalPages: 0, loading: true, error: null };
 
     const handlePageChange = (e, value) => {
         dispatch(setPageNumForTopic({ topicId: id, pageNum: value }));
-        setPaginationDisplayedNum(value);
+        setPage(value);
     }
 
     const renderArticles = () => {
@@ -51,7 +51,7 @@ export default function TopicCard({ topic }) {
                     })}
                     <Pagination 
                         count={totalPages} 
-                        page={paginationDisplayedNum} 
+                        page={page} 
                         onChange={handlePageChange}
                         color='secondary'
                         className='mx-auto' 
