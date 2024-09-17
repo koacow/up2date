@@ -11,9 +11,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { setPageNumForTopic } from "../state/slices/topicsSlice";
 import { fetchArticlesForSavedTopic } from "../state/slices/articlesSlice";
 
-export default function TopicCard({ topic }) {
+export default function TopicCard({ currentTab }) {
     const session = useSelector((state) => state.session.session);
     const dispatch = useDispatch();
+    const topic = useSelector((state) => state.topics.topics.find(topic => topic.id === currentTab));
     const { id, topic: topicName, pageNum } = topic;
     const [ page, setPage ] = useState(pageNum);
 

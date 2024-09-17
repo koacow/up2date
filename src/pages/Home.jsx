@@ -7,8 +7,7 @@ import { useSelector } from 'react-redux';
 
 export default function Home() {
     const savedTopics = useSelector((state) => state.topics.topics);
-    const [ currentTab, setCurrentTab ] = useState(0);
-    const [ currentTopic, setCurrentTopic ] = useState(savedTopics[0]);
+    const [ currentTab, setCurrentTab ] = useState(savedTopics[0].id);
 
     const handleTabChange = (e, newValue) => {
         setCurrentTab(newValue);
@@ -37,7 +36,7 @@ export default function Home() {
                 }
             </Tabs>
             <Container component='main'>
-                <TopicCard topic={currentTopic} page={page} setPage={setPage} key={currentTab} />
+                <TopicCard currentTab={currentTab} key={currentTab} />
             </Container>
         </>
     )
